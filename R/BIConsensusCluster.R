@@ -17,7 +17,9 @@
 #' @export
 #'
 #' @examples
-BIConsensusCluster <- function(x, y, z, output.dir, max.iter = 20, max.K = 7, rep.runs = 1000, pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean", cc.seed=5000){
+BIConsensusCluster <- function(x, y, z,output.dir, max.iter = 20, max.K = 7, rep.runs = 1000,
+                               pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
+                               cc.seed=5000){
   invisible(sapply(list(x, y, z), function(x) setnames(x, 1, 'ID_REF')))
   iteration <- 1
   dir.create(output.dir)
