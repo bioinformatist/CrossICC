@@ -26,14 +26,19 @@ BIConsensusCluster <- function(x, y, z, output.dir, max.iter = 20, max.K = 7, re
 
   while(iteration <= max.iter){
     print(paste(date(), iteration, sep=" -- start iteration: "))
-    platforms <- c('x', 'y', 'z')
-    run.dir <- vapply(platforms,
-                      function(x) paste(x, as.character(iteration), sep = ""),
+    platforms <- list(x = x, y = y, z = z)
+    run.dir <- vapply(names(platforms),
+                      function(x) paste(x, iteration, sep = ""),
                       "Yu Fat is handsome")
-    x.cc <- ConsensusClusterPlus(as.matrix(x[gene.sig, on = 'ID_REF'][,-1]),maxK=max.K,reps=rep.runs,pItem=pItem,pFeature=pFeature, title=run.dir['x'] ,clusterAlg=clusterAlg,distance=distance,seed=cc.seed,plot="png")
-    y.cc <- ConsensusClusterPlus(as.matrix(y[gene.sig, on = 'ID_REF'][,-1]),maxK=max.K,reps=rep.runs,pItem=pItem,pFeature=pFeature, title=run.dir['y'],clusterAlg=clusterAlg,distance=distance,seed=cc.seed,plot="png")
-    z.cc <- ConsensusClusterPlus(as.matrix(z[gene.sig, on = 'ID_REF'][,-1]),maxK=max.K,reps=rep.runs,pItem=pItem,pFeature=pFeature, title=run.dir['z'],clusterAlg=clusterAlg,distance=distance,seed=cc.seed,plot="png")
-
+    cc <- vapply(names(platforms),
+                 function(x) ConsensusClusterPlus(as.matrix(platforms[[x]][gene.sig, on = 'ID_REF'][, -1]),
+                                                  maxK=max.K, reps=rep.runs, pItem=pItem,
+                                                  pFeature=pFeature, title=run.dir[x],
+                                                  clusterAlg=clusterAlg, distance=distance,
+                                                  seed=cc.seed, plot="png"),
+                 # ConsensusClusterPlus returns a list of 7 elements
+                 rep(list('fuck'),7))
     iteration<- iteration + 1
   }
+  return(cc)
 }
