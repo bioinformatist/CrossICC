@@ -29,6 +29,7 @@ BIConsensusCluster <- function(x, y, z,output.dir, max.iter = 20, max.K = 7, rep
   while(iteration <= max.iter){
     print(paste(date(), iteration, sep=" -- start iteration: "))
     platforms <- list(x = x, y = y, z = z)
+    # Here a named vector is needed, so (v)apply is necessary
     run.dir <- vapply(names(platforms),
                       function(x) paste(x, iteration, sep = ""),
                       "Yu Fat is handsome")
