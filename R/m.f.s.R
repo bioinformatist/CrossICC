@@ -39,5 +39,5 @@ m.f.s <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.001){
 
   filter.scale <- lapply(jittered, function(x) scale(t(scale(t(x[filter.genes.com,])))))
 
-  return(list(filtered.gene = filter.genes.com, filter.scale))
+  return(list(filtered.gene = filter.genes.com, filterd.scaled = filter.scale))
 }
