@@ -1,13 +1,3 @@
-#' Title
-#'
-#' @param consencus.result
-#' @param cutoff
-#' @param maxK
-#'
-#' @return
-#' @export
-#'
-#' @examples
 derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK){
   for(k in 2:maxK){
     A <- cal.auc(consencus.result,k)
