@@ -21,15 +21,15 @@
 #' @examples
 BIConsensusCluster <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
-                               cc.seed=5000){
+                               cc.seed=5000, cluster.cutoff = 0.05){
   dir.create(output.dir)
   setwd(output.dir)
-  mfs.list <- m.f.s(x, y, z)
-  iteration <- 1
-  gene.sig <- rownames(mfs.list[[2]][[1]])
 
   # Merge, filter and scale here
+  mfs.list <- m.f.s(x, y, z)
+  iteration <- 1
   platforms <- list(x = mfs.list[[2]][[1]], y = mfs.list[[2]][[2]], z = mfs.list[[2]][[3]])
+  gene.sig <- rownames(platforms$x)
 
   while(iteration <= max.iter){
     print(paste(date(), iteration, sep=" -- start iteration: "))
@@ -45,6 +45,12 @@ BIConsensusCluster <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.001,
                                                                                  seed=cc.seed, plot="png")),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
                  list(x = rep(list('fuck'), 7)))
+
+    balanced.cluster <- balance.cluster(list(x = platforms$x[gene.sig,],
+                                             y = platforms$y[gene.sig,],
+                                             z = platforms$z[gene.sig]),
+                                        cc = cc, cluster.cutoff = cluster.cutoff,
+                                        max.K = max.K, plot = TRUE, iter = iteration)
     iteration<- iteration + 1
   }
   return(cc)
