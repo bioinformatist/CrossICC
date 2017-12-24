@@ -7,7 +7,7 @@
 BIConsensusCluster(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.001,
   output.dir, max.iter = 20, max.K = 6, rep.runs = 1000, pItem = 0.8,
   pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-  cc.seed = 5000)
+  cc.seed = 5000, cluster.cutoff = 0.05)
 }
 \arguments{
 \item{x}{matrix (data.frame) with sample names as column names and feature names as row names.}
