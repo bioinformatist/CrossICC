@@ -27,7 +27,7 @@ m.f.s <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.001){
   null.ic <- unlist(MergeMaid::intcorDens(merged))
   dev.off()
 
-  pval.genes <- apply(as.matrix(rowMeans(pairwise.cors(intCor(merged, exact=FALSE)))), 1,
+  pval.genes <- apply(as.matrix(rowMeans(MergeMaid::pairwise.cors(MergeMaid::intCor(merged, exact=FALSE)))), 1,
                       function(x){pval.cal(x,d=null.ic,alt="g")})
   fdr.genes <- p.adjust(pval.genes, method="fdr")
   genes.com.fdr <- names(which(fdr.genes < fdr.cutoff))
