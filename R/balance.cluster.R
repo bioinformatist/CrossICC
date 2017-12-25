@@ -20,7 +20,8 @@ balance.cluster <- function(xyz, cc, cluster.cutoff = 0.05, max.K = 6, plot = TR
                    function(x) lapply(names(k),
                                       function(y) cc.k.balanced[[y]][which(cc.k.old[[y]] %in% which(hc.list[[y]] == x))] <- x)))
   if(plot){
-    tiff(paste("cluster.centroid.correlation", iter, "tiff", sep = "."), width = 1600, height = 1600, res = 300, compression = 'lzw')
+    tiff(paste("cluster.centroid.correlation", iter, "tiff", sep = "."),
+         width = 1600, height = 1600, res = 300, compression = 'lzw')
     gplots::heatmap.2(xyz.k, distfun = function(c) as.dist(1 - c),
               hclustfun = function(c) hclust(c, method = "average"),
               col = gplots::greenred, trace = "none", density.info = "none")
