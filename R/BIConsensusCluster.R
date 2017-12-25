@@ -3,22 +3,33 @@
 #' @param x matrix (data.frame) with sample names as column names and feature names as row names.
 #' @param y ditto.
 #' @param z ditto.
-#' @param output.dir
-#' @param max.iter
-#' @param max.K
-#' @param rep.runs
-#' @param pItem
-#' @param pFeature
-#' @param clusterAlg
-#' @param distance
-#' @param cc.seed
-#' @param filter.cutoff
-#' @param fdr.cutoff
+#' @param output.dir the results' output directory.
+#' @param max.iter the maximum number of iterations.
+#' @param max.K the maximum number of cluster center.
+#' @param rep.runs number of subsamples during clustering.
+#' @param pItem proportion of items to sample during clustering.
+#' @param pFeature proportion of features to sample during clustering.
+#' @param clusterAlg cluster algorithm. Could be 'hc' heirarchical (hclust),
+#' 'pam' for paritioning around medoids, 'km' for k-means upon data matrix,
+#' 'kmdist' for k-means upon distance matrices (former km option),
+#' or a function that returns a clustering.
+#' @param distance Could be 'pearson': (1 - Pearson correlation),
+#' 'spearman' (1 - Spearman correlation),
+#' 'euclidean', 'binary', 'maximum', 'canberra', 'minkowski" or custom distance function.
+#' @param cc.seed sets random seed for reproducible results.
+#' @param filter.cutoff cutoff value during mad filtering.
+#' @param fdr.cutoff cutoff value during fdr filtering.
+#' @param cluster.cutoff cutoff value during determining cluster numbers.
+#' @param ebayes.cutoff p-value cutoff when select differentially expressed probes.
 #'
-#' @return
+#' @return A nested list with iteration time as its name and list containing consensus cluster,
+#' gene signature and balanced cluster as its value.
 #' @export
 #'
+#' @seealso \code{\link[ConsensusClusterPlus]{ConsensusClusterPlus}}
+#'
 #' @examples
+#' BIConsensusCluster(x, y, z, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 BIConsensusCluster <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
                                cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1){
@@ -27,7 +38,7 @@ BIConsensusCluster <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.1, o
 
   # Merge, filter and scale here
   cat(paste(date(), '--', 'Pre-processing data'), '\n')
-  mfs.list <- m.f.s(x, y, z, fdr.cutoff = fdr.cutoff)
+  mfs.list <- m.f.s(x, y, z, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff)
   iteration <- 1
   platforms <- list(x = mfs.list[[2]][[1]], y = mfs.list[[2]][[2]], z = mfs.list[[2]][[3]])
   gene.sig <- rownames(platforms$x)
