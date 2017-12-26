@@ -1,13 +1,15 @@
-check.eSet <- function(x){
-  if(!is.numeric(x[[1]])){
-    stop("The first element is not numeric:\n
+# x is a list object only containing one element (used in apply)
+check.eSet <- function(x) {
+  if (!is.numeric(x[1])) {
+    stop("The first element from your data is not numeric:\n
          Currently, we only support matrix (data.frame) with sample names as column names
          and feature names as row names.")
-  }
-  if(!is.matrix(x)){
-    as.matrix(x)
   } else {
-    x
+    if (!is.matrix(x)) {
+      as.matrix(x)
+    } else {
+      x
+    }
   }
 }
 
@@ -18,7 +20,7 @@ matrix.please <- function(x) {
   m
 }
 
-get.max.var.rows <- function(x){
+get.max.var.rows <- function(x) {
   DT <- data.table(row.names(x), x, var = apply(x, 1, var))
   # Thanks to https://stackoverflow.com/a/29497254
   DT <- setDT(DT)[, .SD[which.max(var)], by=V1]
@@ -44,6 +46,6 @@ merge.duplicates <- function(x, method = "median") {
          "var" = get.max.var.rows(x))
 }
 
-add.jitter <- function(x){
+add.jitter <- function(x) {
   t(apply(x, 1, function(x) if(zero_range(x) == TRUE){jitter(x)}else{x}))
 }
