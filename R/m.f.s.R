@@ -1,17 +1,12 @@
-m.f.s <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.001){
-
-  # Check if all input matrix is normal
-  list.m <- lapply(list(x, y, z), check.eSet)
+m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.001){
 
   # Merge multiple probes for one gene here
-  non.duplicates <- lapply(list.m, merge.duplicates)
+  non.duplicates <- lapply(platforms.list, merge.duplicates)
 
   # Add jitter for extremly same expressed features through samples (if existed)
   jittered <- lapply(non.duplicates, add.jitter)
 
-  genes.com <- com.feature(rownames(jittered[[1]]),
-                           rownames(jittered[[2]]),
-                           rownames(jittered[[3]]), method="overlap")
+  genes.com <- com.feature(unlist(lapply(jittered, rownames)), method="overlap")
 
   # Must pre-assigned here (deep copy, and must not be slice of list),
   # or mergeExprs will raise error (seems its bug):
@@ -28,7 +23,7 @@ m.f.s <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.001){
   dev.off()
 
   pval.genes <- apply(as.matrix(rowMeans(MergeMaid::pairwise.cors(MergeMaid::intCor(merged, exact=FALSE)))), 1,
-                      function(x){pval.cal(x,d=null.ic,alt="g")})
+                      function(x){pval.cal(x, d=null.ic, alt="g")})
   fdr.genes <- p.adjust(pval.genes, method="fdr")
   genes.com.fdr <- names(which(fdr.genes < fdr.cutoff))
   filter.genes <- lapply(jittered, filter.mad, p = filter.cutoff)
