@@ -30,15 +30,17 @@
 #'
 #' @examples
 #' BIConsensusCluster(x, y, z, output.dir = 'handsome_Yu_Fat', max.iter = 1)
-BIConsensusCluster <- function(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir, max.iter = 20, max.K = 6, rep.runs = 1000,
+BIConsensusCluster <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
                                cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1){
   dir.create(output.dir)
   setwd(output.dir)
 
+  platforms.list <- lapply(platforms.list, check.eSet)
+
   # Merge, filter and scale here
   cat(paste(date(), '--', 'Pre-processing data'), '\n')
-  mfs.list <- m.f.s(x, y, z, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff)
+  mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff)
   iteration <- 1
   platforms <- list(x = mfs.list[[2]][[1]], y = mfs.list[[2]][[2]], z = mfs.list[[2]][[3]])
   gene.sig <- rownames(platforms$x)
