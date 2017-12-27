@@ -2,6 +2,6 @@
 com.feature <- function(..., method = 'merge'){
   switch (method,
     'merge' = unique(c(...)),
-    'overlap' = Reduce(intersect, list(...))
+    'overlap' = Reduce(intersect, ...)
   )
 }
