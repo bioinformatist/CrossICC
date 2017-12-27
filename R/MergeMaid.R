@@ -298,7 +298,7 @@ AverageDuplicates  <- function(data.exprs,data.acc) {
 }
 
 
-# All statements work with list studynames have been removed for its substitute calling
+# All statements that work with list studynames have been removed for its substitute calling
 mergeExprs <- function(...){
   arg  <- list(...)
 
