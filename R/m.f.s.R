@@ -6,15 +6,16 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.001){
   # Add jitter for extremly same expressed features through samples (if existed)
   jittered <- lapply(non.duplicates, add.jitter)
 
-  genes.com <- com.feature(unlist(lapply(jittered, rownames)), method="overlap")
+  genes.com <- com.feature(lapply(jittered, rownames), method = 'overlap')
+
+  genes.com.list <- lapply(jittered, function(x) unlist(x)[genes.com,])
 
   # Must pre-assigned here (deep copy, and must not be slice of list),
-  # or mergeExprs will raise error (seems its bug):
+  # or mergeExprs will raise error (exactly its bug):
+  # https://github.com/Bioconductor-mirror/MergeMaid/blob/baf0cfc0d370917d55c4b4adbc1d75c1141a3661/R/MergeMaid.R#L323
   # Error in dimnames(x) <- dn :
   #   length of 'dimnames' [2] not equal to array extent
-  x.genes.com <- jittered[[1]][genes.com,]
-  y.genes.com <- jittered[[2]][genes.com,]
-  z.genes.com <- jittered[[3]][genes.com,]
+  # MergeMaid.R has been fine-adjusted in this package.
 
   merged <- MergeMaid::mergeExprs(x.genes.com, y.genes.com, z.genes.com)
 
