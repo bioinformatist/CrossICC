@@ -1,6 +1,7 @@
-com.feature <- function(x, y, z, method = 'merge'){
+# ... stand for different atomic vectors
+com.feature <- function(..., method = 'merge'){
   switch (method,
-    'merge' = unique(c(x, y, z)),
-    'overlap' = Reduce(intersect, list(x, y, z))
+    'merge' = unique(c(...)),
+    'overlap' = Reduce(intersect, ...)
   )
 }

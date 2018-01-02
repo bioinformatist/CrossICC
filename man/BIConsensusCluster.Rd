@@ -2,19 +2,17 @@
 % Please edit documentation in R/BIConsensusCluster.R
 \name{BIConsensusCluster}
 \alias{BIConsensusCluster}
-\title{Title}
+\title{Title The Main Function of the package}
 \usage{
-BIConsensusCluster(x, y, z, filter.cutoff = 0.5, fdr.cutoff = 0.1,
+BIConsensusCluster(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
   output.dir, max.iter = 20, max.K = 6, rep.runs = 1000, pItem = 0.8,
   pFeature = 1, clusterAlg = "hc", distance = "euclidean",
   cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1)
 }
 \arguments{
-\item{x}{matrix (data.frame) with sample names as column names and feature names as row names.}
+\item{...}{all datasets (matrices is better)}
 
-\item{y}{ditto.}
-
-\item{z}{ditto.}
+\item{study.names}{a vector containing all study names}
 
 \item{filter.cutoff}{cutoff value during mad filtering.}
 
@@ -52,10 +50,13 @@ A nested list with iteration time as its name and list containing consensus clus
 gene signature and balanced cluster as its value.
 }
 \description{
-Title
+Title The Main Function of the package
 }
 \examples{
+\donttest{
+# It takes too long time for running code below, so ignore them in R CMD check.
 BIConsensusCluster(x, y, z, output.dir = 'handsome_Yu_Fat', max.iter = 1)
+}
 }
 \seealso{
 \code{\link[ConsensusClusterPlus]{ConsensusClusterPlus}}
