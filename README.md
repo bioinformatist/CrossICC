@@ -1,5 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+CrossICC
+========
+
 Iteractive consensus clustering framework for multi-platform data analysis implemented in R.
 
 Installation
@@ -14,7 +17,7 @@ devtools::install_github("bioinformatist/CrossICC")
 
 ### Via Bioconductor (stable)
 
-To be finished~ :clap:
+Comming!~ :clap:
 
 How to use
 ----------
