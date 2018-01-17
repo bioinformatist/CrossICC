@@ -1,24 +1,38 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-",
+  eval = FALSE
+)
+```
+
 Iteractive consensus clustering framework for multi-platform data analysis implemented in R.
 
-Installation
-------------
+## Installation
 
 ### Via GitHub (latest)
 
-``` r
+```{r}
 install.packages("devtools")
 devtools::install_github("bioinformatist/CrossICC")
 ```
 
+
 ### Via Bioconductor (stable)
 
-To be finished~ :clap:
+Comming!~ :clap:
 
-How to use
-----------
+## How to use
 
-``` r
+
+
+```{r}
 BIConsensusCluster(x, y, z, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 ```
