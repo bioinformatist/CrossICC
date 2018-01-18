@@ -1,10 +1,12 @@
-#calculated FAIME profile of a single sample from its annotation
-#Details reference of this method can be found from an article : http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002350
-#r, a named gene annotation list,
-#s, a nameed rank number of a gene expression order list from  gene expression profile in a single samples
+# Calculated FAIME profile of a single sample from its annotation
+# Details reference of this method can be found from an article:
+# http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002350
+# r, a named gene annotation list,
+# s, a named rank number of a gene expression order list from  gene expression profile in a single samples
+
 ## detailed data structure
 
-#r data structure : annotation list
+# r data structure : annotation list
   #GO1: gene1,gene2,gene3...
   #GO2: gene4,gene5,gene7...
   #...
