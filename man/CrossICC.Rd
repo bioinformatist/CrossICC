@@ -4,13 +4,71 @@
 \name{CrossICC}
 \alias{CrossICC}
 \alias{CrossICC-package}
+\alias{CrossICC}
 \title{CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.}
+\usage{
+CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
+  output.dir, max.iter = 20, max.K = 6, rep.runs = 1000, pItem = 0.8,
+  pFeature = 1, clusterAlg = "hc", distance = "euclidean",
+  cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1)
+}
+\arguments{
+\item{...}{all datasets (matrices is better)}
+
+\item{study.names}{a vector containing all study names}
+
+\item{filter.cutoff}{cutoff value during mad filtering.}
+
+\item{fdr.cutoff}{cutoff value during fdr filtering.}
+
+\item{output.dir}{the results' output directory.}
+
+\item{max.iter}{the maximum number of iterations.}
+
+\item{max.K}{the maximum number of cluster center.}
+
+\item{rep.runs}{number of subsamples during clustering.}
+
+\item{pItem}{proportion of items to sample during clustering.}
+
+\item{pFeature}{proportion of features to sample during clustering.}
+
+\item{clusterAlg}{cluster algorithm. Could be 'hc' heirarchical (hclust),
+'pam' for paritioning around medoids, 'km' for k-means upon data matrix,
+'kmdist' for k-means upon distance matrices (former km option),
+or a function that returns a clustering.}
+
+\item{distance}{Could be 'pearson': (1 - Pearson correlation),
+'spearman' (1 - Spearman correlation),
+'euclidean', 'binary', 'maximum', 'canberra', 'minkowski" or custom distance function.}
+
+\item{cc.seed}{sets random seed for reproducible results.}
+
+\item{cluster.cutoff}{cutoff value during determining cluster numbers.}
+
+\item{ebayes.cutoff}{p-value cutoff when select differentially expressed probes.}
+}
+\value{
+A nested list with iteration time as its name and list containing consensus cluster,
+gene signature and balanced cluster as its value.
+}
 \description{
 The CrossICC package provides three categories of important functions:
 foo, bar and baz.
+
+Title The Main Function of the package
 }
 \section{CrossICC functions}{
 
 The foo functions ...
 }
 
+\examples{
+\donttest{
+# It takes too long time for running code below, so ignore them in R CMD check.
+CrossICC(x, y, z, output.dir = 'handsome_Yu_Fat', max.iter = 1)
+}
+}
+\seealso{
+\code{\link[ConsensusClusterPlus]{ConsensusClusterPlus}}
+}

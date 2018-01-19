@@ -25,3 +25,4 @@ Depends: R (>= 2.10),
     Biobase
 biocViews: Software
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)

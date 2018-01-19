@@ -1,17 +1,11 @@
-#' eSet matrix.
+#' list containing 3 different (eSet) matrix.
 #'
-#' A matrix from GSE file with artifical feature names.
+#' each matrix comes from GSE file with artifical feature names.
 #'
-"x"
-
-#' eSet matrix.
-#'
-#' A matrix from GSE file with artifical feature names.
-#'
-"y"
-
-#' eSet matrix.
-#'
-#' A matrix from GSE file with artifical feature names.
-#'
-"z"
+#' @format *Note: this is format of single matrix.* A matrix with rows of features (genes) and column of samples:
+#' \describe{
+#'   \item{sample1}{GSM*}
+#'   \item{sample2}{GSM*}
+#'   ...
+#' }
+"example.matrices"
