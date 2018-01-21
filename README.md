@@ -23,5 +23,5 @@ How to use
 ----------
 
 ``` r
-BIConsensusCluster(x, y, z, output.dir = 'handsome_Yu_Fat', max.iter = 1)
+CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 ```
