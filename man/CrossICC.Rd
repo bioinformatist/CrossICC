@@ -8,8 +8,8 @@
 \title{CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.}
 \usage{
 CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
-  output.dir, max.iter = 20, max.K = 6, rep.runs = 1000, pItem = 0.8,
-  pFeature = 1, clusterAlg = "hc", distance = "euclidean",
+  output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
+  pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
   cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1)
 }
 \arguments{
@@ -66,6 +66,7 @@ The foo functions ...
 \examples{
 \donttest{
 # It takes too long time for running code below, so ignore them in R CMD check.
+CrossICC(example.matrices, max.iter = 1)
 CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 }
 }
