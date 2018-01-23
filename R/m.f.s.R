@@ -22,8 +22,11 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.001){
   fig.size <- (length(platforms.list) + 1) * 400
 
   # tiff("gene.cor.matrix.tiff", compression = 'lzw', res = 300, width = fig.size, height = fig.size)
-  # null.ic <- unlist(MergeMaid::intcorDens(merged))
-  # dev.off()
+
+  win.metafile()
+  dev.control('enable') # enable display list
+  null.ic <- unlist(MergeMaid::intcorDens(merged))
+  dev.off()
 
   pval.genes <- apply(as.matrix(rowMeans(MergeMaid::pairwise.cors(intCor(merged, exact=FALSE)))), 1,
                       function(x){pval.cal(x, d=null.ic, alt="g")})
