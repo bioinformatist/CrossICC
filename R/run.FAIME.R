@@ -35,7 +35,7 @@ run.FAIME<-function(r,s){
 
   #function
   #w generated from above expression
-  get.Fsocre.of.individual.geneset<-function(gene.single.set,w){
+  get.Fscore.of.individual.geneset<-function(gene.single.set,w){
     NC.GO<-mean(w[names(w)%in%gene.single.set])
     NC.G.GO<-mean(w[!names(w)%in%gene.single.set])
     return(NC.GO-NC.G.GO)
@@ -47,7 +47,7 @@ run.FAIME<-function(r,s){
   #get Fscore list
   for (i in 1:length(c)){
     gene.single.set<-r[[i]]
-    Fscore<-c(Fscore,get.Fsocre.of.individual.geneset(gene.single.set,w))
+    Fscore<-c(Fscore,get.Fscore.of.individual.geneset(gene.single.set,w))
   }
   #add names
   names(Fscore)<-c
