@@ -66,7 +66,7 @@ The foo functions ...
 \examples{
 \donttest{
 # It takes too long time for running code below, so ignore them in R CMD check.
-CrossICC(x, y, z, output.dir = 'handsome_Yu_Fat', max.iter = 1)
+CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 }
 }
 \seealso{

@@ -36,6 +36,7 @@ shinyUI(dashboardPage(
               )
 
               ),
+
       # inout panel ----
       tabItem("input",
               fluidRow(
@@ -44,6 +45,7 @@ shinyUI(dashboardPage(
                   #step1----
                   box(
                     title =  div(icon("file-text"),"Example dataset"),
+
                     solidHeader = TRUE,
                     width = NULL,
                     status = "success",
@@ -64,6 +66,7 @@ shinyUI(dashboardPage(
                     #                            accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'),multiple = T)
                     #                  # ,fileInputSeries()
                     # ),
+
                     actionButton("submit","Submit")
 
                   )
@@ -78,6 +81,7 @@ shinyUI(dashboardPage(
               )
               ),
       tabItem("iter")
+
       # analysis  panel ----
     )
     # Boxes need to be put in a row (or column)

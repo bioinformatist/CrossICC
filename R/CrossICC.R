@@ -8,7 +8,6 @@
 #'
 #' @docType package
 #' @name CrossICC
-#' @import graphics
 #' @import data.table MASS MergeMaid grDevices stats
 #' @importFrom methods new
 #' @importFrom utils head
