@@ -52,6 +52,8 @@ NULL
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
                                cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1){
+  graphics.off()
+
   if(is.null(output.dir)) {
     plot.suffix = NULL
   } else {
@@ -126,7 +128,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       break
     }
 
-    heatmaps <- lapply(platforms, function(x) invisible(pheatmap::pheatmap(x[gene.sig,],scale = 'row',colorRampPalette(c("green", "black", "red"))(50))))
+    heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],scale = 'row',colorRampPalette(c("green", "black", "red"))(50)))
 
     result[[iteration]] <- list(consensus.cluster = cc,
                                 gene.signature = gene.sig,

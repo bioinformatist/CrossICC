@@ -26,13 +26,16 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot
   if(plot){
     # tiff(paste("cluster.centroid.correlation", iter, "tiff", sep = "."),
     #      width = 1600, height = 1600, res = 300, compression = 'lzw')
-    win.metafile()
-    dev.control('enable') # enable display list
-    gplots::heatmap.2(all.k, distfun = function(c) as.dist(1 - c),
-                      hclustfun = function(c) hclust(c, method = "average"),
-                      col = gplots::greenred, trace = "none", density.info = "none")
-    heatmap <- recordPlot()
-    dev.off()
+    # op <- par(mar = c(4, 2, 2, 3))
+    # win.metafile()
+    # dev.control('enable') # enable display list
+    # gplots::heatmap.2(all.k, distfun = function(c) as.dist(1 - c),
+    #                   hclustfun = function(c) hclust(c, method = "average"),
+    #                   col = gplots::greenred, trace = "none", density.info = "none", margins = c(9, 9))
+    heatmap <- pheatmap::pheatmap(all.k, colorRampPalette(c("green", "black", "red"))(50))
+    # heatmap <- recordPlot()
+    # dev.off()
+    # par(op)
     # replayPlot(obj)
 
     win.metafile()
