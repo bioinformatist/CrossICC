@@ -85,7 +85,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
   # If study.names is not defined, use automatically generated ones instead
   if ((!is.element(class(sn), "vector")) | (!length(sn) == length(mfs.list[[2]]))) {
-    study.names <- sapply(1:length(platforms), function(x) paste0('Sample.', x))
+    study.names <- sapply(1:length(platforms), function(x) paste0('Matrix.', x))
     names(platforms) <- study.names
   } else {
     names(platforms) <- study.names
@@ -126,13 +126,14 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       break
     }
 
+    heatmaps <- lapply(platforms, function(x) invisible(pheatmap::pheatmap(x[gene.sig,],scale = 'row',colorRampPalette(c("green", "black", "red"))(50))))
+
     result[[iteration]] <- list(consensus.cluster = cc,
                                 gene.signature = gene.sig,
-                                balanced.cluster = balanced.cluster
-    )
+                                balanced.cluster = balanced.cluster,
+                                heatmaps = heatmaps)
 
     iteration<- iteration + 1
   }
   result
-  # list(all.sig, cc)
 }
