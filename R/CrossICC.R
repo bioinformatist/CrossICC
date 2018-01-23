@@ -122,7 +122,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
 
-    if(!isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
+    if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
       break
     }
 
@@ -135,5 +135,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     iteration<- iteration + 1
   }
+  cat(paste(date(), iteration, sep=" -- Iteration finished! Final interation time: "), '\n')
   result
 }
