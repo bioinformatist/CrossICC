@@ -46,13 +46,19 @@ NULL
 #' @examples
 #' \donttest{
 #' # It takes too long time for running code below, so ignore them in R CMD check.
+#' CrossICC(example.matrices, max.iter = 1)
 #' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 #' }
-CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir, max.iter = 20, max.K = 6, rep.runs = 1000,
+CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
                                cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1){
-  dir.create(output.dir)
-  setwd(output.dir)
+  if(is.null(output.dir)) {
+    plot.suffix = NULL
+  } else {
+    plot.suffix = 'png'
+    dir.create(output.dir)
+    setwd(output.dir)
+  }
 
   arg <- list(...)
   result <- list()
@@ -96,10 +102,10 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                       "Yu Fat is handsome")
     cc <- vapply(names(platforms),
                  function(x) list(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
-                                                                                 maxK=max.K, reps=rep.runs, pItem=pItem,
-                                                                                 pFeature=pFeature, title=run.dir[x],
-                                                                                 clusterAlg=clusterAlg, distance=distance,
-                                                                                 seed=cc.seed, plot="png")),
+                                                                             maxK=max.K, reps=rep.runs, pItem=pItem,
+                                                                             pFeature=pFeature, title=run.dir[x],
+                                                                             clusterAlg=clusterAlg, distance=distance,
+                                                                             seed=cc.seed, plot = plot.suffix)),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
                  list(rep(list('fuck'), 7)))
 
@@ -122,7 +128,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     result[[iteration]] <- list(consensus.cluster = cc,
                                 gene.signature = gene.sig,
-                                balanced.cluster = balanced.cluster)
+                                balanced.cluster = balanced.cluster
+    )
 
     iteration<- iteration + 1
   }
