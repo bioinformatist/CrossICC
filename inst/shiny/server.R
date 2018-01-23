@@ -62,7 +62,9 @@ shinyServer(function(session,input, output) {
 #Plot functions
   output$superclusterPlot<-renderPlot({
     fuck<-InterationResult()
-    replayPlot(fuck[[input$iterslided]]$balanced.cluster$heatmap)
+    grid.newpage()
+    grid.draw(fuck[[input$iterslided]]$balanced.cluster$heatmap$gtable)
+
   })
   output$Silhouette<-renderPlot({
     fuck<-InterationResult()
