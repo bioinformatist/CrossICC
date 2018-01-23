@@ -41,10 +41,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot
     plot(si[[1]], col = c1[hc])
     silhouette <- recordPlot()
     dev.off()
-    # dev.off()
     # tiff(paste("silhouette.plot", iter, "tiff", sep = "."), res = 300, width = 1600, height = 1600)
-
-    # dev.off()
   }
 
   list(all.k, cc.k.balanced, heatmap, silhouette)
