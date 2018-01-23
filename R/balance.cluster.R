@@ -24,17 +24,28 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot
                                       # Must use <<- here for scope restrinction
                                       function(y) cc.k.balanced[[y]][which(cc.k.old[[y]] %in% which(hc.list[[y]] == x))] <<- x)))
   if(plot){
-    tiff(paste("cluster.centroid.correlation", iter, "tiff", sep = "."),
-         width = 1600, height = 1600, res = 300, compression = 'lzw')
+    # tiff(paste("cluster.centroid.correlation", iter, "tiff", sep = "."),
+    #      width = 1600, height = 1600, res = 300, compression = 'lzw')
+    win.metafile()
+    dev.control('enable') # enable display list
     gplots::heatmap.2(all.k, distfun = function(c) as.dist(1 - c),
-              hclustfun = function(c) hclust(c, method = "average"),
-              col = gplots::greenred, trace = "none", density.info = "none")
+                      hclustfun = function(c) hclust(c, method = "average"),
+                      col = gplots::greenred, trace = "none", density.info = "none")
+    heatmap <- recordPlot()
     dev.off()
-    tiff(paste("silhouette.plot", iter, "tiff", sep = "."), res = 300, width = 1600, height = 1600)
+    # replayPlot(obj)
+
+    win.metafile()
+    dev.control('enable') # enable display list
     c1 <- rainbow(max.silw)
     plot(si[[1]], col = c1[hc])
+    silhouette <- recordPlot()
     dev.off()
+    # dev.off()
+    # tiff(paste("silhouette.plot", iter, "tiff", sep = "."), res = 300, width = 1600, height = 1600)
+
+    # dev.off()
   }
 
-  list(all.k, cc.k.balanced)
+  list(all.k, cc.k.balanced, heatmap, silhouette)
 }
