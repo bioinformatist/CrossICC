@@ -64,6 +64,7 @@ shinyServer(function(session,input, output) {
     fuck<-InterationResult()
     grid.newpage()
     grid.draw(fuck[[input$iterslided]]$balanced.cluster$heatmap$gtable)
+
   })
   output$Silhouette<-renderPlot({
     fuck<-InterationResult()
