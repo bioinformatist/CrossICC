@@ -22,7 +22,8 @@ shinyUI(dashboardPage(
              collapsible = T,
              menuSubItem('Input Dataset', tabName = 'input'),
              menuSubItem('Iterater', tabName = 'iter')
-    )
+    ),
+    menuItem("Help", tabName = "Help", icon = icon("question"))
   )),
   #body elements ----
   dashboardBody(
@@ -41,20 +42,18 @@ shinyUI(dashboardPage(
       tabItem("input",
               fluidRow(
                 column(
-                  width = 3,
+                  width = 2,
                   #step1----
                   box(
-                    title =  div(icon("file-text"),"Example dataset"),
-
-                    solidHeader = TRUE,
-                    width = NULL,
-                    status = "success",
+                    title =  div(icon("file-text"),"Example dataset"),solidHeader = TRUE,width = 100,status = "success",
                     radioButtons(
                       "dataset",
                       strong("Mutation Dataset"),inline=T,
                       c(Example = "example"),
                       selected = 'example'
                     ),
+                    numericInput("MaxInterNum","Max iterater number",value=1000,min=100,max=1000,step=100),
+                    #input manually ----
                     # radioButtons(
                     #   "dataset",
                     #   strong("Mutation Dataset"),inline=T,
@@ -66,19 +65,32 @@ shinyUI(dashboardPage(
                     #                            accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'),multiple = T)
                     #                  # ,fileInputSeries()
                     # ),
-
+                    #----
                     actionButton("submit","Submit")
+                  ),
+                  box(
+                    title = "Interation information",solidHeader = TRUE,width = 100,status = "success"
 
+                  ),
+                  box(
+                    title = "Control panel",solidHeader = TRUE,width = 100,status = "success"
                   )
-
-                ) ,
-                bsModal("inputdataview",
-                        h3("View Mutation Data"),
-                        "ViewInputDataButton",
-                        size = "large",
-                        div(DT::dataTableOutput("SummaryMutationData"))
+                ),
+                column(
+                  width = 4,
+                  box(
+                    title = "Super Clustering",solidHeader = TRUE,status = "primary"
+                  ),
+                  box(
+                    title = "Silhouette Result",solidHeader = TRUE,status = "primary"
+                  )
+                ),
+                column(
+                  width = 6,
+                  box(
+                    title = "Expression heatmap by signagure",solidHeader = TRUE,status = "primary"
+                  )
                 )
-              )
               ),
       tabItem("iter")
 
@@ -87,5 +99,6 @@ shinyUI(dashboardPage(
     # Boxes need to be put in a row (or column)
 
 
+  )
   )
 ))

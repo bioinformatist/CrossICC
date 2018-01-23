@@ -24,9 +24,23 @@ shinyServer(function(session,input, output) {
 
 
 #input data ----
-inputdata<- reactive(
-  example.matrices
-)
+  inputdata<-  reactive({
+    example.matrices
+  })
+#interation CrossICC
+  InterationResult<- observeEvent(input$submit, {
+    rossICC.object<- CrossICC(inputdata(), max.iter = input$MaxInterNum)
+    CrossICC.object
+  })
 
+#Plot functions
+  ouput$superclusterPlot<-renderPlot({
+    fuck<-InterationResult()
+    replayPlot(fuck[[1]]$balanced.cluster[[3]])
+  })
+  ouput$Silhouette<-renderPlot({
+    fuck<-InterationResult()
+    replayPlot(fuck[[1]]$balanced.cluster[[4]])
+  })
 
 })
