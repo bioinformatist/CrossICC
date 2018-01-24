@@ -23,7 +23,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.001){
 
   # tiff("gene.cor.matrix.tiff", compression = 'lzw', res = 300, width = fig.size, height = fig.size)
 
-  win.metafile()
+  pdf(NULL)
   dev.control('enable') # enable display list
   null.ic <- unlist(MergeMaid::intcorDens(merged))
   dev.off()

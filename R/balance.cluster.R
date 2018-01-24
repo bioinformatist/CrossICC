@@ -40,7 +40,8 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot
     # par(op)
     # replayPlot(obj)
 
-    win.metafile()
+    # win.metafile()
+    pdf(NULL)
     dev.control('enable') # enable display list
     c1 <- rainbow(max.silw)
     plot(si[[1]], col = c1[hc])
