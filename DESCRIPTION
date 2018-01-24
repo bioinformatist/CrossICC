@@ -19,7 +19,8 @@ Imports: data.table,
     limma,
     MergeMaid,
     gplots,
-    cluster
+    cluster,
+    pheatmap
 Depends: R (>= 2.10),
     MASS,
     Biobase
