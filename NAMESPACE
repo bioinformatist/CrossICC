@@ -2,6 +2,7 @@
 
 export(CrossICC)
 export(CrossICCshiny)
+export(ssGSEA)
 import(MASS)
 import(MergeMaid)
 import(data.table)
