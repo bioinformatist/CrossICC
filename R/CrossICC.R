@@ -113,6 +113,12 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
 
     all.sig <- lapply(names(platforms), function(x) platforms[[x]][gene.sig,])
     names(all.sig) <- names(platforms)
+
+    # TODO: finer.cluster
+    # Clusters without balanced used here:
+    # First get centroid for raw clusters;
+    # calculate expression value of samples with centroids for correlation;
+    # hclust of correlation
     balanced.cluster <- balance.cluster(all.sig,
                                         cc = cc, cluster.cutoff = cluster.cutoff,
                                         max.K = max.K, plot = TRUE, iter = iteration)

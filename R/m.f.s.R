@@ -32,6 +32,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 1){
     pval.genes <- apply(as.matrix(rowMeans(MergeMaid::pairwise.cors(intCor(merged, exact=FALSE)))), 1,
                         function(x){pval.cal(x, d=null.ic, alt="g")})
     fdr.genes <- p.adjust(pval.genes, method = "fdr")
+    # TODO: dataset with fdr value over 0.1 should bring an error here
     genes.com.fdr <- names(which(fdr.genes < fdr.cutoff))
     filter.genes <- lapply(jittered, function(x) filter.mad(x[genes.com.fdr, ], p = filter.cutoff))
   } else {
