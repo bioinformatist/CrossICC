@@ -69,9 +69,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
   # Error in .dens.mergeExpressionSet(x = x, method = method, ...) :
   #   Number of studies in the mergeExpressionSet should not less than 2.
   # TODO: To skip this filtering when there's only one sample.
-  if ((length(arg) == 1) & (is.element(class(arg[[1]]),"matrix"))) {
-    stop("Number of studies should not less than 2.")
-  } else if ((length(arg) == 1) & (is.element(class(arg[[1]]),"list"))) {
+  # if ((length(arg) == 1) & (is.element(class(arg[[1]]),"matrix"))) {
+  #   stop("Number of studies should not less than 2.")
+  if ((length(arg) == 1) & (is.element(class(arg[[1]]),"list"))) {
     platforms.list <- unlist(arg, recursive = FALSE)
   } else {
     platforms.list <- lapply(arg, check.eSet)
@@ -130,22 +130,27 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
 
+    # Confirm those two atomic vectors are exactly equal
     if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
+      # Remove final iteration results (repeated) from list, also reset iteration time
+      result[[iteration]] <- NULL
+      iteration <- iteration - 1
       break
     }
 
-    heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],
-                                                                 scale = 'row',
-                                                                 border_color = NA,
-                                                                 colorRampPalette(c("green", "black", "red"))(50)))
-
-    result[[iteration]] <- list(consensus.cluster = cc,
-                                gene.signature = gene.sig,
-                                balanced.cluster = balanced.cluster,
-                                heatmaps = heatmaps)
+    # heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],
+    #                                                              scale = 'row',
+    #                                                              border_color = NA,
+    #                                                              colorRampPalette(c("green", "black", "red"))(50)))
+    #
+    # result[[iteration]] <- list(consensus.cluster = cc,
+    #                             gene.signature = gene.sig,
+    #                             balanced.cluster = balanced.cluster,
+    #                             heatmaps = heatmaps)
 
     iteration<- iteration + 1
   }
-  cat(paste(date(), iteration, sep=" -- Iteration finished! Final interation time: "), '\n')
-  result
+  cat(paste(date(), iteration, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
+  # result
+  platforms
 }
