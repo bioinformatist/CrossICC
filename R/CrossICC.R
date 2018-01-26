@@ -35,6 +35,8 @@ NULL
 #' @param ebayes.cutoff p-value cutoff when select differentially expressed probes.
 #' @param study.names a vector containing all study names
 #' @param ... all datasets (matrices is better)
+#' @param method 'finer' (based on correlation between sample expression values and centroids) or 'balanced' (based on correlation of centroids).
+#' Which super-cluster strategy should be used?
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -51,7 +53,7 @@ NULL
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
-                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1){
+                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, method = 'finer'){
   graphics.off()
 
   if(is.null(output.dir)) {
@@ -68,7 +70,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
   # It is not allowed just a matrix as input, for MergeMaid will raise an error:
   # Error in .dens.mergeExpressionSet(x = x, method = method, ...) :
   #   Number of studies in the mergeExpressionSet should not less than 2.
-  # TODO: To skip this filtering when there's only one sample.
+  # Already can auto-skip this filtering when there's only one sample.
   # if ((length(arg) == 1) & (is.element(class(arg[[1]]),"matrix"))) {
   #   stop("Number of studies should not less than 2.")
   if ((length(arg) == 1) & (is.element(class(arg[[1]]),"list"))) {
@@ -121,7 +123,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
     # hclust of correlation
     balanced.cluster <- balance.cluster(all.sig,
                                         cc = cc, cluster.cutoff = cluster.cutoff,
-                                        max.K = max.K, plot = TRUE, iter = iteration)
+                                        max.K = max.K, plot = TRUE, iter = iteration, method = method)
 
     gene.sig.all <- lapply(names(all.sig),
                            function(x) rownames(ebayes(all.sig[[x]],
@@ -138,19 +140,21 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
       break
     }
 
-    # heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],
-    #                                                              scale = 'row',
-    #                                                              border_color = NA,
-    #                                                              colorRampPalette(c("green", "black", "red"))(50)))
-    #
-    # result[[iteration]] <- list(consensus.cluster = cc,
-    #                             gene.signature = gene.sig,
-    #                             balanced.cluster = balanced.cluster,
-    #                             heatmaps = heatmaps)
+    heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],
+                                                                 scale = 'row',
+                                                                 border_color = NA,
+                                                                 colorRampPalette(c("green", "black", "red"))(50)))
+
+    result[[iteration]] <- list(consensus.cluster = cc,
+                                gene.signature = gene.sig,
+                                balanced.cluster = balanced.cluster,
+                                heatmaps = heatmaps)
 
     iteration<- iteration + 1
   }
   cat(paste(date(), iteration, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
-  # result
-  platforms
+  result
+  # all.sig
+  # cc
+  # platforms
 }

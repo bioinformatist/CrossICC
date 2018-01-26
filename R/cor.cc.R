@@ -1,4 +1,4 @@
-cor.cc <- function(xyz, cc, k){
+cor.cc <- function(xyz, cc, k, method = 'finer'){
   centroids.list <- lapply(names(k),
                            function(p) lapply(1:k[[p]],
                                               function(q) apply(xyz[[p]][, names(which(cc[[p]][[k[[p]]]]$consensusClass == q))],
@@ -12,5 +12,8 @@ cor.cc <- function(xyz, cc, k){
   centroids.names <- unlist(centroids.names.list)
   setnames(centroids, centroids.names)
 
-  cor(centroids, method="pearson")
+  switch (method,
+          'balanced' = cor(centroids, method="pearson"),
+          'finer' = cor(centroids, do.call(cbind, xyz))
+  )
 }

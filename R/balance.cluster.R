@@ -1,11 +1,11 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot = TRUE, iter){
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot = TRUE, iter, method){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, max.K), 2333)
 
   if ((sum(k) - 1) < max.K) {
     max.K = sum(k) - 1
   }
 
-  all.k <- cor.cc(sig.list, cc, k)
+  all.k <- cor.cc(sig.list, cc, k, method = method)
 
   silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x[[1]])[[1]][,3])))
   max.silw <- which.max(silws) + 1
