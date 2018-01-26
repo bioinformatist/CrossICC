@@ -1,4 +1,4 @@
-m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 1) {
+m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01) {
 
   # Merge multiple probes for one gene here
   non.duplicates <- lapply(platforms.list, merge.duplicates)
