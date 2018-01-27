@@ -53,7 +53,7 @@ NULL
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
-                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, method = 'finer'){
+                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, method = 'finer', use.shiny = TRUE){
   graphics.off()
 
   if(is.null(output.dir)) {
@@ -125,10 +125,14 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
                                         cc = cc, cluster.cutoff = cluster.cutoff,
                                         max.K = max.K, plot = TRUE, iter = iteration, method = method)
 
-    gene.sig.all <- lapply(names(all.sig),
-                           function(x) rownames(ebayes(all.sig[[x]],
-                                                       balanced.cluster[[1]][[x]],
-                                                       cutoff = ebayes.cutoff)[[1]]))
+    ebayes.result <- lapply(names(all.sig),
+                            function(x) ebayes(all.sig[[x]],
+                                                        balanced.cluster[[1]][[x]],
+                                                        cutoff = ebayes.cutoff))
+
+    gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
+    geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
+
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
 
@@ -146,16 +150,30 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
 
     result[[iteration]] <- list(# consensus.cluster = cc,
                                 gene.signature = gene.sig,
+                                MDEG = gene.sig.all,
                                 clusters = balanced.cluster,
-                                heatmaps = heatmaps)
+                                heatmaps = heatmaps,
+                                geneset2gene = geneset2gene)
 
     iteration<- iteration + 1
   }
+
+  saveRDS(result, file = 'CrossIcc.object.rds', compress = 'xz')
+
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
+  if (use.shiny) {
+    run.shiny()
+  }
   result
   # all.sig
   # cc
   # platforms
+  # balanced.cluster
+  # ebayes.result
+}
+
+run.shiny<-function(){
+  shiny::runApp(system.file("shiny", package = "CrossICC"))
 }
 
 #' Title
