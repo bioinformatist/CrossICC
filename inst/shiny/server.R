@@ -8,7 +8,7 @@ options(shiny.maxRequestSize=1024*1024^2)
 
 suppressMessages(library(shiny))
 suppressMessages(library(pheatmap))
-# suppressMessages(library(CrossICC))
+suppressMessages(library(CrossICC))
 shinyServer(function(session,input, output) {
 
 # ui setting----
@@ -23,7 +23,7 @@ shinyServer(function(session,input, output) {
   })
  #animate bar ---
   output$interationNumberForplot <- renderUI({
-    if(is.na(InterationResult())){
+    if(is.null(InterationResult())){
       tagList(div())
     }else{
       df=InterationResult()
@@ -48,12 +48,11 @@ shinyServer(function(session,input, output) {
 
 #input data ----
   inputdata<-  reactive({
-
-    example<-NULL
+    example<- readRDS(file = path.expand('~/CrossICC.object.rds'))
     inFile <- input$file1
     CrossICC.object<-NULL
     if (!is.null(inFile)){
-      CrossICC.object<-readRDS(file =inFile$datapath)
+      CrossICC.object<-readRDS(file = inFile$datapath)
     }
     switch(input$dataset,
            "default" = example,
@@ -76,8 +75,8 @@ shinyServer(function(session,input, output) {
       need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
     )
     fuck<-InterationResult()
-    grid.newpage()
-    grid.draw(fuck[[input$iterslided]]$balanced.cluster$heatmap$gtable)
+    grid::grid.newpage()
+    grid::grid.draw(fuck[[input$iterslided]]$clusters$heatmap$gtable)
 
   })
   output$Silhouette<-renderPlot({
@@ -85,14 +84,15 @@ shinyServer(function(session,input, output) {
       need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
     )
     fuck<-InterationResult()
-    replayPlot(fuck[[input$iterslided]]$balanced.cluster$silhouette)
+
+    replayPlot(fuck[[1]]$clusters$silhouette)
   })
   output$clusterexpress<-renderPlot({
     validate(
       need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
     )
     fuck<-InterationResult()
-    grid.newpage()
+    grid::grid.newpage()
     grid::grid.draw(fuck[[input$iterslided]]$heatmaps[[input$SelectPL]]$gtable)
   })
 #Download functions
@@ -104,8 +104,8 @@ shinyServer(function(session,input, output) {
     content = function(file) {
       pdf(file)
       fuck<-InterationResult()
-      grid.newpage()
-      grid.draw(fuck[[input$iterslided]]$balanced.cluster$heatmap$gtable)
+      grid::grid.newpage()
+      grid.draw(fuck[[input$iterslided]]$clusters$heatmap$gtable)
       dev.off()
     },
     contentType = 'image/pdf'
@@ -118,7 +118,7 @@ shinyServer(function(session,input, output) {
     content = function(file) {
       pdf(file)
       fuck<-InterationResult()
-      replayPlot(fuck[[input$iterslided]]$balanced.cluster$silhouette)
+      replayPlot(fuck[[input$iterslided]]$clusters$silhouette)
       dev.off()
     },
     contentType = 'image/pdf'
@@ -131,7 +131,7 @@ shinyServer(function(session,input, output) {
     content = function(file) {
       pdf(file)
       fuck<-InterationResult()
-      grid.newpage()
+      grid::grid.newpage()
       grid::grid.draw(fuck[[input$iterslided]]$heatmaps[[input$SelectPL]]$gtable)
       dev.off()
     },

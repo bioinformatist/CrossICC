@@ -26,6 +26,6 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1){
   }
   ml <- r[-1]
   names(ml) <- K
-  geneset2gene <- do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(dd[[x]])), row.names(dd[[x]]))))
+  geneset2gene <- do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])), row.names(ml[[x]]))))
   list(full.m = r[[1]], geneset2gene = geneset2gene)
 }
