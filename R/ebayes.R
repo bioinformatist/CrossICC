@@ -24,5 +24,8 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1){
     geneset.i <- limma::topTable(fit2, number = 20000, coef = i, adjust.method = 'BH', p.value = cutoff)
     r[[length(r)+1]] <- geneset.i
   }
-  r
+  ml <- r[-1]
+  names(ml) <- K
+  geneset2gene <- do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(dd[[x]])), row.names(dd[[x]]))))
+  list(full.m = r[[1]], geneset2gene = geneset2gene)
 }
