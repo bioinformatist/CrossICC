@@ -11,20 +11,31 @@ suppressMessages(library(DT))
 
 #Main function
 shinyUI(dashboardPage(skin = "black",
+
+
   dashboardHeader(title = "CrossICC: iterative consensus clustering of cross-platform gene expression data",
-                  titleWidth = 600),
+                  titleWidth = 600
+                  ),
   # sider bar ----
   dashboardSidebar(sidebarMenu(
     menuItem("Home", tabName = "home", icon = icon("home")),
     menuItem("Analysis", icon = icon("search"),tabName = "analysis",
              collapsible = T,
-             menuSubItem('Input Dataset', tabName = 'input'),
-             menuSubItem('Iterater', tabName = 'iter')
+             menuSubItem('CrossICC result', tabName = 'CrossICC'),
+             menuSubItem('Predict New Sample', tabName = 'predict'),
+             menuSubItem('Correlation analysis', tabName = 'correlation')
     ),
     menuItem("Help", tabName = "Help", icon = icon("question"))
   )),
   #body elements ----
   dashboardBody(
+    tags$head(
+      tags$style(HTML("
+      .shiny-output-error-validation {
+                      color: brown;
+                      }
+                      "))
+    ),
     tabItems(
       # home page----
       tabItem("home",
@@ -37,71 +48,44 @@ shinyUI(dashboardPage(skin = "black",
               ),
 
       # inout panel ----
-      tabItem("input",
-
-                # column(
-                #   width = 2,
-                #   #step1----
-                #   box(
-                #     title =  div(icon("file-text"),"Example dataset"),solidHeader = TRUE,width = 100,status = "success",
-                #     radioButtons(
-                #       "dataset",
-                #       strong("Mutation Dataset"),inline=T,
-                #       c(Example = "example"),
-                #       selected = 'example'
-                #     ),
-                #     numericInput("MaxInterNum","Max iterater number",value=1000,min=100,max=1000,step=100),
-                #     #input manually ----
-                #     # radioButtons(
-                #     #   "dataset",
-                #     #   strong("Mutation Dataset"),inline=T,
-                #     #   c(Example = "example", Upload = "upload"),
-                #     #   selected = 'example'
-                #     # ),
-                #     # conditionalPanel(condition = "input.dataset == 'upload'",
-                #     #                  fileInput('file1', 'CSV and Text Document format are supported',
-                #     #                            accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'),multiple = T)
-                #     #                  # ,fileInputSeries()
-                #     # ),
-                #     #----
-                #     actionButton("submit","Submit")
-                #   ),
-                #   box(
-                #     title = "Interation information",solidHeader = TRUE,width = 100,status = "success"
-                #
-                #   ),
-                #   box(
-                #     title = "Control panel",solidHeader = TRUE,width = 100,status = "success"
-                #   )
-                # ),
+      tabItem("CrossICC",
               fluidRow(
-                  width = 6,
+                #setting panel
                   box(
-                   title = "Control Panel for Example data ",solidHeader = TRUE,status = "success",
-                   numericInput("MaxInterNum","Max iterater number",value=1000,min=100,max=1000,step=100),
+                   title = "Control Panel for Example data ",solidHeader = TRUE,status = "success",width = 4,
+                   radioButtons(
+                     "dataset",
+                     strong("Mutation Dataset"),inline=T,
+                     c(Default = "default", Upload = "upload"),
+                     selected = 'default'
+                   ),
+                   conditionalPanel(condition = "input.dataset == 'upload'",
+                                    fileInput('file1', 'CrossICC output data in RDA format',
+                                              accept=c('application/rds', '.rds'))
+                   ),
                    actionButton("submit","Submit"),
-                   h3("Run result showing here"),
-                    uiOutput("interationNumberForplot")
+                   uiOutput("interationNumberForplot")
                   ),
-                  box(
-                    title = "Super Clustering",solidHeader = TRUE,status = "primary",
-                    plotOutput("superclusterPlot")
-                  )
-                ),
-              fluidRow(
-                  width = 6,
-                  box(
-                    title = "Expression heatmap by signagure",solidHeader = TRUE,status = "primary",
-                    uiOutput("expressionHeatmapSelectPlatform"),
-                     plotOutput("clusterexpress")
-                  ),
-                  box(
-                    title = "Silhouette Result",solidHeader = TRUE,status = "primary",
-                    plotOutput("Silhouette")
+                  tabBox (id="crossICCresultPanel",title=h3("Data Exploration"),width = 8, side = "right",
+                          selected = "cr01",
+                          tabPanel(title=div(icon("book"),"Super Clustering"),value="cr01",
+                                   downloadLink('DownloadSuperclusterPlot', 'Download PDF'),
+                                   plotOutput("superclusterPlot")
+                          ),
+                          tabPanel(title=div(icon("book"),"Silhouette Result"),value="cr02",
+                                   downloadLink('DownloadSilhouette', 'Download PDF'),
+                                   plotOutput("Silhouette")
+                          ),
+                          tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr03",
+                                   downloadLink('DownloadClusterexpressPlot', 'Download PDF'),
+                                   uiOutput("expressionHeatmapSelectPlatform"),
+                                   plotOutput("clusterexpress")
+                          )
                   )
                 )
               ),
-      tabItem("iter")
+      tabItem("predict"),
+      tabItem("correlation")
 
       # analysis  panel ----
     )
