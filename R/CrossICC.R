@@ -158,7 +158,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
     iteration<- iteration + 1
   }
 
-  saveRDS(result, file = 'CrossIcc.object.rds', compress = 'xz')
+  saveRDS(result, file = path.expand('~/CrossICC.object.rds'))
 
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
   if (use.shiny) {
