@@ -55,7 +55,7 @@ shinyUI(dashboardPage(skin = "black",
                    title = "Control Panel for Example data ",solidHeader = TRUE,status = "success",width = 4,
                    radioButtons(
                      "dataset",
-                     strong("Mutation Dataset"),inline=T,
+                     strong("Mutation Dataset"),inline=TRUE,
                      c(Default = "default", Upload = "upload"),
                      selected = 'default'
                    ),
