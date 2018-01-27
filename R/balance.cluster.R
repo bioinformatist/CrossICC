@@ -50,5 +50,6 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot
     # tiff(paste("silhouette.plot", iter, "tiff", sep = "."), res = 300, width = 1600, height = 1600)
   }
 
-  list(all.k, cc.k.balanced, heatmap = heatmap, silhouette = silhouette)
+  list(  # all.k,
+       clusters = cc.k.balanced, heatmap = heatmap, silhouette = silhouette)
 }

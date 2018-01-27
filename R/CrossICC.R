@@ -127,7 +127,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
 
     gene.sig.all <- lapply(names(all.sig),
                            function(x) rownames(ebayes(all.sig[[x]],
-                                                       balanced.cluster[[2]][[x]],
+                                                       balanced.cluster[[1]][[x]],
                                                        cutoff = ebayes.cutoff)[[1]]))
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
@@ -136,7 +136,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
     if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
       # Remove final iteration results (repeated) from list, also reset iteration time
       result[[iteration]] <- NULL
-      iteration <- iteration - 1
       break
     }
 
@@ -145,16 +144,30 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
                                                                  border_color = NA,
                                                                  colorRampPalette(c("green", "black", "red"))(50)))
 
-    result[[iteration]] <- list(consensus.cluster = cc,
+    result[[iteration]] <- list(# consensus.cluster = cc,
                                 gene.signature = gene.sig,
-                                balanced.cluster = balanced.cluster,
+                                clusters = balanced.cluster,
                                 heatmaps = heatmaps)
 
     iteration<- iteration + 1
   }
-  cat(paste(date(), iteration, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
+  cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
   result
   # all.sig
   # cc
   # platforms
+}
+
+#' Title
+#'
+#' @param result
+#' @param iteration
+#'
+#' @return
+#' @export
+#'
+#' @examples
+summary.CrossICC <- function(result, iteration = 1) {
+  list(gene.signatures = result[[iteration]]$gene.signature,
+       clusters = result[[iteration]]$clusters[[1]])
 }
