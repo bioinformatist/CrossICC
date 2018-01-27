@@ -11,8 +11,11 @@ suppressMessages(library(DT))
 
 #Main function
 shinyUI(dashboardPage(skin = "black",
+
+
   dashboardHeader(title = "CrossICC: iterative consensus clustering of cross-platform gene expression data",
-                  titleWidth = 600),
+                  titleWidth = 600
+                  ),
   # sider bar ----
   dashboardSidebar(sidebarMenu(
     menuItem("Home", tabName = "home", icon = icon("home")),
@@ -26,6 +29,13 @@ shinyUI(dashboardPage(skin = "black",
   )),
   #body elements ----
   dashboardBody(
+    tags$head(
+      tags$style(HTML("
+      .shiny-output-error-validation {
+                      color: brown;
+                      }
+                      "))
+    ),
     tabItems(
       # home page----
       tabItem("home",
@@ -40,22 +50,34 @@ shinyUI(dashboardPage(skin = "black",
       # inout panel ----
       tabItem("CrossICC",
               fluidRow(
+                #setting panel
                   box(
                    title = "Control Panel for Example data ",solidHeader = TRUE,status = "success",width = 4,
-                   numericInput("MaxInterNum","Max iterater number",value=1000,min=100,max=1000,step=100),
+                   radioButtons(
+                     "dataset",
+                     strong("Mutation Dataset"),inline=T,
+                     c(Default = "default", Upload = "upload"),
+                     selected = 'default'
+                   ),
+                   conditionalPanel(condition = "input.dataset == 'upload'",
+                                    fileInput('file1', 'CrossICC output data in RDA format',
+                                              accept=c('application/rds', '.rds'))
+                   ),
                    actionButton("submit","Submit"),
-                   h3("Run result showing here"),
-                    uiOutput("interationNumberForplot")
+                   uiOutput("interationNumberForplot")
                   ),
                   tabBox (id="crossICCresultPanel",title=h3("Data Exploration"),width = 8, side = "right",
                           selected = "cr01",
                           tabPanel(title=div(icon("book"),"Super Clustering"),value="cr01",
+                                   downloadLink('DownloadSuperclusterPlot', 'Download PDF'),
                                    plotOutput("superclusterPlot")
                           ),
                           tabPanel(title=div(icon("book"),"Silhouette Result"),value="cr02",
+                                   downloadLink('DownloadSilhouette', 'Download PDF'),
                                    plotOutput("Silhouette")
                           ),
                           tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr03",
+                                   downloadLink('DownloadClusterexpressPlot', 'Download PDF'),
                                    uiOutput("expressionHeatmapSelectPlatform"),
                                    plotOutput("clusterexpress")
                           )
