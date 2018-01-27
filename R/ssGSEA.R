@@ -16,7 +16,7 @@ ssGSEA <- function(x, cluster, gene.signature, geneset2gene, plot.file, color = 
   # 'genewprobe' for runFAIME. But still need geneset2gene: An one-to-one mapping matrix with two columns,
   # the 1st column is geneset ID/name, and the 2nd is its gene members
   # For testing:
-  # gs <- data.frame(geneset = c(rep('set1', 7), rep('set2', 8)), gene = fuck[[1]]$gene.signature)
+  # gs <- data.frame(geneset = c(rep('set1', 8), rep('set2', 8)), gene = fuck[[1]]$gene.signature)
   # gs <- as.matrix(gs)
   genewprobe <- gene.signature
   names(genewprobe) <- gene.signature
