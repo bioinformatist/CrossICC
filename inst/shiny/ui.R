@@ -18,8 +18,9 @@ shinyUI(dashboardPage(skin = "black",
     menuItem("Home", tabName = "home", icon = icon("home")),
     menuItem("Analysis", icon = icon("search"),tabName = "analysis",
              collapsible = T,
-             menuSubItem('Input Dataset', tabName = 'input'),
-             menuSubItem('Iterater', tabName = 'iter')
+             menuSubItem('CrossICC result', tabName = 'CrossICC'),
+             menuSubItem('Predict New Sample', tabName = 'predict'),
+             menuSubItem('Correlation analysis', tabName = 'correlation')
     ),
     menuItem("Help", tabName = "Help", icon = icon("question"))
   )),
@@ -37,71 +38,32 @@ shinyUI(dashboardPage(skin = "black",
               ),
 
       # inout panel ----
-      tabItem("input",
-
-                # column(
-                #   width = 2,
-                #   #step1----
-                #   box(
-                #     title =  div(icon("file-text"),"Example dataset"),solidHeader = TRUE,width = 100,status = "success",
-                #     radioButtons(
-                #       "dataset",
-                #       strong("Mutation Dataset"),inline=T,
-                #       c(Example = "example"),
-                #       selected = 'example'
-                #     ),
-                #     numericInput("MaxInterNum","Max iterater number",value=1000,min=100,max=1000,step=100),
-                #     #input manually ----
-                #     # radioButtons(
-                #     #   "dataset",
-                #     #   strong("Mutation Dataset"),inline=T,
-                #     #   c(Example = "example", Upload = "upload"),
-                #     #   selected = 'example'
-                #     # ),
-                #     # conditionalPanel(condition = "input.dataset == 'upload'",
-                #     #                  fileInput('file1', 'CSV and Text Document format are supported',
-                #     #                            accept=c('text/csv', 'text/comma-separated-values,text/plain', '.csv'),multiple = T)
-                #     #                  # ,fileInputSeries()
-                #     # ),
-                #     #----
-                #     actionButton("submit","Submit")
-                #   ),
-                #   box(
-                #     title = "Interation information",solidHeader = TRUE,width = 100,status = "success"
-                #
-                #   ),
-                #   box(
-                #     title = "Control panel",solidHeader = TRUE,width = 100,status = "success"
-                #   )
-                # ),
+      tabItem("CrossICC",
               fluidRow(
-                  width = 6,
                   box(
-                   title = "Control Panel for Example data ",solidHeader = TRUE,status = "success",
+                   title = "Control Panel for Example data ",solidHeader = TRUE,status = "success",width = 4,
                    numericInput("MaxInterNum","Max iterater number",value=1000,min=100,max=1000,step=100),
                    actionButton("submit","Submit"),
                    h3("Run result showing here"),
                     uiOutput("interationNumberForplot")
                   ),
-                  box(
-                    title = "Super Clustering",solidHeader = TRUE,status = "primary",
-                    plotOutput("superclusterPlot")
-                  )
-                ),
-              fluidRow(
-                  width = 6,
-                  box(
-                    title = "Expression heatmap by signagure",solidHeader = TRUE,status = "primary",
-                    uiOutput("expressionHeatmapSelectPlatform"),
-                     plotOutput("clusterexpress")
-                  ),
-                  box(
-                    title = "Silhouette Result",solidHeader = TRUE,status = "primary",
-                    plotOutput("Silhouette")
+                  tabBox (id="crossICCresultPanel",title=h3("Data Exploration"),width = 8, side = "right",
+                          selected = "cr01",
+                          tabPanel(title=div(icon("book"),"Super Clustering"),value="cr01",
+                                   plotOutput("superclusterPlot")
+                          ),
+                          tabPanel(title=div(icon("book"),"Silhouette Result"),value="cr02",
+                                   plotOutput("Silhouette")
+                          ),
+                          tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr03",
+                                   uiOutput("expressionHeatmapSelectPlatform"),
+                                   plotOutput("clusterexpress")
+                          )
                   )
                 )
               ),
-      tabItem("iter")
+      tabItem("predict"),
+      tabItem("correlation")
 
       # analysis  panel ----
     )
