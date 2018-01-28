@@ -2,6 +2,7 @@
 
 export(CrossICC)
 export(CrossICCshiny)
+export(predictor)
 export(ssGSEA)
 export(summary.CrossICC)
 import(MASS)
