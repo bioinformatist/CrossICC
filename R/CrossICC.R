@@ -48,7 +48,7 @@ NULL
 #' @examples
 #' \donttest{
 #' # It takes too long time for running code below, so ignore them in R CMD check.
-#' CrossICC(example.matrices, max.iter = 1)
+#' CrossICC(example.matrices, max.iter = 1, use.shiny = FALSE)
 #' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
@@ -133,6 +133,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
     geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
 
+    unioned.genesets <- as.matrix(unique(data.table(do.call(rbind, geneset2gene))))
+
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
 
@@ -150,10 +152,11 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
 
     result[[iteration]] <- list(# consensus.cluster = cc,
                                 gene.signature = gene.sig,
-                                MDEG = gene.sig.all,
+                                # MDEG = gene.sig.all,
                                 clusters = balanced.cluster,
                                 heatmaps = heatmaps,
-                                geneset2gene = geneset2gene)
+                                geneset2gene = geneset2gene,
+                                unioned.genesets = unioned.genesets)
 
     iteration<- iteration + 1
   }
