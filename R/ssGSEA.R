@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @examples
-ssGSEA <- function(x, cluster, gene.signature, geneset2gene, plot.file, color = c("purple", "#910202",
-  "#035005", "#1273d6", "#ff8207")) {
+ssGSEA <- function(x, gene.signature, geneset2gene, plot.file = FALSE, color = c("purple", "#910202",
+  "#035005", "#1273d6", "#ff8207"), cluster) {
   # Our up-stream matrix is already with gene symbols, so provide fake
   # 'genewprobe' for runFAIME. But still need geneset2gene: An one-to-one mapping matrix with two columns,
   # the 1st column is geneset ID/name, and the 2nd is its gene members
@@ -25,7 +25,7 @@ ssGSEA <- function(x, cluster, gene.signature, geneset2gene, plot.file, color = 
   fs.scale <- replace(fs.scale, fs.scale < -2, -2)
   fs.scale <- replace(fs.scale, fs.scale > 2, 2)
   sn <- gene.signature
-  if (exists("plot.file")) {
+  if (plot.file) {
     fs.scale <- fs.scale[, names(sort(cluster))]
     col.col <- c()
     cluster.member <- unique(sort(cluster))
