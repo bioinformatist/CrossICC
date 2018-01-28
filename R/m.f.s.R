@@ -1,4 +1,4 @@
-m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01) {
+m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perform.mad = TRUE) {
 
   # Merge multiple probes for one gene here
   non.duplicates <- lapply(platforms.list, merge.duplicates)
@@ -41,10 +41,19 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01) {
            You may check if fake gene symbol/ID or wrongly annotated?")
     }
 
-    filter.genes <- lapply(jittered, function(x) filter.mad(x[genes.com.fdr,
-      ], p = filter.cutoff))
+    if (perform.mad) {
+      filter.genes <- lapply(jittered, function(x) filter.mad(x[genes.com.fdr,
+                                                                ], p = filter.cutoff))
+    } else {
+      filter.genes <- genes.com.fdr
+    }
+
   } else {
-    filter.genes <- lapply(jittered, function(x) filter.mad(x, p = filter.cutoff))
+    if (perform.mad) {
+      filter.genes <- lapply(jittered, function(x) filter.mad(x, p = filter.cutoff))
+    } else {
+      filter.genes <- genes.com.list
+    }
   }
 
   filter.genes.com <- com.feature(filter.genes, method = "overlap")
