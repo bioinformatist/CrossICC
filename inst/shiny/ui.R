@@ -84,7 +84,38 @@ shinyUI(dashboardPage(skin = "black",
                   )
                 )
               ),
-      tabItem("predict"),
+      tabItem("predict",
+              fluidRow(
+                #setting panel
+                box(
+                  title = "Input your data set for prediction",solidHeader = TRUE,status = "success",width = 4,
+                  radioButtons(
+                    "dataset2",
+                    strong("Mutation Dataset"),inline=TRUE,
+                    c(Default = "default", Upload = "upload"),
+                    selected = 'default'
+                  ),
+                  conditionalPanel(condition = "input.dataset2 == 'upload'",
+                                   fileInput('file1', 'Input dataset in matrix file',
+                                             accept=c('text/txt', '.rds'))
+                  ),
+                  actionButton("submit2","Submit")
+                ),
+                tabBox (id="PredictResultPanel",title=h3("Analysis"),width = 8, side = "right",
+                        selected = "pre01",
+                        tabPanel(title=div(icon("book"),"Read Me"),value="pre01",
+                                 p("Write introduction here")
+                        ),
+                        tabPanel(title=div(icon("book"),"Data Input"),value="pre02",
+                                 h3("Summary of input dataset ")
+                        ),
+                        tabPanel(title=div(icon("book"),"Predict Result"),value="pre03"
+
+                        )
+                )
+              )
+
+              ),
       tabItem("correlation")
 
       # analysis  panel ----
