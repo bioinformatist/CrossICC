@@ -4,8 +4,8 @@
 \alias{predictor}
 \title{Title}
 \usage{
-predictor(x, y, gene.signature, geneset2gene, filter.cutoff = 0.5,
-  fdr.cutoff = 0.01)
+predictor(x, y, gene.signature, geneset2gene, filter.cutoff = 1,
+  fdr.cutoff = 1)
 }
 \arguments{
 \item{fdr.cutoff}{}

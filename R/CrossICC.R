@@ -48,8 +48,8 @@ NULL
 #' @examples
 #' \donttest{
 #' # It takes too long time for running code below, so ignore them in R CMD check.
-#' CrossICC(example.matrices, max.iter = 1, use.shiny = FALSE)
-#' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 1)
+#' CrossICC(example.matrices, max.iter = 20, use.shiny = FALSE)
+#' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 20)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
@@ -184,7 +184,18 @@ run.shiny<-function(){
 #' @export
 #'
 #' @examples
-summary.CrossICC <- function(result, iteration = 1) {
-  list(gene.signatures = result[[iteration]]$gene.signature,
-       clusters = result[[iteration]]$clusters[[1]])
+summary.CrossICC <- function(result, iteration = NULL) {
+  # make sure the last iterater was summarized which represents the final result
+  if(is.null(iteration)){
+    iteration<-length(result)
+  }
+  temp.object<-result[[iteration]]$clusters[[1]]
+  #get final gene2cluster set
+  colnames(result[[iteration]]$unioned.genesets)=c("Cluster","Genes")
+  final.geneset<-result[[iteration]]$unioned.genesets
+  #get final clusterSample result
+  names(temp.object)=c()
+  final.cluster<-do.call(c,result[[iteration]]$clusters[[1]])
+  list(gene.signatures = final.geneset,
+       clusters = final.cluster)
 }

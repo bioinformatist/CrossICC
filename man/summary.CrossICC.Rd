@@ -4,7 +4,7 @@
 \alias{summary.CrossICC}
 \title{Title}
 \usage{
-summary.CrossICC(result, iteration = 1)
+summary.CrossICC(result, iteration = NULL)
 }
 \arguments{
 \item{iteration}{}

@@ -4,8 +4,8 @@
 \alias{ssGSEA}
 \title{Title}
 \usage{
-ssGSEA(x, gene.signature, geneset2gene, plot.file, color = c("purple",
-  "#910202", "#035005", "#1273d6", "#ff8207"), cluster)
+ssGSEA(x, gene.signature, geneset2gene, plot.file = FALSE,
+  color = c("purple", "#910202", "#035005", "#1273d6", "#ff8207"), cluster)
 }
 \arguments{
 \item{color}{}
