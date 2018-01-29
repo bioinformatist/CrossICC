@@ -11,11 +11,11 @@
 #' @export
 #'
 #' @examples
-predictor <- function(x, y, gene.signature, geneset2gene, filter.cutoff = 0.5, fdr.cutoff = 0.01) {
+predictor <- function(x, y, gene.signature, geneset2gene, filter.cutoff = 1, fdr.cutoff = 1) {
   filtered.x <- m.f.s(list(x), fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, perform.mad = FALSE)[[2]][[1]]
   genewprobe <- gene.signature
   names(genewprobe) <- gene.signature
-  c1 <- runFAIME(filtered.x, genewprobe, geneset2gene, weightRank = FALSE)
+  c1 <- runFAIME(filtered.x, genewprobe, geneset2gene, na.last = "keep", weightRank = FALSE)
   c2 <- ssGSEA(y, gene.signature, geneset2gene)
 
   FAIME.scale <- function(fs) {
@@ -32,13 +32,13 @@ predictor <- function(x, y, gene.signature, geneset2gene, filter.cutoff = 0.5, f
   #   cor_row <- c()
   #   for(i in 1:ncol(c2)){
   #     vcentroidi <- c2[,i]
-  #     corj <- cor.test(pcentroidj,vcentroidi,use="complete",method="pearson")
+  #     corj <- cor(pcentroidj, vcentroidi, use="complete", method="pearson")
   #     cor_row[length(cor_row)+1] <- corj$estimate
   #   }
   #   cor <- rbind(cor,cor_row)
   # }
   # rownames(cor) <- colnames(c1)
   # colnames(cor) <- colnames(c2)
-  # cor
-  list(c1, c2)
+  # mapply(cor, c1, c2)
+  cor(c1, c2)
 }
