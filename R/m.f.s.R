@@ -8,8 +8,6 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
 
   genes.com <- com.feature(lapply(jittered, rownames), method = "overlap")
 
-  genes.com.list <- lapply(jittered, function(x) unlist(x)[genes.com, ])
-
   if (length(platforms.list) > 1) {
     # Must pre-assigned here (deep copy, and must not be slice of list), or
     # mergeExprs will raise error (exactly its bug):
@@ -17,6 +15,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
     # Error in dimnames(x) <- dn : length of 'dimnames' [2] not equal to array
     # extent MergeMaid.R has been fine-adjusted in this package.
 
+    genes.com.list <- lapply(jittered, function(x) unlist(x)[genes.com, ])
     merged <- mergeExprs(genes.com.list)
 
     fig.size <- (length(platforms.list) + 1) * 400
@@ -44,22 +43,25 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
     if (perform.mad) {
       filter.genes <- lapply(jittered, function(x) filter.mad(x[genes.com.fdr,
                                                                 ], p = filter.cutoff))
+      filter.genes.com <- com.feature(filter.genes, method = "overlap")
     } else {
       filter.genes <- genes.com.fdr
+      filter.genes.com <- com.feature(filter.genes, method = "overlap")
     }
 
   } else {
     if (perform.mad) {
       filter.genes <- lapply(jittered, function(x) filter.mad(x, p = filter.cutoff))
+      filter.genes.com <- com.feature(filter.genes, method = "overlap")
     } else {
-      filter.genes <- genes.com.list
+      filter.genes <- genes.com
+      filter.genes.com <- filter.genes
     }
   }
-
-  filter.genes.com <- com.feature(filter.genes, method = "overlap")
 
   filter.scale <- lapply(jittered, function(x) scale(t(scale(t(x[filter.genes.com,
     ])))))
 
   return(list(filtered.gene = filter.genes.com, filterd.scaled = filter.scale))
+  # filter.genes.com
 }
