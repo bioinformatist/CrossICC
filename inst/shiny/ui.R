@@ -68,15 +68,19 @@ shinyUI(dashboardPage(skin = "black",
                   ),
                   tabBox (id="crossICCresultPanel",title=h3("Data Exploration"),width = 8, side = "right",
                           selected = "cr01",
-                          tabPanel(title=div(icon("book"),"Super Clustering"),value="cr01",
+                          tabPanel(title=div(icon("book"),"Summary"),value="cr01",
+                                   dataTableOutput("OutputResultSignature"),
+                                   verbatimTextOutput("OutputClusterResult")
+                          ),
+                          tabPanel(title=div(icon("book"),"Super Clustering"),value="cr02",
                                    downloadLink('DownloadSuperclusterPlot', 'Download PDF'),
                                    plotOutput("superclusterPlot")
                           ),
-                          tabPanel(title=div(icon("book"),"Silhouette Result"),value="cr02",
+                          tabPanel(title=div(icon("book"),"Silhouette Result"),value="cr03",
                                    downloadLink('DownloadSilhouette', 'Download PDF'),
                                    plotOutput("Silhouette")
                           ),
-                          tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr03",
+                          tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr04",
                                    downloadLink('DownloadClusterexpressPlot', 'Download PDF'),
                                    uiOutput("expressionHeatmapSelectPlatform"),
                                    plotOutput("clusterexpress")
