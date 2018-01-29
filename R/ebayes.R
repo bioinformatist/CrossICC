@@ -1,4 +1,4 @@
-ebayes <- function(eSet.subset, class, cutoff = 0.1){
+ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
   k <- length(unique(class))
   design <- model.matrix(~ 0 + factor(class))
   colnames(design) <- paste("K", 1:k, sep = "")
@@ -26,6 +26,13 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1){
   }
   ml <- r[-1]
   names(ml) <- K
-  geneset2gene <- do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])), row.names(ml[[x]]))))
+  if (k <= 2 && mode == "both") {
+    warning("It's not allowed to perform ebayes with both mode when cluster type number is less than 2.\nAlready set it to up mode.")
+    mode = "up"
+  }
+  geneset2gene <- switch(mode,
+    "up" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(abs(ml[[x]][,1]) >= 1)), names(which(abs(ml[[x]][,1]) >= 1)))))),
+    "both" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])), row.names(ml[[x]]))))
+    )
   list(full.m = r[[1]], geneset2gene = geneset2gene)
 }

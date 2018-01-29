@@ -53,7 +53,7 @@ NULL
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
-                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, method = 'finer', use.shiny = TRUE){
+                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
   graphics.off()
 
   if(is.null(output.dir)) {
@@ -128,7 +128,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
     ebayes.result <- lapply(names(all.sig),
                             function(x) ebayes(all.sig[[x]],
                                                         balanced.cluster[[1]][[x]],
-                                                        cutoff = ebayes.cutoff))
+                                                        cutoff = ebayes.cutoff,
+                                               mode = ebayes.mode))
 
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
     geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
