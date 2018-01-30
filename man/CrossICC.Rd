@@ -49,8 +49,12 @@ or a function that returns a clustering.}
 
 \item{ebayes.cutoff}{p-value cutoff when select differentially expressed probes.}
 
+\item{ebayes.mode}{'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes.}
+
 \item{method}{'finer' (based on correlation between sample expression values and centroids) or 'balanced' (based on correlation of centroids).
 Which super-cluster strategy should be used?}
+
+\item{use.shiny}{If TRUE, a shiny app will appear after running this main function.}
 }
 \value{
 A nested list with iteration time as its name and list containing consensus cluster,

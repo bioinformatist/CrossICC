@@ -37,6 +37,8 @@ NULL
 #' @param ... all datasets (matrices is better)
 #' @param method 'finer' (based on correlation between sample expression values and centroids) or 'balanced' (based on correlation of centroids).
 #' Which super-cluster strategy should be used?
+#' @param ebayes.mode 'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes.
+#' @param use.shiny If TRUE, a shiny app will appear after running this main function.
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.

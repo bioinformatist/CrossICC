@@ -4,11 +4,11 @@
 \alias{predictor}
 \title{Title}
 \usage{
-predictor(x, y, gene.signature, geneset2gene, filter.cutoff = 1,
+predictor(x, fs, gene.signature, geneset2gene, filter.cutoff = 1,
   fdr.cutoff = 1)
 }
 \arguments{
-\item{fdr.cutoff}{}
+\item{fs}{}
 }
 \description{
 Title
