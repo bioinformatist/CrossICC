@@ -1,22 +1,22 @@
 #' Title
 #'
 #' @param x
-#' @param y
 #' @param gene.signature
 #' @param geneset2gene
 #' @param filter.cutoff
 #' @param fdr.cutoff
+#' @param fs
 #'
 #' @return
 #' @export
 #'
 #' @examples
-predictor <- function(x, y, gene.signature, geneset2gene, filter.cutoff = 1, fdr.cutoff = 1) {
+predictor <- function(x, fs, gene.signature, geneset2gene, filter.cutoff = 1, fdr.cutoff = 1) {
   filtered.x <- m.f.s(list(x), fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, perform.mad = FALSE)[[2]][[1]]
   genewprobe <- gene.signature
   names(genewprobe) <- gene.signature
   c1 <- runFAIME(filtered.x, genewprobe, geneset2gene, na.last = "keep", weightRank = FALSE)
-  c2 <- ssGSEA(y, gene.signature, geneset2gene)
+  c2 <- fs
 
   FAIME.scale <- function(fs) {
     fs.scale <- t(scale(t(fs)))
