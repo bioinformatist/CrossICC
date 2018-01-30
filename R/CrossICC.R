@@ -138,6 +138,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
     if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
       # Remove final iteration results (repeated) from list, also reset iteration time
       result[[iteration]] <- NULL
+      signal <- "reached"
       break
     }
 
@@ -160,6 +161,11 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
   saveRDS(result, file = path.expand('~/CrossICC.object.rds'))
 
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
+
+  if (!signal) {
+    warning("Still not reach convergence when provided iteration time has gone!")
+  }
+
   if (use.shiny) {
     run.shiny()
   }
