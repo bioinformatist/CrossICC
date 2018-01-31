@@ -16,8 +16,77 @@ Cancer subtyping and prognosis have been studied extensively by various molecula
 There are two iteration based cluster modes provided by CrossICC, which are `balanced` clustering mode and `finer` clustering mode. For `balanced` mode, the core procedure is that samples from each platform are clustered seperately and  centroid of each subcluster derived were clustered again to generate super cluster. This process skipped the normalization step and avoided removing batch effect across platforms. Thus it can obtain more confidential gene signature as well as reliabe subtypes supported by larger data set. The details step by step illustration of this algorithm can be found in our previous published [paper](http://clincancerres.aacrjournals.org/content/early/2014/12/09/1078-0432.ccr-14-2481) and  our recent submitted paper[coming soon]. 
 For `finer` mode, we are aiming to get more subtypes when samples comes groups that have high heterogeneity. Briefly, subclusters were first worked out by [ConsensusClusterPlus](https://bioconductor.org/packages/release/bioc/html/ConsensusClusterPlus.html) in each platform. We then calculated correlation coefficient between samples and centroids of clusters to get a new feature vector of each samples. Based on this new matrix, samples were devided into new clusters which are corresponding to final cancer subtypes.
 
-## To get super
+## Example 1: To get super cluster from multiple platform sourced dataset
 
 ```{r eval=FALSE}
-CrossICC(example.matrices, max.iter = 20)
+CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
 ```
+
+Here, `CrossICC.object` is a list object in R which contains results of each iteration before reaching convergence or given upper-limit time. For instance, `CrossICC.object[[1]]` stands for the result (gene signatures, super cluster and geneset group, etc.) produced by the 1st time iteration. Ditto the `CrossICC.object[[n]]`. If the iteration time comes to the user-defined upper-limit but still not reaches convergence, you will receive a warning message.
+
+For the return value of `CrossICC()` has such a complicate structure that you should always assign the `CrossICC()`'s results to a variable, then use `summary.CrossICC()` for pretty/readable output in R console: 
+
+By default, `CrossICC()` will run a shiny app once the iteration to help ...(Qi Fat please describe the shiny app here, detailed pls)
+
+## Example 2: Summary the CrossICC-returned list to produce human-readable output
+
+```{r eval=FALSE}
+summary.CrossICC(CrossICC.object)
+```
+
+With `summary.CrossICC` you can get prettier output (also could be easy for using in further analysys) like:
+
+```pre
+$gene.signatures
+      Cluster Genes     
+ [1,] "K1"    "CCDC175" 
+ [2,] "K1"    "ESYT3"   
+ [3,] "K1"    "C10orf76"
+ [4,] "K1"    "SLC38A1" 
+ [5,] "K1"    "CLEC2A"  
+ [6,] "K2"    "TMEM200C"
+ [7,] "K2"    "SPANXN2" 
+ [8,] "K2"    "SAMD4A"  
+ [9,] "K2"    "TTLL9"   
+[10,] "K1"    "APOB"    
+[11,] "K1"    "PIAS4"   
+[12,] "K1"    "HIP1R"   
+[13,] "K2"    "NPIPB11" 
+[14,] "K2"    "PLCXD2"  
+[15,] "K2"    "SLC38A1" 
+[16,] "K1"    "SAMD4A"  
+
+$clusters
+  Matrix.1.GSM40651   Matrix.1.GSM40652   Matrix.1.GSM40653   Matrix.1.GSM40654   Matrix.1.GSM40655   Matrix.1.GSM40656 
+                  1                   2                   1                   1                   1                   1 
+  Matrix.1.GSM40657   Matrix.1.GSM40658   Matrix.1.GSM40659  Matrix.2.GSM359831  Matrix.2.GSM675619  Matrix.2.GSM675625 
+                  2                   2                   2                   1                   2                   1 
+ Matrix.2.GSM675628  Matrix.2.GSM675630  Matrix.2.GSM675650  Matrix.2.GSM675652  Matrix.2.GSM675659  Matrix.2.GSM675661 
+                  1                   1                   1                   1                   1                   1 
+ Matrix.2.GSM675662  Matrix.2.GSM675663  Matrix.2.GSM675664  Matrix.2.GSM675665  Matrix.2.GSM675666  Matrix.2.GSM675667 
+                  1                   1                   1                   2                   2                   2 
+ Matrix.2.GSM675668  Matrix.2.GSM675669  Matrix.2.GSM675670  Matrix.2.GSM675671  Matrix.2.GSM675672  Matrix.2.GSM675673 
+                  2                   2                   2                   2                   2                   2 
+ Matrix.2.GSM675674  Matrix.2.GSM675675  Matrix.2.GSM675681 Matrix.3.GSM1253682 Matrix.3.GSM1253683 Matrix.3.GSM1253684 
+                  2                   2                   2                   2                   2                   1 
+Matrix.3.GSM1253685 Matrix.3.GSM1253686 Matrix.3.GSM1253687 Matrix.3.GSM1253688 Matrix.3.GSM1253689 Matrix.3.GSM1253690 
+                  2                   1                   1                   1                   1                   1 
+Matrix.3.GSM1253691 Matrix.3.GSM1253692 
+                  2                   2 
+```
+
+## Example 3: To get GSEA-like ranked matrix from CrossICC result
+
+```{r eval=FALSE}
+ssGSEA.matrix <- ssGSEA(example.matrices$x, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
+```
+
+Qi Fat please describe ssGSEA here
+
+## Example 4: To calculate the correlation between the predictor centroid and the validation centroid
+
+```{r eval=FALSE}
+predictor(example.matrices$x, ssGSEA.matrix, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
+```
+
+Qi Fat please describe predictor here
