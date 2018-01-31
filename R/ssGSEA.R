@@ -1,15 +1,20 @@
-#' Title
+#' Title To get GSEA-like ranked matrix from CrossICC result.
 #'
-#' @param x
-#' @param cluster
-#' @param gene.signature
-#' @param plot.file
-#' @param color
+#' @param x a eSet object or eSet-like matrix.
+#' @param cluster only used when plot.file is provided. Single super cluster vector of list from CrossICC result list.
+#' @param gene.signature gene signatures calculated by CrossICC.
+#' @param plot.file to be deprecated.
+#' @param color to be deprecated.
+#' @param geneset2gene a matrix contains geneset (cluster name) mapping to gene.
 #'
-#' @return
+#' @return a matrix with samples' eigenvalue in different super clusters.
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
+#' ssGSEA(example.matrices$x, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
+#' }
 ssGSEA <- function(x, gene.signature, geneset2gene, plot.file = FALSE, color = c("purple", "#910202",
   "#035005", "#1273d6", "#ff8207"), cluster) {
   # Our up-stream matrix is already with gene symbols, so provide fake

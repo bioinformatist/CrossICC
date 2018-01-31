@@ -2,14 +2,32 @@
 % Please edit documentation in R/predictor.R
 \name{predictor}
 \alias{predictor}
-\title{Title}
+\title{Title To calculate the correlation between the predictor centroid and the validation centroid.}
 \usage{
 predictor(x, fs, gene.signature, geneset2gene, filter.cutoff = 1,
   fdr.cutoff = 1)
 }
 \arguments{
-\item{fs}{}
+\item{x}{a eSet object or eSet-like matrix.}
+
+\item{fs}{return matrix of See \code{\link{ssGSEA}}.}
+
+\item{gene.signature}{gene signatures calculated by CrossICC.}
+
+\item{geneset2gene}{a matrix contains geneset (cluster name) mapping to gene.}
+
+\item{filter.cutoff}{cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.}
+
+\item{fdr.cutoff}{cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.}
+}
+\value{
+a correlation matrix.
 }
 \description{
-Title
+Title To calculate the correlation between the predictor centroid and the validation centroid.
+}
+\examples{
+\donttest{
+predictor(example.matrices$x, ssGSEA.matrix, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
+}
 }

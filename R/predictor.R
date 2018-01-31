@@ -1,16 +1,19 @@
-#' Title
+#' Title To calculate the correlation between the predictor centroid and the validation centroid.
 #'
-#' @param x
-#' @param gene.signature
-#' @param geneset2gene
-#' @param filter.cutoff
-#' @param fdr.cutoff
-#' @param fs
+#' @param x a eSet object or eSet-like matrix.
+#' @param gene.signature gene signatures calculated by CrossICC.
+#' @param geneset2gene a matrix contains geneset (cluster name) mapping to gene.
+#' @param filter.cutoff cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.
+#' @param fdr.cutoff cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.
+#' @param fs return matrix of See \code{\link{ssGSEA}}.
 #'
-#' @return
+#' @return a correlation matrix.
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' predictor(example.matrices$x, ssGSEA.matrix, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
+#' }
 predictor <- function(x, fs, gene.signature, geneset2gene, filter.cutoff = 1, fdr.cutoff = 1) {
   filtered.x <- m.f.s(list(x), fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, perform.mad = FALSE)[[2]][[1]]
   genewprobe <- gene.signature

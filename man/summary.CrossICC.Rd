@@ -2,13 +2,24 @@
 % Please edit documentation in R/CrossICC.R
 \name{summary.CrossICC}
 \alias{summary.CrossICC}
-\title{Title}
+\title{Title Summary the CrossICC-returned list to produce human-readable output}
 \usage{
 summary.CrossICC(result, iteration = NULL)
 }
 \arguments{
-\item{iteration}{}
+\item{result}{list-type CrossICC's return value.}
+
+\item{iteration}{the result from which iteration time should be exhibited. Default is the last iteration.}
+}
+\value{
+list contains: a matrix of genesets mapping to genes; a named atomic vetor of samples mapping to super clusters.
 }
 \description{
-Title
+Title Summary the CrossICC-returned list to produce human-readable output
+}
+\examples{
+\donttest{
+CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
+summary.CrossICC(CrossICC.object)
+}
 }
