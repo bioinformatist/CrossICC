@@ -203,7 +203,7 @@ summary.CrossICC <- function(result, iteration = NULL) {
   final.geneset<-result[[iteration]]$unioned.genesets
   #get final clusterSample result
   names(temp.object)=c()
-  final.cluster<-do.call(c,result[[iteration]]$clusters[[1]])
+  final.cluster<-do.call(c,temp.object)
   list(gene.signatures = final.geneset,
        clusters = final.cluster)
 }
