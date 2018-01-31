@@ -69,21 +69,26 @@ shinyUI(dashboardPage(skin = "black",
                   tabBox (id="crossICCresultPanel",title=h3("Data Exploration"),width = 8, side = "right",
                           selected = "cr01",
                           tabPanel(title=div(icon("book"),"Summary"),value="cr01",
-                                   dataTableOutput("OutputResultSignature"),
-                                   verbatimTextOutput("OutputClusterResult")
+                                   h3("Sample clusters"),
+                                   verbatimTextOutput("OutputClusterResult"),
+                                   h3("Gene signature for each cluster"),
+                                   dataTableOutput("OutputResultSignature")
+
                           ),
                           tabPanel(title=div(icon("book"),"Super Clustering"),value="cr02",
                                    downloadLink('DownloadSuperclusterPlot', 'Download PDF'),
-                                   plotOutput("superclusterPlot")
+                                   plotOutput("superclusterPlot",height = "800px")
                           ),
                           tabPanel(title=div(icon("book"),"Silhouette Result"),value="cr03",
                                    downloadLink('DownloadSilhouette', 'Download PDF'),
-                                   plotOutput("Silhouette")
+                                   plotOutput("Silhouette",height = "800px")
                           ),
                           tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr04",
                                    downloadLink('DownloadClusterexpressPlot', 'Download PDF'),
                                    uiOutput("expressionHeatmapSelectPlatform"),
-                                   plotOutput("clusterexpress")
+                                   plotOutput("clusterexpress",height = "800px")
+                          ),
+                          tabPanel(title=div(icon("book"),"ssGSEA"),value="cr05"
                           )
                   )
                 )
