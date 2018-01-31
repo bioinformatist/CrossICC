@@ -57,22 +57,14 @@ $gene.signatures
 [16,] "K1"    "SAMD4A"  
 
 $clusters
-  Matrix.1.GSM40651   Matrix.1.GSM40652   Matrix.1.GSM40653   Matrix.1.GSM40654   Matrix.1.GSM40655   Matrix.1.GSM40656 
-                  1                   2                   1                   1                   1                   1 
-  Matrix.1.GSM40657   Matrix.1.GSM40658   Matrix.1.GSM40659  Matrix.2.GSM359831  Matrix.2.GSM675619  Matrix.2.GSM675625 
-                  2                   2                   2                   1                   2                   1 
- Matrix.2.GSM675628  Matrix.2.GSM675630  Matrix.2.GSM675650  Matrix.2.GSM675652  Matrix.2.GSM675659  Matrix.2.GSM675661 
-                  1                   1                   1                   1                   1                   1 
- Matrix.2.GSM675662  Matrix.2.GSM675663  Matrix.2.GSM675664  Matrix.2.GSM675665  Matrix.2.GSM675666  Matrix.2.GSM675667 
-                  1                   1                   1                   2                   2                   2 
- Matrix.2.GSM675668  Matrix.2.GSM675669  Matrix.2.GSM675670  Matrix.2.GSM675671  Matrix.2.GSM675672  Matrix.2.GSM675673 
-                  2                   2                   2                   2                   2                   2 
- Matrix.2.GSM675674  Matrix.2.GSM675675  Matrix.2.GSM675681 Matrix.3.GSM1253682 Matrix.3.GSM1253683 Matrix.3.GSM1253684 
-                  2                   2                   2                   2                   2                   1 
-Matrix.3.GSM1253685 Matrix.3.GSM1253686 Matrix.3.GSM1253687 Matrix.3.GSM1253688 Matrix.3.GSM1253689 Matrix.3.GSM1253690 
-                  2                   1                   1                   1                   1                   1 
-Matrix.3.GSM1253691 Matrix.3.GSM1253692 
-                  2                   2 
+  GSM40651   GSM40652   GSM40653   GSM40654   GSM40655   GSM40656   GSM40657   GSM40658   GSM40659  GSM359831  GSM675619 
+         1          2          1          1          1          1          2          2          2          1          2 
+ GSM675625  GSM675628  GSM675630  GSM675650  GSM675652  GSM675659  GSM675661  GSM675662  GSM675663  GSM675664  GSM675665 
+         1          1          1          1          1          1          1          1          1          1          2 
+ GSM675666  GSM675667  GSM675668  GSM675669  GSM675670  GSM675671  GSM675672  GSM675673  GSM675674  GSM675675  GSM675681 
+         2          2          2          2          2          2          2          2          2          2          2 
+GSM1253682 GSM1253683 GSM1253684 GSM1253685 GSM1253686 GSM1253687 GSM1253688 GSM1253689 GSM1253690 GSM1253691 GSM1253692 
+         2          2          1          2          1          1          1          1          1          2          2  
 ```
 
 ## Example 3: To get GSEA-like ranked matrix from CrossICC result
