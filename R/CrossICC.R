@@ -56,6 +56,9 @@ NULL
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
                                cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
+  if (max.iter < 2) {
+    warning('Result from less than 2 times iteration may not make sense at all!')
+  }
   graphics.off()
 
   if(is.null(output.dir)) {
@@ -142,7 +145,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
       # Remove final iteration results (repeated) from list, also reset iteration time
       result[[iteration]] <- NULL
-      signal <- "reached"
+      if (iteration < max.iter) {
+        warning("Still not reach convergence when provided iteration time has gone!")
+      }
       break
     }
 
@@ -167,10 +172,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       Note that the previous file will be overridden.\n")
 
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
-
-  if (exists(signal)) {
-    warning("Still not reach convergence when provided iteration time has gone!")
-  }
 
   if (use.shiny) {
     run.shiny()
