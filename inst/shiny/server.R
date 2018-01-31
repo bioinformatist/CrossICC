@@ -104,7 +104,7 @@ shinyServer(function(session,input, output) {
     )
     fuck<-InterationResult()
 
-    fuck[[1]]$clusters$silhouette
+    fuck[[input$iterslided]]$clusters$silhouette
   })
   output$clusterexpress<-renderPlot({
     validate(
@@ -137,7 +137,7 @@ shinyServer(function(session,input, output) {
     content = function(file) {
       pdf(file)
       fuck<-InterationResult()
-     fuck[[input$iterslided]]$clusters$silhouette
+      fuck[[input$iterslided]]$clusters$silhouette
       dev.off()
     },
     contentType = 'image/pdf'
