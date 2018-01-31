@@ -3,6 +3,10 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
   # Merge multiple probes for one gene here
   non.duplicates <- lapply(platforms.list, merge.duplicates)
 
+  # Remove rows with all values as 0
+
+  non.zero <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !all(y==0)),])
+
   # Add jitter for extremly same expressed features through samples (if existed)
   jittered <- lapply(non.duplicates, add.jitter)
 
