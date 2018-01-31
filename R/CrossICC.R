@@ -53,7 +53,7 @@ NULL
 #' CrossICC(example.matrices, max.iter = 20, use.shiny = FALSE)
 #' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 20)
 #' }
-CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
+CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
                                cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
   graphics.off()
@@ -107,11 +107,11 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
                       function(x) paste(x, iteration, sep = "."),
                       "Yu Fat is handsome")
     cc <- vapply(names(platforms),
-                 function(x) list(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
+                 function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
                                                                              maxK=max.K, reps=rep.runs, pItem=pItem,
                                                                              pFeature=pFeature, title=run.dir[x],
                                                                              clusterAlg=clusterAlg, distance=distance,
-                                                                             seed=cc.seed, plot = plot.suffix)),
+                                                                             seed=cc.seed, plot = plot.suffix))),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
                  list(rep(list('fuck'), 7)))
 
@@ -135,6 +135,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
 
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
+
+    cat(length(gene.sig), "genes were engaged in this iteration.\n")
 
     # Confirm those two atomic vectors are exactly equal
     if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
@@ -161,6 +163,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
   }
 
   saveRDS(result, file = path.expand('~/CrossICC.object.rds'))
+  cat("A CrossICC.object.rds file will be generated in home directory by default.
+      Note that the previous file will be overridden.\n")
 
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
 
@@ -207,7 +211,7 @@ summary.CrossICC <- function(result, iteration = NULL) {
   final.geneset<-result[[iteration]]$unioned.genesets
   #get final clusterSample result
   names(temp.object)=c()
-  final.cluster<-do.call(c,result[[iteration]]$clusters[[1]])
-  list(geneset2gene = final.geneset,
+  final.cluster<-do.call(c,temp.object)
+  list(gene.signatures = final.geneset,
        clusters = final.cluster)
 }
