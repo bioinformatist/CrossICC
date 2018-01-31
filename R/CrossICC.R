@@ -164,7 +164,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1, outp
 
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
 
-  if (!signal) {
+  if (exists(signal)) {
     warning("Still not reach convergence when provided iteration time has gone!")
   }
 
@@ -183,15 +183,19 @@ run.shiny<-function(){
   shiny::runApp(system.file("shiny", package = "CrossICC"))
 }
 
-#' Title
+#' Title Summary the CrossICC-returned list to produce human-readable output
 #'
-#' @param result
-#' @param iteration
+#' @param result list-type CrossICC's return value.
+#' @param iteration the result from which iteration time should be exhibited. Default is the last iteration.
 #'
-#' @return
+#' @return list contains: a matrix of genesets mapping to genes; a named atomic vetor of samples mapping to super clusters.
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
+#' summary.CrossICC(CrossICC.object)
+#' }
 summary.CrossICC <- function(result, iteration = NULL) {
   # make sure the last iterater was summarized which represents the final result
   if(is.null(iteration)){
@@ -204,6 +208,6 @@ summary.CrossICC <- function(result, iteration = NULL) {
   #get final clusterSample result
   names(temp.object)=c()
   final.cluster<-do.call(c,result[[iteration]]$clusters[[1]])
-  list(gene.signatures = final.geneset,
+  list(geneset2gene = final.geneset,
        clusters = final.cluster)
 }
