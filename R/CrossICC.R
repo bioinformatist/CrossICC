@@ -53,9 +53,9 @@ NULL
 #' CrossICC(example.matrices, max.iter = 20, use.shiny = FALSE)
 #' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 20)
 #' }
-CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
+CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
-                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
+                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
   if (max.iter < 2) {
     warning('Result from less than 2 times iteration may not make sense at all!')
   }
@@ -111,7 +111,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                       "Yu Fat is handsome")
     cc <- vapply(names(platforms),
                  function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
-                                                                             maxK=max.K, reps=rep.runs, pItem=pItem,
+                                                                             maxK = 7, reps=rep.runs, pItem=pItem,
                                                                              pFeature=pFeature, title=run.dir[x],
                                                                              clusterAlg=clusterAlg, distance=distance,
                                                                              seed=cc.seed, plot = plot.suffix))),
@@ -123,13 +123,21 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     balanced.cluster <- balance.cluster(all.sig,
                                         cc = cc, cluster.cutoff = cluster.cutoff,
-                                        max.K = max.K, plot = TRUE, iter = iteration, method = method)
+                                        max.K = NULL, plot = TRUE, iter = iteration, method = method)
 
     ebayes.result <- lapply(names(all.sig),
                             function(x) ebayes(all.sig[[x]],
                                                         balanced.cluster[[1]][[x]],
                                                         cutoff = ebayes.cutoff,
                                                mode = ebayes.mode))
+
+    for (i in length(ebayes.result)) {
+      if (ebayes.result[[i]]$geneset2gene == 'hehe') {
+        result[[iteration]] <- NULL
+        warning('Iteration is over for there\'s no MDEGs!')
+        break
+      }
+    }
 
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
     geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
@@ -142,7 +150,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     cat(length(gene.sig), "genes were engaged in this iteration.\n")
 
     # Confirm those two atomic vectors are exactly equal
-    if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
+    # if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
+    if(isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
       # Remove final iteration results (repeated) from list, also reset iteration time
       result[[iteration]] <- NULL
       if (iteration == max.iter) {
