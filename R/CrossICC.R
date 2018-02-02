@@ -145,8 +145,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
       # Remove final iteration results (repeated) from list, also reset iteration time
       result[[iteration]] <- NULL
-      if (iteration < max.iter) {
-        warning("Still not reach convergence when provided iteration time has gone!")
+      if (iteration == max.iter) {
+        warning("Max iteration time reached! May still not reach convergence.")
       }
       break
     }
@@ -156,7 +156,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                                  border_color = NA,
                                                                  colorRampPalette(c("green", "black", "red"))(50)))
 
-    result[[iteration]] <- list(# consensus.cluster = cc,
+    result[[iteration]] <- list(consensus.cluster = cc,
+                                all.sig = all.sig,
                                 gene.signature = gene.sig,
                                 # MDEG = gene.sig.all,
                                 clusters = balanced.cluster,
