@@ -3,14 +3,13 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
   # Merge multiple probes for one gene here
   non.duplicates <- lapply(platforms.list, merge.duplicates)
 
-  # Remove rows with all values as 0
+  # no.same <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !all(y==0)),])
+  # no.same <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !zero_range(x)),])
 
-  non.zero <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !all(y==0)),])
+  # Remove rows with all values are same
+  no.same <- lapply(non.duplicates, remove.all.same)
 
-  # Add jitter for extremly same expressed features through samples (if existed)
-  jittered <- lapply(non.duplicates, add.jitter)
-
-  genes.com <- com.feature(lapply(jittered, rownames), method = "overlap")
+  genes.com <- com.feature(lapply(no.same, rownames), method = "overlap")
 
   if (length(platforms.list) > 1) {
     # Must pre-assigned here (deep copy, and must not be slice of list), or
@@ -19,7 +18,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
     # Error in dimnames(x) <- dn : length of 'dimnames' [2] not equal to array
     # extent MergeMaid.R has been fine-adjusted in this package.
 
-    genes.com.list <- lapply(jittered, function(x) unlist(x)[genes.com, ])
+    genes.com.list <- lapply(no.same, function(x) unlist(x)[genes.com, ])
     merged <- mergeExprs(genes.com.list)
 
     fig.size <- (length(platforms.list) + 1) * 400
@@ -45,25 +44,23 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
     }
 
     if (perform.mad) {
-      filter.genes <- lapply(jittered, function(x) filter.mad(x[genes.com.fdr,
+      filter.genes <- lapply(no.same, function(x) filter.mad(x[genes.com.fdr,
                                                                 ], p = filter.cutoff))
       filter.genes.com <- com.feature(filter.genes, method = "overlap")
     } else {
-      filter.genes <- genes.com.fdr
-      filter.genes.com <- com.feature(filter.genes, method = "overlap")
+      filter.genes.com <- genes.com.fdr
     }
 
   } else {
     if (perform.mad) {
-      filter.genes <- lapply(jittered, function(x) filter.mad(x, p = filter.cutoff))
+      filter.genes <- lapply(no.same, function(x) filter.mad(x, p = filter.cutoff))
       filter.genes.com <- com.feature(filter.genes, method = "overlap")
     } else {
-      filter.genes <- genes.com
-      filter.genes.com <- filter.genes
+      filter.genes.com <- genes.com
     }
   }
 
-  filter.scale <- lapply(jittered, function(x) scale(t(scale(t(x[filter.genes.com,
+  filter.scale <- lapply(no.same, function(x) scale(t(scale(t(x[filter.genes.com,
     ])))))
 
   return(list(filtered.gene = filter.genes.com, filterd.scaled = filter.scale))

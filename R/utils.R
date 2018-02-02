@@ -49,3 +49,9 @@ merge.duplicates <- function(x, method = "median") {
 add.jitter <- function(x) {
   t(apply(x, 1, function(x) if(zero_range(x) == TRUE){jitter(x)}else{x}))
 }
+
+
+remove.all.same <- function(m) {
+  keep <- apply(m, 1, function(x) length(unique(x[!is.na(x)])) != 1)
+  m[keep, ]
+}
