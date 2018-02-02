@@ -1,13 +1,19 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot = TRUE, iter, method){
-  k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, max.K), 2333)
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, plot = TRUE, iter, method){
+  k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff), 2333)
 
   # Max cluster number must be refined here, forsilhouette statistics are only defined if 2 <= k <= n-1.
-  # Here, n is sum(k)
-  if ((sum(k) - 1) < max.K) {
-    max.K <- sum(k) - 1
-    if (max.K < 2) {
-      max.K <- 2
+  # Here, n is sum(k), Qi Fat suggests that max.K should be as half as n by default
+  if (is.null(max.K)) {
+    max.K <- ceiling(sum(k) / 2)
+  } else {
+    if ((sum(k) - 1) < max.K) {
+      warning("User defined max super cluster number is larger than real value, will refine it to (n - 1)!")
+      max.K <- sum(k) - 1
     }
+  }
+
+  if (max.K < 2) {
+    max.K <- 2
   }
 
   all.k <- cor.cc(sig.list, cc, k, method = method)

@@ -1,4 +1,4 @@
-derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK){
+derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 7){
   for(k in 2:maxK){
     A <- cal.auc(consencus.result, k)
     if(k == 2){
