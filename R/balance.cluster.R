@@ -1,8 +1,13 @@
 balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = 6, plot = TRUE, iter, method){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, max.K), 2333)
 
+  # Max cluster number must be refined here, forsilhouette statistics are only defined if 2 <= k <= n-1.
+  # Here, n is sum(k)
   if ((sum(k) - 1) < max.K) {
-    max.K = sum(k) - 1
+    max.K <- sum(k) - 1
+    if (max.K < 2) {
+      max.K <- 2
+    }
   }
 
   all.k <- cor.cc(sig.list, cc, k, method = method)
