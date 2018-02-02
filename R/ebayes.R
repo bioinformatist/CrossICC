@@ -26,12 +26,20 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
   }
   ml <- r[-1]
   names(ml) <- K
+
   if (k <= 2 && mode == "both") {
     warning("It's not allowed to perform ebayes with both mode when cluster type number is less than 2.\nAlready set it to up mode.")
     mode = "up"
   }
+
+  for (i in 1:length(ml)) {
+    if (length(ml[[i]][,1] >= 0) == 0) {
+      return(list(full.m = r[[1]], geneset2gene = 'hehe'))
+    }
+  }
+
   geneset2gene <- switch(mode,
-    "up" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][,1] >= 1))), rownames(ml[[x]])[which(ml[[x]][,1] >= 1)]))),
+    "up" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][,1] >= 0))), rownames(ml[[x]])[which(ml[[x]][,1] >= 0)]))),
     "both" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])), row.names(ml[[x]]))))
     )
   list(full.m = r[[1]], geneset2gene = geneset2gene)
