@@ -5,7 +5,7 @@
 #' @param geneset2gene a matrix contains geneset (cluster name) mapping to gene.
 #' @param filter.cutoff cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.
 #' @param fdr.cutoff cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.
-#' @param fs return matrix of See \code{\link{ssGSEA}}.
+#' @param fs return matrix of ssGSEA. See \code{\link{ssGSEA}}.
 #'
 #' @return a correlation matrix.
 #' @export

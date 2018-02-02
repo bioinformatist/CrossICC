@@ -7,7 +7,7 @@
 \alias{CrossICC}
 \title{CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.}
 \usage{
-CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 1,
+CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
   output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
   pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
   cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 1,

@@ -10,7 +10,7 @@ predictor(x, fs, gene.signature, geneset2gene, filter.cutoff = 1,
 \arguments{
 \item{x}{a eSet object or eSet-like matrix.}
 
-\item{fs}{return matrix of See \code{\link{ssGSEA}}.}
+\item{fs}{return matrix of ssGSEA. See \code{\link{ssGSEA}}.}
 
 \item{gene.signature}{gene signatures calculated by CrossICC.}
 
