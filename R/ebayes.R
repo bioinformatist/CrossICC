@@ -32,14 +32,14 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
     mode = "up"
   }
 
-  for (i in 1:length(ml)) {
-    if (length(ml[[i]][,1] >= 0) == 0) {
-      return(list(full.m = r[[1]], geneset2gene = 'hehe'))
-    }
-  }
+  # for (i in 1:length(ml)) {
+  #   if (length(ml[[i]][,1] >= 0) == 0) {
+  #     return(list(full.m = r[[1]], geneset2gene = 'hehe'))
+  #   }
+  # }
 
   geneset2gene <- switch(mode,
-    "up" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][,1] >= 0))), rownames(ml[[x]])[which(ml[[x]][,1] >= 0)]))),
+                         "up" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][,1] >= 0))), rownames(ml[[x]])[which(ml[[x]][,1] >= 0)]))),
     "both" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])), row.names(ml[[x]]))))
     )
   list(full.m = r[[1]], geneset2gene = geneset2gene)
