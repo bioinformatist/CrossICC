@@ -72,8 +72,10 @@ GSM1253682 GSM1253683 GSM1253684 GSM1253685 GSM1253686 GSM1253687 GSM1253688 GSM
 ```{r eval=FALSE}
 ssGSEA.matrix <- ssGSEA(example.matrices$x, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
 ```
+ssGSEA is a downsteam analysis function that utilize the output of CrossICC to get a cluster based score of each individual sample.  It was initially used to calculate the enrichment score of the module/pathway/gene signature in single sample, which details process can found in the Yang X et al. Here, we implemeneted ssGSEA based on gene set that represents each cluster resulted from CrossICC. Briefly, in CrossICC, we finally assigned each samples to a cluster that expressed certain genes that can form a signature or geneset to represent this cluster. Therefore, each cluster can be regard as a gene set similar to the module/pathway/function term to be used to calculate ssGSEA score in each sample. Each sample may have a ssGSEA score vector where the length is the same as the length of final clusters from CorssICC. 
 
-Qi Fat please describe ssGSEA here
+
+yu fat paste result here
 
 ## Example 4: To calculate the correlation between the predictor centroid and the validation centroid
 
@@ -81,4 +83,8 @@ Qi Fat please describe ssGSEA here
 predictor(example.matrices$x, ssGSEA.matrix, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
 ```
 
-Qi Fat please describe predictor here
+This fucntion is designed to predict the cluster of a sample or samples based on pre-clustered training sample set. It first obtained ssGSEA matrix of training dataset based on CrossICC result as descripted above. Then new samples with expression data were fed to this function to get ssGSEA matrix and their ssGSEA vectors were compared with thosed labelled sample by correlation analysis to determine the clusters. 
+yu fat paste result here
+
+
+

@@ -54,6 +54,9 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
   } else {
     if (perform.mad) {
       filter.genes <- lapply(no.same, function(x) filter.mad(x, p = filter.cutoff))
+      if(is.null(filter.genes)){
+        warning("filter.cutoff is to large too get enough gene number in dataset")
+      }
       filter.genes.com <- com.feature(filter.genes, method = "overlap")
     } else {
       filter.genes.com <- genes.com

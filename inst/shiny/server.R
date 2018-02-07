@@ -28,7 +28,7 @@ shinyServer(function(session,input, output) {
       df=InterationResult()
       iter.num<-length(df)
       tagList(
-        sliderInput("iterslided","Total Iteration Time",min=1,max=iter.num,value = 1,step=2,animate=T)
+        sliderInput("iterslided","Total Iteration Time",min=1,max=iter.num,value = iter.num,step=1,animate=T)
       )
     }
   })

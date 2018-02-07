@@ -170,7 +170,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       annotation.list<-final.cluster[which(names(final.cluster)%in%colnames(x))]
       annotation.list<-sort(annotation.list)
       x<-x[,names(annotation.list)]
-      annotation.frame<-data.frame(cluster=annotation.list)
+      annotation.frame<-data.frame(cluster=as.factor(annotation.list))
       rownames(annotation.frame)<-names(annotation.list)
       pheatmap::pheatmap(x[gsig,],
                          scale = 'none',
