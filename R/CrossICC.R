@@ -52,6 +52,7 @@ NULL
 #' # It takes too long time for running code below, so ignore them in R CMD check.
 #' CrossICC(example.matrices, max.iter = 20, use.shiny = FALSE)
 #' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 20)
+#' fuck <- CrossICC(datalist, max.iter = 5, use.shiny = FALSE, method = "balanced",fdr.cutoff = 0.5, ebayes.cutoff = 0.01)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, rep.runs = 1000,
                                pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
@@ -132,7 +133,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                mode = ebayes.mode))
 
     for (i in length(ebayes.result)) {
-      if (ebayes.result[[i]]$geneset2gene == 'hehe') {
+      if (length(ebayes.result[[i]]) == 1) {
         result[[iteration]] <- NULL
         warning('Iteration is over for there\'s no MDEGs!')
         break
@@ -160,10 +161,30 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       break
     }
 
-    heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],
-                                                                 scale = 'row',
-                                                                 border_color = NA,
-                                                                 colorRampPalette(c("green", "black", "red"))(50)))
+
+    #modify heat map by sorting samples with cluster and annotation bar
+    heatmap.fit<-function(x,cluster,gsig){
+      x<-data.frame(x,check.names = FALSE)
+      names(cluster)=c()
+      final.cluster<-do.call(c,cluster)
+      annotation.list<-final.cluster[which(names(final.cluster)%in%colnames(x))]
+      annotation.list<-sort(annotation.list)
+      x<-x[,names(annotation.list)]
+      annotation.frame<-data.frame(cluster=annotation.list)
+      rownames(annotation.frame)<-names(annotation.list)
+      pheatmap::pheatmap(x[gsig,],
+                         scale = 'none',
+                         border_color = NA,
+                         cluster_cols = FALSE,
+                         annotation_col = annotation.frame,
+                         colorRampPalette(c("green", "black", "red"))(50))
+    }
+    heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
+
+    # heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],
+    #                                                              scale = 'row',
+    #                                                              border_color = NA,
+    #                                                              colorRampPalette(c("green", "black", "red"))(50)))
 
     result[[iteration]] <- list(consensus.cluster = cc,
                                 all.sig = all.sig,
@@ -184,6 +205,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
 
   if (use.shiny) {
+    warning('Result list would not be returned when use.shiny=TRUE.')
     run.shiny()
   }
   result
