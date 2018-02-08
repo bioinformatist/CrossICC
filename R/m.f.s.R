@@ -62,6 +62,10 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
 
   filter.scale <- lapply(no.same, function(x) scale(t(scale(t(x[filter.genes.com,
     ])))))
+  #filter outlier with range
+  filter.scale<-lapply(filter.scale,function(x) replace(x, x < -2, -2) )
+  filter.scale<-lapply(filter.scale,function(x) replace(x, x > 2, 2) )
+
 
   return(list(filtered.gene = filter.genes.com, filterd.scaled = filter.scale))
   # filter.genes.com
