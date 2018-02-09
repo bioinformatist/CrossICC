@@ -177,7 +177,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                          border_color = NA,
                          cluster_cols = FALSE,
                          annotation_col = annotation.frame,
-                         colorRampPalette(c("green", "black", "red"))(50))
+                         colorRampPalette(c("blue", "white", "red"))(100))
     }
     heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
 
