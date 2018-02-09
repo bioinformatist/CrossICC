@@ -88,7 +88,10 @@ shinyUI(dashboardPage(skin = "black",
                                    uiOutput("expressionHeatmapSelectPlatform"),
                                    plotOutput("clusterexpress",height = "800px")
                           ),
-                          tabPanel(title=div(icon("book"),"ssGSEA"),value="cr05"
+                          tabPanel(title=div(icon("book"),"ssGSEA"),value="cr05",
+                                   plotOutput("ssGSEAheatmap",height = "800px"),
+                                   dataTableOutput("ssGSEAmatrix")
+
                           )
                   )
                 )
@@ -105,7 +108,7 @@ shinyUI(dashboardPage(skin = "black",
                     selected = 'default'
                   ),
                   conditionalPanel(condition = "input.dataset2 == 'upload'",
-                                   fileInput('file1', 'Input dataset in matrix file',
+                                   fileInput('file2', 'Input dataset in matrix file',
                                              accept=c('text/txt', '.rds'))
                   ),
                   actionButton("submit2","Submit")
@@ -116,7 +119,9 @@ shinyUI(dashboardPage(skin = "black",
                                  p("Write introduction here")
                         ),
                         tabPanel(title=div(icon("book"),"Data Input"),value="pre02",
-                                 h3("Summary of input dataset ")
+                                 h3("Summary of input dataset "),
+                                 dataTableOutput("predictInputDataSummary")
+
                         ),
                         tabPanel(title=div(icon("book"),"Predict Result"),value="pre03"
 
