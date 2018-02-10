@@ -118,14 +118,14 @@ shinyServer(function(session,input, output) {
         ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, CrossICC.object[[input$iterslided]]$unioned.genesets)
         ssGSEA.list[[1]]
       })
-      output$ssGSEAheatmap-renderPlot({
-        validate(
-          need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
-        )
-        fuck<-InterationResult()
-        ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, CrossICC.object[[input$iterslided]]$unioned.genesets)
-        ssGSEA.list[[2]]
-      })
+      # output$ssGSEAheatmap-renderPlot({
+      #   validate(
+      #     need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
+      #   )
+      #   fuck<-InterationResult()
+      #   ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, CrossICC.object[[input$iterslided]]$unioned.genesets)
+      #   ssGSEA.list[[2]]
+      # })
   #Download functions----
       output$DownloadSuperclusterPlot<-downloadHandler(
         filename = function() {

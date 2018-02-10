@@ -132,13 +132,13 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                         cutoff = ebayes.cutoff,
                                                mode = ebayes.mode))
 
-    for (i in length(ebayes.result)) {
-      if (length(ebayes.result[[i]]) == 1) {
-        result[[iteration]] <- NULL
-        warning('Iteration is over for there\'s no MDEGs!')
-        break
-      }
-    }
+    # for (i in length(ebayes.result)) {
+    #   if (length(ebayes.result[[i]]) == 1) {
+    #     result[[iteration]] <- NULL
+    #     warning('Iteration is over for there\'s no MDEGs!')
+    #     break
+    #   }
+    # }
 
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
     geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
@@ -162,7 +162,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     }
 
 
-    #modify heat map by sorting samples with cluster and annotation bar
+    # Modify heat map by sorting samples with cluster and annotation bar
     heatmap.fit<-function(x,cluster,gsig){
       x<-data.frame(x,check.names = FALSE)
       names(cluster)=c()
@@ -186,7 +186,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     #                                                              border_color = NA,
     #                                                              colorRampPalette(c("green", "black", "red"))(50)))
 
-    result[[iteration]] <- list(consensus.cluster = cc,
+    result[[iteration]] <- list(# consensus.cluster = cc,
                                 all.sig = all.sig,
                                 gene.signature = gene.sig,
                                 # MDEG = gene.sig.all,
