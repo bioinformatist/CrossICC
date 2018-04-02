@@ -34,7 +34,8 @@ shinyUI(dashboardPage(skin = "black",
       .shiny-output-error-validation {
                       color: brown;
                       }
-                      "))
+                      ")),
+      tags$link(rel = "stylesheet", type = "text/css", href = "css/main.css")
     ),
     tabItems(
       # home page----
