@@ -110,6 +110,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     run.dir <- vapply(names(platforms),
                       function(x) paste(x, iteration, sep = "."),
                       "Yu Fat is handsome")
+    pdf(NULL)
+    dev.control('enable') # enable display list
     cc <- vapply(names(platforms),
                  function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
                                                                              maxK = 7, reps=rep.runs, pItem=pItem,
@@ -118,6 +120,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                                              seed=cc.seed, plot = plot.suffix))),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
                  list(rep(list('fuck'), 7)))
+    dev.off()
 
     all.sig <- lapply(names(platforms), function(x) platforms[[x]][gene.sig,])
     names(all.sig) <- names(platforms)
@@ -229,15 +232,15 @@ run.shiny<-function(){
 #' summary.CrossICC(CrossICC.object)
 #' }
 summary.CrossICC <- function(result, iteration = NULL) {
-  # make sure the last iterater was summarized which represents the final result
+  # Use last time result as default
   if(is.null(iteration)){
     iteration<-length(result)
   }
   temp.object<-result[[iteration]]$clusters[[1]]
-  #get final gene2cluster set
+  # Get final gene2cluster set
   colnames(result[[iteration]]$unioned.genesets)=c("Cluster","Genes")
   final.geneset<-result[[iteration]]$unioned.genesets
-  #get final clusterSample result
+  # Get final clusterSample result
   names(temp.object)=c()
   final.cluster<-do.call(c,temp.object)
   list(gene.signatures = final.geneset,
