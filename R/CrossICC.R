@@ -181,11 +181,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     }
     heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
 
-    # heatmaps <- lapply(platforms, function(x) pheatmap::pheatmap(x[gene.sig,],
-    #                                                              scale = 'row',
-    #                                                              border_color = NA,
-    #                                                              colorRampPalette(c("green", "black", "red"))(50)))
-
     result[[iteration]] <- list(# consensus.cluster = cc,
                                 all.sig = all.sig,
                                 gene.signature = gene.sig,

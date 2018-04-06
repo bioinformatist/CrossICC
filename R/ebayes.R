@@ -1,5 +1,6 @@
 ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
   k <- length(unique(class))
+  if (k == 1) return(list(full.m = NULL, geneset2gene = NULL))
   design <- model.matrix(~ 0 + factor(class))
   colnames(design) <- paste("K", 1:k, sep = "")
   K <- colnames(design)

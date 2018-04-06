@@ -12,6 +12,8 @@ derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 7){
       } else {
         return(k - 1)
       }
+    } else if (k == maxK){
+      return(maxK)
     }
     pre.A <- A
   }
