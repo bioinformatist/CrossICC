@@ -209,6 +209,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   result
   # all.sig
   # cc
+  # list(all.sig, cc)
   # platforms
   # balanced.cluster
   # ebayes.result
