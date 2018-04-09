@@ -110,7 +110,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     run.dir <- vapply(names(platforms),
                       function(x) paste(x, iteration, sep = "."),
                       "Yu Fat is handsome")
+
     pdf(NULL)
+    par(mar=c(1,1,1,1))
     dev.control('enable') # enable display list
     cc <- vapply(names(platforms),
                  function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],

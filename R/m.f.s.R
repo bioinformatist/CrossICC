@@ -1,4 +1,4 @@
-m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perform.mad = TRUE) {
+m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE) {
 
   # Merge multiple probes for one gene here
   non.duplicates <- lapply(platforms.list, merge.duplicates)
@@ -21,17 +21,18 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
     genes.com.list <- lapply(no.same, function(x) unlist(x)[genes.com, ])
     merged <- mergeExprs(genes.com.list)
 
-    fig.size <- (length(platforms.list) + 1) * 400
-
+    # fig.size <- (length(platforms.list) + 1) * 400
     # tiff('gene.cor.matrix.tiff', compression = 'lzw', res = 300, width = fig.size,
     # height = fig.size)
 
+    graphics.off()
     pdf(NULL)
+    par(mar=c(1,1,1,1))
     dev.control("enable")  # enable display list
     null.ic <- unlist(MergeMaid::intcorDens(merged))
     dev.off()
 
-    pval.genes <- apply(as.matrix(rowMeans(MergeMaid::pairwise.cors(intCor(merged,
+    pval.genes <- apply(as.matrix(rowMeans(MergeMaid::pairwise.cors(MergeMaid::intCor(merged,
       exact = FALSE)))), 1, function(x) {
       pval.cal(x, d = null.ic, alt = "g")
     })
@@ -40,7 +41,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
 
     if (length(genes.com.fdr) == 0) {
       stop("The dataset has no common signature gene which can pass FDR filtering!\n
-           You may check if fake gene symbol/ID or wrongly annotated?")
+           You may check if fake gene symbol/ID or wrongly annotated? Or try smaller FDR cutoff.")
     }
 
     if (perform.mad) {
@@ -61,6 +62,11 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.01, perfor
     } else {
       filter.genes.com <- genes.com
     }
+  }
+
+  if (length(filter.genes.com) < 5) {
+    stop("There are too few features in the dataset after filtering.\n
+         Try to re-run with adjusted parameters or check your data source (too few overlapped features among matrices).")
   }
 
   filter.scale <- lapply(no.same, function(x) scale(t(scale(t(x[filter.genes.com,
