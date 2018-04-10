@@ -134,8 +134,10 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     ebayes.result <- lapply(names(all.sig),
                             function(x) ebayes(all.sig[[x]],
-                                                        balanced.cluster[[1]][[x]],
-                                                        cutoff = ebayes.cutoff,
+                                               switch(method,
+                                                      'balanced' = balanced.cluster[[1]][[x]],
+                                                      'finer' = balanced.cluster[[1]]),
+                                               cutoff = ebayes.cutoff,
                                                mode = ebayes.mode))
 
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
@@ -163,8 +165,12 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     # Modify heat map by sorting samples with cluster and annotation bar
     heatmap.fit<-function(x,cluster,gsig){
       x<-data.frame(x,check.names = FALSE)
-      names(cluster)=c()
-      final.cluster<-do.call(c,cluster)
+      if (method == 'balanced') {
+        names(cluster) <- NULL
+        final.cluster <- do.call(c, cluster)
+      } else {
+        final.cluster <- cluster
+      }
       annotation.list<-final.cluster[which(names(final.cluster)%in%colnames(x))]
       annotation.list<-sort(annotation.list)
       x<-x[,names(annotation.list)]
@@ -178,14 +184,16 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                          show_colnames = FALSE,
                          colorRampPalette(c("blue", "white", "red"))(100))
     }
+
     heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
 
     result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
                                 # all.sig = all.sig,  # For test only
+                                # platforms = platforms, # For test only
                                 gene.signature = gene.sig,
                                 # MDEG = gene.sig.all,
                                 clusters = balanced.cluster,
-                                heatmaps = heatmaps,
+                                # heatmaps = heatmaps,
                                 geneset2gene = geneset2gene,
                                 unioned.genesets = unioned.genesets)
 
