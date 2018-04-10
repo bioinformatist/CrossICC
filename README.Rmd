@@ -38,3 +38,14 @@ Comming!~ :clap:
 ```{r}
 CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 1)
 ```
+# FAQ
+* Question 1
+> A: This error is offen introduced by NA values in your expression data. users may also encounter other unexpected error due to NA values in raw dataset. Therefore, we strong recommanded that users checked the NA valus in thire data set before loading it into `CrossICC`. To check the completed cases in matrix, `completed.cases` can be a good option to do that. Here, we also present an example for users to impute there data in case they don't want to remove case in the dataset. The imputation method shown here are KNN method from impute package.
+```{r}
+# for a individual matrix, plz do imputation using the following r code
+tempdata.impute=impute.knn(as.matrix(tempdata) ,k = 10, rowmax = 0.5, colmax = 0.8)
+normalize.Data=as.data.frame(tempdata.impute$data)
+```
+
+
+
