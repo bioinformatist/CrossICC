@@ -45,7 +45,8 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, p
     #                   col = gplots::greenred, trace = "none", density.info = "none", margins = c(9, 9))
     heatmap <- pheatmap::pheatmap(all.k,
                                   border_color = NA,
-                                  colorRampPalette(c("green", "black", "red"))(50))
+                                  show_rownames = F,
+                                  colorRampPalette(c("#FC8D59", "#FFFFBF", "#91CF60"))(50))
     # heatmap <- recordPlot()
     # dev.off()
     # par(op)
