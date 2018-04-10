@@ -180,8 +180,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     }
     heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
 
-    result[[iteration]] <- list(# consensus.cluster = cc,
-                                all.sig = all.sig,
+    result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
+                                # all.sig = all.sig,  # For test only
                                 gene.signature = gene.sig,
                                 # MDEG = gene.sig.all,
                                 clusters = balanced.cluster,

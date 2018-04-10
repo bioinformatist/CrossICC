@@ -24,45 +24,29 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, p
   si <- sil.width(all.k, max.silw, method = method)
   hc <- si[[2]]
 
-  hc.list <- lapply(names(k), function(x) hc[grep(x, names(hc))])
-  names(hc.list) <- names(k)
-
-  cc.k.balanced <- cc.k.old <- lapply(names(k), function(x) cc[[x]][[k[[x]]]]$consensusClass)
-  names(cc.k.balanced) <- names(cc.k.old) <- names(k)
-
-  invisible(lapply(1:max.silw,
-                   function(x) lapply(names(k),
-                                      # Must use <<- here for scope restrinction
-                                      function(y) cc.k.balanced[[y]][which(cc.k.old[[y]] %in% which(hc.list[[y]] == x))] <<- x)))
   if(plot){
-    # tiff(paste("cluster.centroid.correlation", iter, "tiff", sep = "."),
-    #      width = 1600, height = 1600, res = 300, compression = 'lzw')
-    # op <- par(mar = c(4, 2, 2, 3))
-    # win.metafile()
-    # dev.control('enable') # enable display list
-    # gplots::heatmap.2(all.k, distfun = function(c) as.dist(1 - c),
-    #                   hclustfun = function(c) hclust(c, method = "average"),
-    #                   col = gplots::greenred, trace = "none", density.info = "none", margins = c(9, 9))
     heatmap <- pheatmap::pheatmap(all.k,
                                   border_color = NA,
-                                  show_rownames = F,
+                                  show_rownames = FALSE,
                                   colorRampPalette(c("#FC8D59", "#FFFFBF", "#91CF60"))(50))
-    # heatmap <- recordPlot()
-    # dev.off()
-    # par(op)
-    # replayPlot(obj)
-
-    # win.metafile()
-    # pdf(NULL)
-    # dev.control('enable') # enable display list
-    # c1 <- rainbow(max.silw)
-    # plot(si[[1]], col = c1[1:max.silw])
-    # silhouette <- recordPlot()
-    # dev.off()
-    # tiff(paste("silhouette.plot", iter, "tiff", sep = "."), res = 300, width = 1600, height = 1600)
   }
 
-  list(clusters = cc.k.balanced, heatmap = heatmap, silhouette = list(si[[1]], max.silw))
+  if (method == "balanced") {
+    hc.list <- lapply(names(k), function(x) hc[grep(x, names(hc))])
+    names(hc.list) <- names(k)
+
+    cc.k.balanced <- cc.k.old <- lapply(names(k), function(x) cc[[x]][[k[[x]]]]$consensusClass)
+    names(cc.k.balanced) <- names(cc.k.old) <- names(k)
+
+    invisible(lapply(1:max.silw,
+                     function(x) lapply(names(k),
+                                        # Must use <<- here for scope restrinction
+                                        function(y) cc.k.balanced[[y]][which(cc.k.old[[y]] %in% which(hc.list[[y]] == x))] <<- x)))
+  }
+  list(clusters = switch (method,
+    "balanced" = cc.k.balanced,
+    'finer' = hc
+  ), heatmap = heatmap, silhouette = si[[1]])
 }
 
 derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 7){

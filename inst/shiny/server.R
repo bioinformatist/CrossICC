@@ -8,6 +8,7 @@ options(shiny.maxRequestSize=1024*1024^2)
 suppressMessages(library(shiny))
 suppressMessages(library(pheatmap))
 suppressMessages(library(CrossICC))
+suppressMessages(library(RColorBrewer))
 shinyServer(function(session,input, output) {
 # CrossICC panel functions ----
   # ui setting----
@@ -99,8 +100,10 @@ shinyServer(function(session,input, output) {
           need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
         )
         fuck<-InterationResult()
-
-        fuck[[input$iterslided]]$clusters$silhouette
+        sih<-fuck[[input$iterslided]]$clusters$silhouette
+        max.sliw<-which.max(max(sih[,3])) + 1
+        color.list<-brewer.pal(length(unique(sih[,1])), "Set2")
+        plot(sih,col=color.list[1:max.sliw])
       })
       output$clusterexpress<-renderPlot({
         validate(
@@ -147,7 +150,10 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           pdf(file)
           fuck<-InterationResult()
-          fuck[[input$iterslided]]$clusters$silhouette
+          sih<-fuck[[input$iterslided]]$clusters$silhouette
+          max.sliw<-which.max(max(sih[,3])) + 1
+          color.list<-brewer.pal(length(unique(sih[,1])), "Set2")
+          plot(sih,col=color.list[1:max.sliw])
           dev.off()
         },
         contentType = 'image/pdf'
