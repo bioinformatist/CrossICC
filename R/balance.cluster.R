@@ -18,10 +18,10 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, p
 
   all.k <- cor.cc(sig.list, cc, k, method = method)
 
-  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x)[[1]][,3])))
+  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, method = method)[[1]][,3])))
   max.silw <- which.max(silws) + 1
 
-  si <- sil.width(all.k, max.silw)
+  si <- sil.width(all.k, max.silw, method = method)
   hc <- si[[2]]
 
   hc.list <- lapply(names(k), function(x) hc[grep(x, names(hc))])
@@ -55,7 +55,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, p
     pdf(NULL)
     dev.control('enable') # enable display list
     c1 <- rainbow(max.silw)
-    plot(si[[1]], col = c1[hc])
+    plot(si[[1]], col = c1[1:max.silw])
     silhouette <- recordPlot()
     dev.off()
     # tiff(paste("silhouette.plot", iter, "tiff", sep = "."), res = 300, width = 1600, height = 1600)
@@ -101,9 +101,6 @@ cal.auc <- function(consencus.result, k){
 }
 
 cor.cc <- function(xyz, cc, k, method = 'finer'){
-  # cat(xyz$Matrix.1, "\n")
-  # cat(names(k), k, "\n")
-  # cat(xyz$Matrix.1[, names(which(cc$Matrix.1[[5]]$consensusClass == 1))], "\n")
   centroids.list <- lapply(names(k),
                            function(p) lapply(1:k[[p]],
                                               # Thanks to https://stackoverflow.com/questions/28423275/dimx-must-have-a-positive-length-when-applying-function-in-data-frame/28423503#28423503
@@ -120,19 +117,16 @@ cor.cc <- function(xyz, cc, k, method = 'finer'){
 
   switch (method,
           'balanced' = cor(centroids, method="pearson"),
-          'finer' = cor(centroids, do.call(cbind, xyz))
+          'finer' = t(cor(centroids, do.call(cbind, xyz)))
   )
 }
 
-sil.width <- function(cc.matrix, k){
-  # Make it silenced for finer strategy may produce non-square matrix
-  dist.M <- suppressWarnings(as.dist(1 - cc.matrix))
-  H <- hclust(dist.M, method = 'average')
-  HC <- cutree(H, k = k)
-  si <- cluster::silhouette(HC, dist.M)
-  return(list(si, HC))
+sil.width <- function(cc.matrix, k, method = 'finer'){
+  dist.M <- switch (method,
+                    'balanced' = as.dist(1 - cc.matrix),
+                    'finer' = dist(cc.matrix)
+  )
 
-  dist.M <- suppressWarnings(dist(cc.matrix))
   H <- hclust(dist.M, method = 'average')
   HC <- cutree(H, k = k)
   si <- cluster::silhouette(HC, dist.M)
