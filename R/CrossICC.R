@@ -138,14 +138,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                         cutoff = ebayes.cutoff,
                                                mode = ebayes.mode))
 
-    # for (i in length(ebayes.result)) {
-    #   if (length(ebayes.result[[i]]) == 1) {
-    #     result[[iteration]] <- NULL
-    #     warning('Iteration is over for there\'s no MDEGs!')
-    #     break
-    #   }
-    # }
-
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
     geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
 
@@ -183,7 +175,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                          border_color = NA,
                          cluster_cols = FALSE,
                          annotation_col = annotation.frame,
-                         show_colnames = F,
+                         show_colnames = FALSE,
                          colorRampPalette(c("blue", "white", "red"))(100))
     }
     heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
