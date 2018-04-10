@@ -1,5 +1,11 @@
 m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE) {
 
+  # Check if has NAs in matrices
+  if (!all(sapply(platforms.list, function(x) !any(is.na(x))))) {
+    stop("Your list has as least one matrix contains NA(s)!\n
+         You should process missing values first, for details, see https://github.com/bioinformatist/CrossICC#faqs")
+  }
+
   # Merge multiple probes for one gene here
   non.duplicates <- lapply(platforms.list, merge.duplicates)
 
