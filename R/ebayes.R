@@ -33,11 +33,8 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
     mode = "up"
   }
 
-  # for (i in 1:length(ml)) {
-  #   if (length(ml[[i]][,1] >= 0) == 0) {
-  #     return(list(full.m = r[[1]], geneset2gene = 'hehe'))
-  #   }
-  # }
+  # Some element (actually as data.frame) of ml may has 0 columns and 0 rows, remove them here
+  ml <- ml[sapply(ml, function(x) dim(x)[1]) > 0]
 
   geneset2gene <- switch(mode,
                          "up" = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][,1] >= 0))), rownames(ml[[x]])[which(ml[[x]][,1] >= 0)]))),
