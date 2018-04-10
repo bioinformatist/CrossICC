@@ -40,13 +40,19 @@ shinyUI(dashboardPage(skin = "black",
     tabItems(
       # home page----
       tabItem("home",
-              box(
-                width = 8, status = "info", solidHeader = TRUE,collapsible = TRUE,
-                title = "Workflow",
-                tags$img(src="images/workflow.png")
+              fluidRow(
+                box(
+                  width = 6, status = "success", solidHeader = TRUE,collapsible = TRUE,
+                  title = "Read Me",
+                  includeMarkdown("Readmeshiny.md")
+                ),
+                box(
+                  width = 6, status = "info", solidHeader = TRUE,collapsible = TRUE,
+                  title = "Workflow",
+                  tags$img(src="images/workflow.png")
+                )
               )
-
-              ),
+      ),
 
       # inout panel ----
       tabItem("CrossICC",
