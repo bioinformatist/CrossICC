@@ -53,17 +53,16 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, p
     # replayPlot(obj)
 
     # win.metafile()
-    pdf(NULL)
-    dev.control('enable') # enable display list
-    c1 <- rainbow(max.silw)
-    plot(si[[1]], col = c1[1:max.silw])
-    silhouette <- recordPlot()
-    dev.off()
+    # pdf(NULL)
+    # dev.control('enable') # enable display list
+    # c1 <- rainbow(max.silw)
+    # plot(si[[1]], col = c1[1:max.silw])
+    # silhouette <- recordPlot()
+    # dev.off()
     # tiff(paste("silhouette.plot", iter, "tiff", sep = "."), res = 300, width = 1600, height = 1600)
   }
 
-  list(  # all.k,
-       clusters = cc.k.balanced, heatmap = heatmap, silhouette = silhouette)
+  list(clusters = cc.k.balanced, heatmap = heatmap, silhouette = list(si[[1]], max.silw))
 }
 
 derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 7){
