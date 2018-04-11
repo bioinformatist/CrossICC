@@ -176,11 +176,20 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       x<-x[,names(annotation.list)]
       annotation.frame<-data.frame(cluster=as.factor(annotation.list))
       rownames(annotation.frame)<-names(annotation.list)
+      #heatmap colors
+      colorlength <- 3
+      if(length(unique(annotation.frame[,1]))>3){
+        colorlength <- length(unique(annotation.frame[,1]))
+      }
+      color.list<-brewer.pal(colorlength, "Set2")
+
       pheatmap::pheatmap(x[gsig,],
                          scale = 'none',
                          border_color = NA,
                          cluster_cols = FALSE,
+                         cluster_rows = FALSE,
                          annotation_col = annotation.frame,
+                         ann_colors = list(color.list),
                          show_colnames = FALSE,
                          colorRampPalette(c("blue", "white", "red"))(100))
     }
@@ -193,7 +202,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                 gene.signature = gene.sig,
                                 # MDEG = gene.sig.all,
                                 clusters = balanced.cluster,
-                                # heatmaps = heatmaps,
+                                heatmaps = heatmaps,
                                 geneset2gene = geneset2gene,
                                 unioned.genesets = unioned.genesets)
 
@@ -246,8 +255,14 @@ summary.CrossICC <- function(result, iteration = NULL) {
   colnames(result[[iteration]]$unioned.genesets)=c("Cluster","Genes")
   final.geneset<-result[[iteration]]$unioned.genesets
   # Get final clusterSample result
-  names(temp.object)=c()
-  final.cluster<-do.call(c,temp.object)
+  if(class(temp.object)=='list'){
+    names(temp.object)=c()
+    final.cluster<-do.call(c,temp.object)
+  }else{
+    final.cluster<-temp.object
+  }
+
+
   list(gene.signatures = final.geneset,
        clusters = final.cluster)
 }

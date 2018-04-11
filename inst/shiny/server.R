@@ -102,7 +102,11 @@ shinyServer(function(session,input, output) {
         fuck<-InterationResult()
         sih<-fuck[[input$iterslided]]$clusters$silhouette
         max.sliw<-which.max(max(sih[,3])) + 1
-        color.list<-brewer.pal(length(unique(sih[,1])), "Set2")
+        colorlength <- 3
+        if(length(unique(sih[,1]))>3){
+          colorlength <- length(unique(sih[,1]))
+        }
+        color.list<-brewer.pal(colorlength, "Set2")
         plot(sih,col=color.list[1:max.sliw])
       })
       output$clusterexpress<-renderPlot({
