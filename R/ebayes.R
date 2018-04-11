@@ -19,7 +19,7 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
   contrast.matrix <- limma::makeContrasts(contrasts = x,levels = design)
   fit2 <- limma::contrasts.fit(fit,contrast.matrix)
   fit2 <- limma::eBayes(fit2)
-  gene.signature <- limma::topTable(fit2, number = 20000, adjust.method = 'BH', p.value = cutoff)
+  gene.signature <- limma::toptable(fit2, number = 20000, adjust.method = 'BH', p.value = cutoff, sort.by = 'logFC')
   r <- list(gene.signature)
   for(i in (k*(k - 1) / 2 + 1):(k * (k - 1) / 2 + k)){
     geneset.i <- limma::topTable(fit2, number = 20000, coef = i, adjust.method = 'BH', p.value = cutoff)
