@@ -162,39 +162,39 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     }
 
 
-    # Modify heat map by sorting samples with cluster and annotation bar
-    heatmap.fit<-function(x,cluster,gsig){
-      x<-data.frame(x,check.names = FALSE)
-      if (method == 'balanced') {
-        names(cluster) <- NULL
-        final.cluster <- do.call(c, cluster)
-      } else {
-        final.cluster <- cluster
-      }
-      annotation.list<-final.cluster[which(names(final.cluster)%in%colnames(x))]
-      annotation.list<-sort(annotation.list)
-      x<-x[,names(annotation.list)]
-      annotation.frame<-data.frame(cluster=as.factor(annotation.list))
-      rownames(annotation.frame)<-names(annotation.list)
-      #heatmap colors
-      colorlength <- 3
-      if(length(unique(annotation.frame[,1]))>3){
-        colorlength <- length(unique(annotation.frame[,1]))
-      }
-      color.list<-brewer.pal(colorlength, "Set2")
-
-      pheatmap::pheatmap(x[gsig,],
-                         scale = 'none',
-                         border_color = NA,
-                         cluster_cols = FALSE,
-                         cluster_rows = FALSE,
-                         annotation_col = annotation.frame,
-                         ann_colors = list(color.list),
-                         show_colnames = FALSE,
-                         colorRampPalette(c("blue", "white", "red"))(100))
-    }
-
-    heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
+    # # Modify heat map by sorting samples with cluster and annotation bar
+    # heatmap.fit<-function(x,cluster,gsig){
+    #   x<-data.frame(x,check.names = FALSE)
+    #   if (method == 'balanced') {
+    #     names(cluster) <- NULL
+    #     final.cluster <- do.call(c, cluster)
+    #   } else {
+    #     final.cluster <- cluster
+    #   }
+    #   annotation.list<-final.cluster[which(names(final.cluster)%in%colnames(x))]
+    #   annotation.list<-sort(annotation.list)
+    #   x<-x[,names(annotation.list)]
+    #   annotation.frame<-data.frame(cluster=as.factor(annotation.list))
+    #   rownames(annotation.frame)<-names(annotation.list)
+    #   #heatmap colors
+    #   colorlength <- 3
+    #   if(length(unique(annotation.frame[,1]))>3){
+    #     colorlength <- length(unique(annotation.frame[,1]))
+    #   }
+    #   color.list<-brewer.pal(colorlength, "Set2")
+    #
+    #   pheatmap::pheatmap(x[gsig,],
+    #                      scale = 'none',
+    #                      border_color = NA,
+    #                      cluster_cols = FALSE,
+    #                      cluster_rows = FALSE,
+    #                      annotation_col = annotation.frame,
+    #                      ann_colors = list(color.list),
+    #                      show_colnames = FALSE,
+    #                      colorRampPalette(c("blue", "white", "red"))(100))
+    # }
+    #
+    # heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
 
     result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
                                 # all.sig = all.sig,  # For test only
