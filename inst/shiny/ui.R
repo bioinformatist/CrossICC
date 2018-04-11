@@ -92,6 +92,7 @@ shinyUI(dashboardPage(skin = "black",
                           ),
                           tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr04",
                                    downloadLink('DownloadClusterexpressPlot', 'Download PDF'),
+                                   downloadLink('DownloadClusterExpressMatrix', 'Download Matrix'),
                                    uiOutput("expressionHeatmapSelectPlatform"),
                                    plotOutput("clusterexpress",height = "800px")
                           ),

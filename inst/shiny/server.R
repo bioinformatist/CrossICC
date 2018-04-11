@@ -177,6 +177,19 @@ shinyServer(function(session,input, output) {
         },
         contentType = 'image/pdf'
       )
+      output$DownloadClusterExpressMatrix<-downloadHandler(
+        filename = function() {
+          paste("Clusterexpress_", Sys.time(), '.csv', sep='')
+        },
+        content = function(file) {
+          pdf(file)
+          plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
+          write.csv(plot.matrix, file)
+
+        },
+        contentType = 'text/csv'
+      )
+
 # Predict panel functions ----
 
       predict.inputdata<- reactive({
