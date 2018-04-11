@@ -189,7 +189,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
                                 # all.sig = all.sig,  # For test only
-                                # platforms = platforms,  # For test only
+                                platforms = platforms,  # For heatmap in shiny
                                 gene.signature = gene.sig,
                                 # gene.sig.all = gene.sig.all,  # For test only
                                 # MDEG = gene.sig.all,
