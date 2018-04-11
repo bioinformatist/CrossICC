@@ -9,6 +9,7 @@ suppressMessages(library(shiny))
 suppressMessages(library(pheatmap))
 suppressMessages(library(CrossICC))
 suppressMessages(library(RColorBrewer))
+source("globalfunctions/plotFunctions.R")
 shinyServer(function(session,input, output) {
 # CrossICC panel functions ----
   # ui setting----
@@ -39,7 +40,7 @@ shinyServer(function(session,input, output) {
       tagList(div())
     }else{
       df=InterationResult()
-      platformnamelist<-names(df[[input$iterslided]]$heatmaps)
+      platformnamelist<-names(df[[input$iterslided]]$platforms)
       tagList(
         selectInput("SelectPL", "SelectPlatform", choices=platformnamelist, selected = platformnamelist[1], multiple = FALSE)
       )
@@ -101,21 +102,21 @@ shinyServer(function(session,input, output) {
         )
         fuck<-InterationResult()
         sih<-fuck[[input$iterslided]]$clusters$silhouette
-        max.sliw<-which.max(max(sih[,3])) + 1
-        colorlength <- 3
-        if(length(unique(sih[,1]))>3){
-          colorlength <- length(unique(sih[,1]))
-        }
-        color.list<-brewer.pal(colorlength, "Set2")
-        plot(sih,col=color.list[1:max.sliw])
+        plot_sihouttle_with_crossICCout(sih)
       })
       output$clusterexpress<-renderPlot({
         validate(
           need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
         )
         fuck<-InterationResult()
-        grid::grid.newpage()
-        grid::grid.draw(fuck[[input$iterslided]]$heatmaps[[input$SelectPL]]$gtable)
+        #plot heatmap
+        # get data
+        plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
+        cluster.table<-fuck[[input$iterslided]]$clusters$clusters
+        gsig<-data.t[[1]]$gene.signature
+        #plot
+        plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
+
       })
       output$ssGSEAmatrix<-renderDataTable({
         validate(
@@ -155,9 +156,7 @@ shinyServer(function(session,input, output) {
           pdf(file)
           fuck<-InterationResult()
           sih<-fuck[[input$iterslided]]$clusters$silhouette
-          max.sliw<-which.max(max(sih[,3])) + 1
-          color.list<-brewer.pal(length(unique(sih[,1])), "Set2")
-          plot(sih,col=color.list[1:max.sliw])
+          plot_sihouttle_with_crossICCout(sih)
           dev.off()
         },
         contentType = 'image/pdf'
@@ -169,8 +168,11 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           pdf(file)
           fuck<-InterationResult()
-          grid::grid.newpage()
-          grid::grid.draw(fuck[[input$iterslided]]$heatmaps[[input$SelectPL]]$gtable)
+          plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
+          cluster.table<-fuck[[input$iterslided]]$clusters$clusters
+          gsig<-data.t[[1]]$gene.signature
+          #plot
+          plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
           dev.off()
         },
         contentType = 'image/pdf'

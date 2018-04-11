@@ -203,7 +203,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                 # gene.sig.all = gene.sig.all,  # For test only
                                 # MDEG = gene.sig.all,
                                 clusters = balanced.cluster,
-                                heatmaps = heatmaps,
                                 geneset2gene = geneset2gene,
                                 unioned.genesets = unioned.genesets)
 
