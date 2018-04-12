@@ -3,7 +3,7 @@
 #required packages
 suppressMessages(library(shiny))
 suppressMessages(library(shinydashboard))
-
+suppressMessages(library(shinyWidgets))
 suppressMessages(library(DT))
 # suppressMessages(library(shinyIncubator))
 # suppressMessages(library(plotly))
@@ -59,34 +59,38 @@ shinyUI(dashboardPage(skin = "black",
               fluidRow(
                 #setting panel
                   box(
-                   title = "Control Panel for Example data ",solidHeader = TRUE,status = "success",width = 4,
+                   title = div(shiny::icon("gear"),"Control Panel for Example data "),width = 4, background = "black",
                    radioButtons(
                      "dataset",
-                     strong("Mutation Dataset"),inline=TRUE,
+                     strong("Loading CrossICC output"),inline=TRUE,
                      c(Default = "default", Upload = "upload"),
                      selected = 'default'
                    ),
                    conditionalPanel(condition = "input.dataset == 'upload'",
-                                    fileInput('file1', 'CrossICC output data in RDA format',
+                                    fileInput('file1', 'CrossICC output data in RDS format',
                                               accept=c('application/rds', '.rds'))
                    ),
-                   actionButton("submit","Submit"),
+                   actionButton("submit","Click ME to visualize result "),
                    uiOutput("interationNumberForplot")
                   ),
-                  tabBox (id="crossICCresultPanel",title=h3("Data Exploration"),width = 8, side = "right",
+                  tabBox (id="crossICCresultPanel",title=div(icon("hand-right",lib = "glyphicon"),h3("Data Exploration")), width = 8,side = "right",
                           selected = "cr01",
                           tabPanel(title=div(icon("book"),"Summary"),value="cr01",
                                    h3("Sample clusters"),
+                                   dropdownButton(
+                                     circle = TRUE, status = "primary", icon = icon("gear"), width = "300px",
+                                     tooltip = tooltipOptions(title = "Click to see inputs !")
+                                   ),
                                    verbatimTextOutput("OutputClusterResult"),
                                    h3("Gene signature for each cluster"),
                                    dataTableOutput("OutputResultSignature")
 
                           ),
-                          tabPanel(title=div(icon("book"),"Super Clustering"),value="cr02",
+                          tabPanel(title=div(icon("th",lib = "glyphicon"),"Super Clustering"),value="cr02",
                                    downloadLink('DownloadSuperclusterPlot', 'Download PDF'),
                                    plotOutput("superclusterPlot",height = "800px")
                           ),
-                          tabPanel(title=div(icon("book"),"Silhouette Result"),value="cr03",
+                          tabPanel(title=div(icon("signal",lib = "glyphicon"),"Silhouette Result"),value="cr03",
                                    downloadLink('DownloadSilhouette', 'Download PDF'),
                                    plotOutput("Silhouette",height = "800px")
                           ),
@@ -102,8 +106,8 @@ shinyUI(dashboardPage(skin = "black",
 
                           )
                   )
-                )
-              ),
+            )
+      ),
       tabItem("predict",
               fluidRow(
                 #setting panel
