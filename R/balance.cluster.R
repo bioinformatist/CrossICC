@@ -1,4 +1,4 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, plot = TRUE, iter, method){
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, method){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff), 2333)
 
   # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
@@ -24,12 +24,10 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, p
   si <- sil.width(all.k, max.silw, method = method)
   hc <- si[[2]]
 
-  if(plot){
-    heatmap <- pheatmap::pheatmap(all.k,
-                                  border_color = NA,
-                                  show_rownames = FALSE,
-                                  colorRampPalette(c("#FC8D59", "#FFFFBF", "#91CF60"))(50))
-  }
+  # pheatmap::pheatmap(all.k,
+  #                    border_color = NA,
+  #                    show_rownames = FALSE,
+  #                    colorRampPalette(c("#FC8D59", "#FFFFBF", "#91CF60"))(50))
 
   if (method == "balanced") {
     hc.list <- lapply(names(k), function(x) hc[grep(x, names(hc))])
@@ -46,7 +44,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, p
   list(clusters = switch (method,
     "balanced" = cc.k.balanced,
     'finer' = hc
-  ), heatmap = heatmap, silhouette = si[[1]])
+  ), all.k = all.k, silhouette = si[[1]])
 }
 
 derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 7){
