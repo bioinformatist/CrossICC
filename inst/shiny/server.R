@@ -92,8 +92,7 @@ shinyServer(function(session,input, output) {
           need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
         )
         fuck<-InterationResult()
-        grid::grid.newpage()
-        grid::grid.draw(fuck[[input$iterslided]]$clusters$heatmap$gtable)
+        plot_balanced_heatmap(fuck[[input$iterslided]]$clusters$all.k)
 
       })
       output$Silhouette<-renderPlot({
@@ -113,8 +112,10 @@ shinyServer(function(session,input, output) {
         #plot heatmap
         # get data
         plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
+        platform.names <- names(fuck[[input$iterslided]]$platforms)
+        index <- which(platform.names %in% input$SelectPL)
         cluster.table<-fuck[[input$iterslided]]$clusters$clusters
-        gsig<-fuck[[1]]$gene.signature
+        gsig<-fuck[[input$iterslided]]$sorted.gene.list[[index]]
         #plot
         plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
 
@@ -124,7 +125,7 @@ shinyServer(function(session,input, output) {
           need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
         )
         fuck<-InterationResult()
-        ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, CrossICC.object[[input$iterslided]]$unioned.genesets)
+        ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets)
         ssGSEA.list[[1]]
       })
       # output$ssGSEAheatmap-renderPlot({
@@ -143,8 +144,7 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           pdf(file)
           fuck<-InterationResult()
-          grid::grid.newpage()
-          grid::grid.draw(fuck[[input$iterslided]]$clusters$heatmap$gtable)
+          plot_balanced_heatmap(fuck[[input$iterslided]]$clusters$all.k)
           dev.off()
         },
         contentType = 'image/pdf'

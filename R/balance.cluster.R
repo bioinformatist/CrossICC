@@ -24,10 +24,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, m
   si <- sil.width(all.k, max.silw, method = method)
   hc <- si[[2]]
 
-  # pheatmap::pheatmap(all.k,
-  #                    border_color = NA,
-  #                    show_rownames = FALSE,
-  #                    colorRampPalette(c("#FC8D59", "#FFFFBF", "#91CF60"))(50))
+
 
   if (method == "balanced") {
     hc.list <- lapply(names(k), function(x) hc[grep(x, names(hc))])

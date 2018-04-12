@@ -26,7 +26,7 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes){
                      scale = 'none',
                      border_color = NA,
                      cluster_cols = FALSE,
-                     cluster_rows = TRUE,
+                     cluster_rows = FALSE,
                      annotation_col = annotation.frame,
                      annotation_colors = list(cluster=color.list),
                      show_colnames = FALSE,
@@ -52,5 +52,13 @@ plot_sihouttle_with_crossICCout <- function(sih){
   plot(sih,col=color.list[1:max.sliw])
 }
 
+plot_balanced_heatmap<-function(all.k){
+  pheatmap::pheatmap(all.k,
+                     border_color = NA,
+                     show_rownames = FALSE,
+                     show_colnames = FALSE,
+                     colorRampPalette(c("#FC8D59", "#FFFFBF", "#91CF60"))(50))
+
+}
 
 
