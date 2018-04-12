@@ -219,6 +219,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     warning('Result list would not be returned when use.shiny=TRUE.')
     run.shiny()
   }
+  # list(all.sig = all.sig, balanced.cluster = balanced.cluster)
   result
   # all.sig
   # cc
