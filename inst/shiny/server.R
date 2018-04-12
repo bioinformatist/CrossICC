@@ -103,6 +103,7 @@ shinyServer(function(session,input, output) {
         fuck<-InterationResult()
         sih<-fuck[[input$iterslided]]$clusters$silhouette
         plot_sihouttle_with_crossICCout(sih)
+
       })
       output$clusterexpress<-renderPlot({
         validate(
@@ -113,7 +114,7 @@ shinyServer(function(session,input, output) {
         # get data
         plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
         cluster.table<-fuck[[input$iterslided]]$clusters$clusters
-        gsig<-data.t[[1]]$gene.signature
+        gsig<-fuck[[1]]$gene.signature
         #plot
         plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
 
@@ -170,7 +171,7 @@ shinyServer(function(session,input, output) {
           fuck<-InterationResult()
           plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
           cluster.table<-fuck[[input$iterslided]]$clusters$clusters
-          gsig<-data.t[[1]]$gene.signature
+          gsig<-fuck[[1]]$gene.signature
           #plot
           plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
           dev.off()

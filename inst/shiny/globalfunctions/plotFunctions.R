@@ -1,7 +1,9 @@
+#loading dependencies
+suppressMessages(library(cluster))
 #plot heat map from matrix and annotation information
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes){
-
-  samplename<-colnames(df)
+  plot.matrix<-df
+  samplename<-colnames(plot.matrix)
   annotation.list<-sample.cluster[samplename]
 
   annotation.list<-sort(annotation.list)
@@ -38,11 +40,11 @@ plot_sihouttle_with_crossICCout <- function(sih){
   max.sliw<-which.max(max(sih[,3])) + 1
   color.list<-c()
   colorlength <- 3
-  if(length(unique(annotation.frame[,1]))>3){
-    colorlength <- length(unique(annotation.frame[,1]))
+  if(length(unique(sih[,1]))>3){
+    colorlength <- length(unique(sih[,1]))
     color.list<-brewer.pal(colorlength, "Set2")
   }else{
-    colorlength <- length(unique(annotation.frame[,1]))
+    colorlength <- length(unique(sih[,1]))
     color.list<-brewer.pal(3, "Set2")[1:colorlength]
   }
 
