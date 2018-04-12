@@ -130,7 +130,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     balanced.cluster <- balance.cluster(all.sig,
                                         cc = cc, cluster.cutoff = cluster.cutoff,
-                                        max.K = NULL, plot = TRUE, iter = iteration, method = method)
+                                        max.K = NULL, method = method)
 
     ebayes.result <- lapply(names(all.sig),
                             function(x) ebayes(all.sig[[x]],
@@ -140,6 +140,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                cutoff = ebayes.cutoff,
                                                mode = ebayes.mode))
 
+    # Remove possible NULL element produced during ebayes step
+    ebayes.result <- Filter(Negate(is.null), ebayes.result)
+
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
     geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
 
@@ -147,6 +150,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
+
+    sorted.gene.list <- lapply(ebayes.result, function(x) rownames(x$full.m[rownames(x$full.m) %in% gene.sig,][order(-x$full.m[rownames(x$full.m) %in% gene.sig,][,1]),]))
 
     cat(length(gene.sig), "genes were engaged in this iteration.\n")
 
@@ -198,8 +203,10 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
                                 # all.sig = all.sig,  # For test only
+                                # er = ebayes.result,  # For test only
                                 platforms = platforms,  # For heatmap in shiny
                                 gene.signature = gene.sig,
+                                sorted.gene.list = sorted.gene.list,  # Sorted gene names by Fold-Change value, for heatmaps use
                                 # gene.sig.all = gene.sig.all,  # For test only
                                 # MDEG = gene.sig.all,
                                 clusters = balanced.cluster,
