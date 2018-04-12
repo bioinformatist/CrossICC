@@ -1,6 +1,8 @@
 ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
+  class <- class[colnames(eSet.subset)]
   k <- length(unique(class))
   if (k == 1) return(list(full.m = NULL, geneset2gene = NULL))
+  # Here use subset of cluster class, for finer method class contains all clusters
   design <- model.matrix(~ 0 + factor(class))
   colnames(design) <- paste("K", 1:k, sep = "")
   K <- colnames(design)
@@ -19,7 +21,7 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
   contrast.matrix <- limma::makeContrasts(contrasts = x,levels = design)
   fit2 <- limma::contrasts.fit(fit,contrast.matrix)
   fit2 <- limma::eBayes(fit2)
-  gene.signature <- limma::toptable(fit2, number = 20000, adjust.method = 'BH', p.value = cutoff, sort.by = 'logFC')
+  gene.signature <- limma::topTable(fit2, number = 20000, adjust.method = 'BH', p.value = cutoff)
   r <- list(gene.signature)
   for(i in (k*(k - 1) / 2 + 1):(k * (k - 1) / 2 + k)){
     geneset.i <- limma::topTable(fit2, number = 20000, coef = i, adjust.method = 'BH', p.value = cutoff)
