@@ -55,11 +55,16 @@ NULL
 #' fuck <- CrossICC(datalist, max.iter = 5, use.shiny = FALSE, method = "balanced",fdr.cutoff = 0.5, ebayes.cutoff = 0.01)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, rep.runs = 1000,
-                               pItem=0.8, pFeature=1, clusterAlg="hc", distance="euclidean",
-                               cc.seed=5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
+                               pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
+                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
-  if (!method %in% c('finer', 'balanced')) stop("Bad argument: You should choose proper method for super-cluster!")
+  # Check method (sometimes spelling mistake here)
+  method <- match.arg(method, c("finer","balanced"))
+
+  # Get arguments as data.table
+  arg.list <- unlist(as.list(match.call())[-1])
+  arg.table <- data.table(Parameters = names(arg.list), value = arg.list)
 
   graphics.off()
 
@@ -204,6 +209,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
                                 # all.sig = all.sig,  # For test only
                                 # er = ebayes.result,  # For test only
+                                arg.table = arg.table,  # data.table object of arguments
                                 platforms = platforms,  # For heatmap in shiny
                                 gene.signature = gene.sig,
                                 sorted.gene.list = sorted.gene.list,  # Sorted gene names by Fold-Change value, for heatmaps use
