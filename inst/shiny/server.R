@@ -86,6 +86,12 @@ shinyServer(function(session,input, output) {
         s$clusters
       })
 
+  # Render arguments matrix----
+      output$outputArguments <- renderTable({
+        fuck<-InterationResult()
+        dt<-fuck[[input$iterslided]]$arg.table
+        dt
+      })
   #Plot functions----
       output$superclusterPlot<-renderPlot({
         validate(

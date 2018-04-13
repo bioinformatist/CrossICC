@@ -71,7 +71,8 @@ shinyUI(dashboardPage(skin = "black",
                                               accept=c('application/rds', '.rds'))
                    ),
                    actionButton("submit","Click ME to visualize result "),
-                   uiOutput("interationNumberForplot")
+                   uiOutput("interationNumberForplot"),
+                   tableOutput("outputArguments")
                   ),
                   tabBox (id="crossICCresultPanel",title=div(icon("hand-right",lib = "glyphicon"),h3("Data Exploration")), width = 8,side = "right",
                           selected = "cr01",
@@ -84,7 +85,6 @@ shinyUI(dashboardPage(skin = "black",
                                    verbatimTextOutput("OutputClusterResult"),
                                    h3("Gene signature for each cluster"),
                                    dataTableOutput("OutputResultSignature")
-
                           ),
                           tabPanel(title=div(icon("th",lib = "glyphicon"),"Super Clustering"),value="cr02",
                                    downloadLink('DownloadSuperclusterPlot', 'Download PDF'),
@@ -103,7 +103,6 @@ shinyUI(dashboardPage(skin = "black",
                           tabPanel(title=div(icon("book"),"ssGSEA"),value="cr05",
                                    plotOutput("ssGSEAheatmap",height = "800px"),
                                    dataTableOutput("ssGSEAmatrix")
-
                           )
                   )
             )
