@@ -64,7 +64,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
   # Get arguments as data.table
   arg.list <- unlist(as.list(match.call())[-1])
-  arg.table <- data.table(Parameters = names(arg.list), value = arg.list)
+  arg.table <- data.frame(Parameters = names(arg.list), value = arg.list)
 
   graphics.off()
 
