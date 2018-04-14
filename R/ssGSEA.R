@@ -20,9 +20,6 @@ ssGSEA <- function(x, gene.signature, geneset2gene, color = c("purple", "#910202
   # Our up-stream matrix is already with gene symbols, so provide fake
   # 'genewprobe' for runFAIME. But still need geneset2gene: An one-to-one mapping matrix with two columns,
   # the 1st column is geneset ID/name, and the 2nd is its gene members
-  # For testing:
-  # gs <- data.frame(geneset = c(rep('set1', 8), rep('set2', 8)), gene = fuck[[1]]$gene.signature)
-  # gs <- as.matrix(gs)
   genewprobe <- gene.signature
   names(genewprobe) <- gene.signature
   fs <- runFAIME(x, genewprobe, geneset2gene, weightRank = FALSE)
@@ -39,15 +36,5 @@ ssGSEA <- function(x, gene.signature, geneset2gene, color = c("purple", "#910202
     col.col <- c(col.col, rep(color[i], length(cluster.names)))
   }
 
-  pdf(NULL)
-  dev.control("enable")
-  if (require("gplots")) {
-    heatmap <- heatmap.2(fs.scale, col = greenred(75), ColSideColors = col.col, sepcol = "white",
-      sepwidth = c(0.001, 0.001), rowsep = 1:nrow(fs), scale = "none",
-      trace = "none", density.info = "none", labRow = NULL, labCol = NULL)
-  }
-
-  dev.off()
-
-  return(list(fs, heatmap))
+  return(list(fs, fs.scale))
 }
