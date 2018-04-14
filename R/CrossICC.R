@@ -64,7 +64,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
   # Get arguments as data.table
   arg.list <- unlist(as.list(match.call())[-1])
-  arg.table <- data.frame(Parameters = names(arg.list), value = arg.list)
 
   graphics.off()
 
@@ -207,17 +206,17 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     # heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
 
     result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
-                                # all.sig = all.sig,  # For test only
-                                # er = ebayes.result,  # For test only
-                                arg.table = arg.table,  # data.table object of arguments
-                                platforms = platforms,  # For heatmap in shiny
-                                gene.signature = gene.sig,
-                                sorted.gene.list = sorted.gene.list,  # Sorted gene names by Fold-Change value, for heatmaps use
-                                # gene.sig.all = gene.sig.all,  # For test only
-                                # MDEG = gene.sig.all,
-                                clusters = balanced.cluster,
-                                geneset2gene = geneset2gene,
-                                unioned.genesets = unioned.genesets)
+      # all.sig = all.sig,  # For test only
+      # er = ebayes.result,  # For test only
+      arg.list = arg.list,  # named vector object of arguments
+      platforms = platforms,  # For heatmap in shiny
+      gene.signature = gene.sig,
+      sorted.gene.list = sorted.gene.list,  # Sorted gene names by Fold-Change value, for heatmaps use
+      # gene.sig.all = gene.sig.all,  # For test only
+      # MDEG = gene.sig.all,
+      clusters = balanced.cluster,
+      geneset2gene = geneset2gene,
+      unioned.genesets = unioned.genesets)
 
     iteration<- iteration + 1
   }
