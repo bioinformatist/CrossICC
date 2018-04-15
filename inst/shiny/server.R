@@ -36,7 +36,7 @@ shinyServer(function(session,input, output) {
   })
   #heatmap control option of platform selection ui----
   output$expressionHeatmapSelectPlatform <- renderUI({
-    if(is.na(InterationResult())){
+    if(is.null(InterationResult())){
       tagList(div())
     }else{
       df=InterationResult()
@@ -46,40 +46,41 @@ shinyServer(function(session,input, output) {
       )
     }
   })
-  #input data ----
+  #crossICC outputData ----
       inputdata<-  reactive({
-        example<- readRDS(file = path.expand('~/CrossICC.object.rds'))
+        outputdata<- readRDS(file = path.expand('~/CrossICC.object.rds'))
         inFile <- input$file1
         CrossICC.object<-NULL
         if (!is.null(inFile)){
           CrossICC.object<-readRDS(file = inFile$datapath)
         }
         switch(input$dataset,
-               "default" = example,
+               "default" = outputdata,
                "upload" = CrossICC.object
         )
       })
-  #interation CrossICC
+  #Interation CrossICC
       InterationResult <- reactive({
         # Create a Progress object
         if(input$submit!=0)
           CrossICC.object=inputdata()
       })
 
-  #summary crossICC result----
+  #Summary crossICC result----
       output$OutputResultSignature <- renderDataTable({
-        validate(
-          need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
-        )
+        # validate(
+        #   need(!is.null(InterationResult()), "Press submit button")
+        # )
         tempr<-InterationResult()
         len<-length(tempr)
-        s<-summary.CrossICC(tempr)
+        cat(len)
+        s<-summary.CrossICC(tempr,iteration = len)
         s$gene.signatures
         })
       output$OutputClusterResult <- renderPrint({
-        validate(
-          need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
-        )
+        # validate(
+        #   need(!is.null(InterationResult()), "Press submit button")
+        # )
         tempr<-InterationResult()
         len<-length(tempr)
         s<-summary.CrossICC(tempr)
@@ -92,18 +93,22 @@ shinyServer(function(session,input, output) {
         dt<-fuck[[input$iterslided]]$arg.table
         dt
       })
+
+
   #Plot functions----
       output$superclusterPlot<-renderPlot({
         validate(
-          need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
+          need(!is.null(InterationResult()), "Press submit button")
         )
         fuck<-InterationResult()
+        Sys.sleep(1)
         plot_balanced_heatmap(fuck[[input$iterslided]]$clusters$all.k)
 
       })
       output$Silhouette<-renderPlot({
+        Sys.sleep(1)
         validate(
-          need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
+          need(!is.null(InterationResult()), "Press submit button")
         )
         fuck<-InterationResult()
         sih<-fuck[[input$iterslided]]$clusters$silhouette
@@ -111,8 +116,9 @@ shinyServer(function(session,input, output) {
 
       })
       output$clusterexpress<-renderPlot({
+        Sys.sleep(1)
         validate(
-          need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
+          need(!is.null(InterationResult()), "Press submit button")
         )
         fuck<-InterationResult()
         #plot heatmap
@@ -128,15 +134,15 @@ shinyServer(function(session,input, output) {
       })
       output$ssGSEAmatrix<-renderDataTable({
         validate(
-          need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
+          need(!is.null(InterationResult()), "Press submit button")
         )
         fuck<-InterationResult()
-        ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets)
+        ssGSEA.list<-ssGSEA(fuck[[input$iterslided]]$platforms[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets)
         ssGSEA.list[[1]]
       })
       # output$ssGSEAheatmap-renderPlot({
       #   validate(
-      #     need(!is.null(InterationResult()), "Please upload a correct CrossICC output file in RDA format, which can be found at default output path of CrossICC function or user defined path.")
+      #     need(!is.null(InterationResult()), "Press submit button")
       #   )
       #   fuck<-InterationResult()
       #   ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, CrossICC.object[[input$iterslided]]$unioned.genesets)
@@ -209,5 +215,19 @@ shinyServer(function(session,input, output) {
       })
       output$predictInputDataSummary<-renderDataTable({
         predict.inputdata()
+      })
+
+# clinical correlation analysis
+      clinicalRelatedData<-  reactive({
+        example<- data()
+        inFile <- input$file3
+        clinical.df<-NULL
+        if (!is.null(inFile)){
+          clinical.df<-read.csv(inFile,header=T,check.names = F)
+        }
+        switch(input$dataset,
+               "Default" = outputdata,
+               "Upload" = clinical.df
+        )
       })
 })

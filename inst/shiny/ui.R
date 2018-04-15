@@ -1,10 +1,13 @@
-
+options(spinner.type=4)
 
 #required packages
 suppressMessages(library(shiny))
 suppressMessages(library(shinydashboard))
 suppressMessages(library(shinyWidgets))
+suppressMessages(library(shinycssloaders))
 suppressMessages(library(DT))
+
+# library(surival)d
 # suppressMessages(library(shinyIncubator))
 # suppressMessages(library(plotly))
 # suppressMessages(library(heatmaply))
@@ -72,6 +75,7 @@ shinyUI(dashboardPage(skin = "black",
                    ),
                    actionButton("submit","Click ME to visualize result "),
                    uiOutput("interationNumberForplot"),
+                   h4("Your running parameters "),
                    tableOutput("outputArguments")
                   ),
                   tabBox (id="crossICCresultPanel",title=div(icon("hand-right",lib = "glyphicon"),h3("Data Exploration")), width = 8,side = "right",
@@ -84,21 +88,21 @@ shinyUI(dashboardPage(skin = "black",
                                    ),
                                    verbatimTextOutput("OutputClusterResult"),
                                    h3("Gene signature for each cluster"),
-                                   dataTableOutput("OutputResultSignature")
+                                   tableOutput("OutputResultSignature")
                           ),
                           tabPanel(title=div(icon("th",lib = "glyphicon"),"Super Clustering"),value="cr02",
                                    downloadLink('DownloadSuperclusterPlot', 'Download PDF'),
-                                   plotOutput("superclusterPlot",height = "800px")
+                                   withSpinner(plotOutput("superclusterPlot",height = "800px"),color = "black")
                           ),
                           tabPanel(title=div(icon("signal",lib = "glyphicon"),"Silhouette Result"),value="cr03",
                                    downloadLink('DownloadSilhouette', 'Download PDF'),
-                                   plotOutput("Silhouette",height = "800px")
+                                   withSpinner( plotOutput("Silhouette",height = "800px"),color = "black")
                           ),
                           tabPanel(title=div(icon("book"),"Expression heatmap by signagure"),value="cr04",
                                    downloadLink('DownloadClusterexpressPlot', 'Download PDF'),
-                                   downloadLink('DownloadClusterExpressMatrix', 'Download Matrix'),
+                                   downloadButton('DownloadClusterExpressMatrix', 'Download Matrix'),
                                    uiOutput("expressionHeatmapSelectPlatform"),
-                                   plotOutput("clusterexpress",height = "800px")
+                                   withSpinner(plotOutput("clusterexpress",height = "800px"),color = "black")
                           ),
                           tabPanel(title=div(icon("book"),"ssGSEA"),value="cr05",
                                    plotOutput("ssGSEAheatmap",height = "800px"),
@@ -141,7 +145,34 @@ shinyUI(dashboardPage(skin = "black",
               )
 
               ),
-      tabItem("correlation")
+      tabItem("correlation",
+              fluidRow(
+                #setting panel
+                box(
+                  title = "Phenotype Data input",solidHeader = TRUE,status = "success",width = 4,
+                  radioGroupButtons(
+                    "data3",
+                    label = strong("clinical Dataset"),
+                    choices = c(Default = "Default", Upload = "Upload"),
+                    selected = 'Default',status = "primary"
+                  ),
+                  conditionalPanel(condition = "input.data3 == 'upload'",
+                                   fileInput('file3', 'Input dataset in matrix file',
+                                             accept=c('text/txt', '.rds'))
+                  ),
+                  actionBttn("submit3","Submit", style = "unite")
+                ),
+                tabBox (id="clinicalResultPanel",title=h3("Analysis"),width = 8, side = "right",
+                        selected = "ca01",
+                        tabPanel(title=div(icon("book"),"Read Me"),value="ca01",
+                                 p("Write introduction here")
+
+                        )
+
+                )
+              )
+
+              )
 
       # analysis  panel ----
     )
