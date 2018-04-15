@@ -155,7 +155,37 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
 
-    sorted.gene.list <- lapply(ebayes.result, function(x) rownames(x$full.m[rownames(x$full.m) %in% gene.sig,][order(-x$full.m[rownames(x$full.m) %in% gene.sig,][,1]),]))
+    merged.matrix <- do.call(cbind, all.sig)
+    merged.cluster <- switch (method,
+      'balanced' = do.call(c, balanced.cluster[[1]]),
+      'finer' = balanced.cluster[[1]]
+    )
+
+    design <- model.matrix(~ 0 + factor(merged.cluster))
+    k <- length(unique(merged.cluster))
+    colnames(design) <- paste("K", 1:k, sep = "")
+    K <- colnames(design)
+    fit <- limma::lmFit(merged.matrix, design)
+
+    x <- c()
+    for(i in 1:(k - 1)){
+      for(j in (i + 1):k){
+        x <- c(x, paste(K[j], K[i], sep = "-"))
+      }
+    }
+    for(i in 1:k){
+      x <- c(x, paste(K[i], paste("(", paste(K[-i], collapse="+"), ")", "/", k-1, sep=""), sep="-"))
+    }
+
+    contrast.matrix <- limma::makeContrasts(contrasts = x,levels = design)
+    fit2 <- limma::contrasts.fit(fit,contrast.matrix)
+    fit2 <- limma::eBayes(fit2)
+    FC.matrix <- limma::topTable(fit2, number = 20000, adjust.method = 'BH')
+    sorted.genes <- rownames(FC.matrix[order(-FC.matrix[,1]),])
+    gene.order <- sorted.genes[sorted.genes %in% gene.sig]
+
+    # Old version of sorting
+    # sorted.gene.list <- lapply(ebayes.result, function(x) rownames(x$full.m[rownames(x$full.m) %in% gene.sig,][order(-x$full.m[rownames(x$full.m) %in% gene.sig,][,1]),]))
 
     cat(length(gene.sig), "genes were engaged in this iteration.\n")
 
@@ -211,7 +241,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       arg.list = arg.list,  # named vector object of arguments
       platforms = platforms,  # For heatmap in shiny
       gene.signature = gene.sig,
-      sorted.gene.list = sorted.gene.list,  # Sorted gene names by Fold-Change value, for heatmaps use
+      gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
       # gene.sig.all = gene.sig.all,  # For test only
       # MDEG = gene.sig.all,
       clusters = balanced.cluster,
