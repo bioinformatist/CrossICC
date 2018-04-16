@@ -295,7 +295,8 @@ summary.CrossICC <- function(result, iteration = NULL) {
   }
   temp.object<-result[[iteration]]$clusters[[1]]
   # Get final gene2cluster set
-  colnames(result[[iteration]]$unioned.genesets)=c("Cluster","Genes")
+  union.geneset<-result[[iteration]]$unioned.genesets
+  colnames(union.geneset)=c("Cluster","Genes")
   final.geneset<-result[[iteration]]$unioned.genesets
   # Get final clusterSample result
   if(class(temp.object)=='list'){

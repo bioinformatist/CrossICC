@@ -62,7 +62,7 @@ shinyUI(dashboardPage(skin = "black",
               fluidRow(
                 #setting panel
                   box(
-                   title = div(shiny::icon("gear"),"Control Panel for Example data "),width = 4, background = "black",
+                   title = div(shiny::icon("gear"),"Control Panel for Example data", inline=T),width = 4, background = "black",
                    radioButtons(
                      "dataset",
                      strong("Loading CrossICC output"),inline=TRUE,
@@ -73,22 +73,19 @@ shinyUI(dashboardPage(skin = "black",
                                     fileInput('file1', 'CrossICC output data in RDS format',
                                               accept=c('application/rds', '.rds'))
                    ),
-                   actionButton("submit","Click ME to visualize result "),
+                   actionBttn("submit",div("Click ME to visualize result ",icon("hand-right",lib = "glyphicon")),style = "float"),
                    uiOutput("interationNumberForplot"),
                    h4("Your running parameters "),
-                   tableOutput("outputArguments")
+                   div(align='center',tableOutput("outputArguments"))
                   ),
-                  tabBox (id="crossICCresultPanel",title=div(icon("hand-right",lib = "glyphicon"),h3("Data Exploration")), width = 8,side = "right",
+                  tabBox (id="crossICCresultPanel",title="", width = 8,side = "right",
                           selected = "cr01",
                           tabPanel(title=div(icon("book"),"Summary"),value="cr01",
-                                   h3("Sample clusters"),
-                                   dropdownButton(
-                                     circle = TRUE, status = "primary", icon = icon("gear"), width = "300px",
-                                     tooltip = tooltipOptions(title = "Click to see inputs !")
-                                   ),
-                                   verbatimTextOutput("OutputClusterResult"),
-                                   h3("Gene signature for each cluster"),
-                                   tableOutput("OutputResultSignature")
+                                   h4("Dowload Clustering result"),
+                                   downloadButton("OutputClusterResult"),
+                                   h4("Gene signature for each cluster"),
+                                   dataTableOutput("OutputResultSignature")
+
                           ),
                           tabPanel(title=div(icon("th",lib = "glyphicon"),"Super Clustering"),value="cr02",
                                    downloadLink('DownloadSuperclusterPlot', 'Download PDF'),

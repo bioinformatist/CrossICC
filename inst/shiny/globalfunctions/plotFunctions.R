@@ -51,7 +51,6 @@ plot_sihouttle_with_crossICCout <- function(sih){
     color.list<-brewer.pal(3, "Set2")[1:colorlength]
   }
 
-  color.list<-brewer.pal(colorlength, "Set2")
   plot(sih,col=color.list[1:max.sliw])
 }
 

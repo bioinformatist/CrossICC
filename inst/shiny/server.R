@@ -60,38 +60,57 @@ shinyServer(function(session,input, output) {
         )
       })
   #Interation CrossICC
-      InterationResult <- reactive({
-        # Create a Progress object
-        if(input$submit!=0)
-          CrossICC.object=inputdata()
+      InterationResult <- eventReactive(input$submit, {
+        CrossICC.object=inputdata()
+        CrossICC.object
       })
+      # InterationResult <- reactive({
+      #   # Create a Progress object
+      #   if(input$submit){
+      #     CrossICC.object=inputdata()
+      #     CrossICC.object
+      #   }else{
+      #     NULL
+      #   }
+      # })
+        summary.data<-eventReactive(input$submit,{
+          temp.summary <-  CrossICC::summary.CrossICC(inputdata(),iteration = input$iterslided)
+          return(temp.summary)
+        })
 
   #Summary crossICC result----
       output$OutputResultSignature <- renderDataTable({
-        # validate(
-        #   need(!is.null(InterationResult()), "Press submit button")
-        # )
-        tempr<-InterationResult()
-        len<-length(tempr)
-        cat(len)
-        s<-summary.CrossICC(tempr,iteration = len)
-        s$gene.signatures
+
+        temp.summary <-  CrossICC::summary.CrossICC(InterationResult(),iteration = input$iterslided)
+        df<-temp.summary$gene.signatures
+        colnames(df)<-c("Cluster","Feature")
+        df
         })
-      output$OutputClusterResult <- renderPrint({
-        # validate(
-        #   need(!is.null(InterationResult()), "Press submit button")
-        # )
-        tempr<-InterationResult()
-        len<-length(tempr)
-        s<-summary.CrossICC(tempr)
-        s$clusters
-      })
+      output$OutputClusterResult <- downloadHandler(
+        filename = function() {
+          paste("Final_cluster_result", Sys.time(), '.csv', sep='')
+        },
+        content = function(file) {
+          temp.summary <-  CrossICC::summary.CrossICC(InterationResult(),iteration = input$iterslided)
+
+          write.csv(temp.summary$cluster, file)
+
+        },
+        contentType = 'text/csv'
+
+      )
 
   # Render arguments matrix----
       output$outputArguments <- renderTable({
+        validate(
+          need(!is.null(InterationResult()), "Press submit button")
+        )
         fuck<-InterationResult()
-        dt<-fuck[[input$iterslided]]$arg.table
-        dt
+        arg.list<-fuck[[input$iterslided]]$arg.list
+        tempname<-names(arg.list)
+        tempname[1]="Input"
+        df<-data.frame(Parameter=tempname,Value=unlist(as.character(arg.list), use.names=FALSE))
+        df
       })
 
 
@@ -127,7 +146,7 @@ shinyServer(function(session,input, output) {
         platform.names <- names(fuck[[input$iterslided]]$platforms)
         index <- which(platform.names %in% input$SelectPL)
         cluster.table<-fuck[[input$iterslided]]$clusters$clusters
-        gsig<-fuck[[input$iterslided]]$sorted.gene.list[[index]]
+        gsig<-fuck[[input$iterslided]]$gene.order
         #plot
         plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
 
@@ -137,7 +156,7 @@ shinyServer(function(session,input, output) {
           need(!is.null(InterationResult()), "Press submit button")
         )
         fuck<-InterationResult()
-        ssGSEA.list<-ssGSEA(fuck[[input$iterslided]]$platforms[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets)
+        ssGSEA.list<-ssGSEA(fuck[[input$iterslided]]$platforms[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets,cluster = F)
         ssGSEA.list[[1]]
       })
       # output$ssGSEAheatmap-renderPlot({
@@ -195,7 +214,7 @@ shinyServer(function(session,input, output) {
           paste("Clusterexpress_", Sys.time(), '.csv', sep='')
         },
         content = function(file) {
-          pdf(file)
+          fuck<-InterationResult()
           plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
           write.csv(plot.matrix, file)
 
@@ -213,7 +232,7 @@ shinyServer(function(session,input, output) {
         }
         data
       })
-      output$predictInputDataSummary<-renderDataTable({
+      output$predictInputData<-renderDataTable({
         predict.inputdata()
       })
 
