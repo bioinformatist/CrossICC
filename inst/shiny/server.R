@@ -64,15 +64,7 @@ shinyServer(function(session,input, output) {
         CrossICC.object=inputdata()
         CrossICC.object
       })
-      # InterationResult <- reactive({
-      #   # Create a Progress object
-      #   if(input$submit){
-      #     CrossICC.object=inputdata()
-      #     CrossICC.object
-      #   }else{
-      #     NULL
-      #   }
-      # })
+
         summary.data<-eventReactive(input$submit,{
           temp.summary <-  CrossICC::summary.CrossICC(inputdata(),iteration = input$iterslided)
           return(temp.summary)
@@ -106,10 +98,14 @@ shinyServer(function(session,input, output) {
           need(!is.null(InterationResult()), "Press submit button")
         )
         fuck<-InterationResult()
-        arg.list<-fuck[[input$iterslided]]$arg.list
-        tempname<-names(arg.list)
+        validate(
+          need(!is.null(input$iterslided), "Press submit button")
+        )
+
+        arg.list.2<-fuck[[input$iterslided]]$arg.list
+        tempname<-names(arg.list.2)
         tempname[1]="Input"
-        df<-data.frame(Parameter=tempname,Value=unlist(as.character(arg.list), use.names=FALSE))
+        df<-data.frame(Parameter=tempname,Value=unlist(as.character(arg.list.2), use.names=FALSE))
         df
       })
 
@@ -120,6 +116,7 @@ shinyServer(function(session,input, output) {
           need(!is.null(InterationResult()), "Press submit button")
         )
         fuck<-InterationResult()
+
         Sys.sleep(1)
         plot_balanced_heatmap(fuck[[input$iterslided]]$clusters$all.k)
 
