@@ -1,6 +1,6 @@
 #' Title To calculate the correlation between the predictor centroid and the validation centroid.
 #'
-#' @param x a eSet object or eSet-like matrix.
+#' @param x a eSet object or eSet-like matrix. with features in rows and samples in columns
 #' @param gene.signature gene signatures calculated by CrossICC.
 #' @param geneset2gene a matrix contains geneset (cluster name) mapping to gene.
 #' @param filter.cutoff cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.
