@@ -306,7 +306,7 @@ summary.CrossICC <- function(result, iteration = NULL) {
     final.cluster<-temp.object
   }
 
-
-  list(gene.signatures = final.geneset,
+  colnames(final.geneset)=c("Cluster","Genes")
+  list(gene.signatures = data.frame(final.geneset),
        clusters = final.cluster)
 }
