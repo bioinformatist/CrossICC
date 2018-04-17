@@ -115,6 +115,9 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
+        validate(
+          need(!is.null(input$iterslided), "Press submit button")
+        )
         fuck<-InterationResult()
 
         Sys.sleep(1)
@@ -126,6 +129,9 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
+        validate(
+          need(!is.null(input$iterslided), "Press submit button")
+        )
         fuck<-InterationResult()
         sih<-fuck[[input$iterslided]]$clusters$silhouette
         plot_sihouttle_with_crossICCout(sih)
@@ -135,6 +141,12 @@ shinyServer(function(session,input, output) {
         Sys.sleep(1)
         validate(
           need(!is.null(InterationResult()), "Press submit button")
+        )
+        validate(
+          need(!is.null(input$iterslided), "Press submit button")
+        )
+        validate(
+          need(!is.null(input$SelectPL), "Press submit button")
         )
         fuck<-InterationResult()
         #plot heatmap
@@ -152,18 +164,14 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
+        validate(
+          need(!is.null(input$iterslided), "Press submit button")
+        )
         fuck<-InterationResult()
-        ssGSEA.list<-ssGSEA(fuck[[input$iterslided]]$platforms[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets,cluster = F)
+        ssGSEA.list<-ssGSEA(fuck[[input$iterslided]]$platforms[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets,cluster = fuck[[input$iterslided]]$clusters$clusters)
         ssGSEA.list[[1]]
       })
-      # output$ssGSEAheatmap-renderPlot({
-      #   validate(
-      #     need(!is.null(InterationResult()), "Press submit button")
-      #   )
-      #   fuck<-InterationResult()
-      #   ssGSEA.list<-ssGSEA(fuck[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, CrossICC.object[[input$iterslided]]$unioned.genesets)
-      #   ssGSEA.list[[2]]
-      # })
+
   #Download functions----
       output$DownloadSuperclusterPlot<-downloadHandler(
         filename = function() {
