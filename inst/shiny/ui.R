@@ -112,10 +112,10 @@ shinyUI(dashboardPage(skin = "black",
               fluidRow(
                 #setting panel
                 box(
-                  title = "Input your data set for prediction",solidHeader = TRUE,status = "success",width = 4,
+                  title = "Input your data set for prediction", background = "black",width = 4,
                   radioButtons(
                     "dataset2",
-                    strong("Mutation Dataset"),inline=TRUE,
+                    strong("Data to predict"),inline=TRUE,
                     c(Default = "default", Upload = "upload"),
                     selected = 'default'
                   ),
@@ -123,19 +123,14 @@ shinyUI(dashboardPage(skin = "black",
                                    fileInput('file2', 'Input dataset in matrix file',
                                              accept=c('text/txt', '.rds'))
                   ),
-                  actionButton("submit2","Submit")
+                  actionBttn("submit2","Submit")
                 ),
                 tabBox (id="PredictResultPanel",title=h3("Analysis"),width = 8, side = "right",
                         selected = "pre01",
-                        tabPanel(title=div(icon("book"),"Read Me"),value="pre01",
-                                 p("Write introduction here")
-                        ),
-                        tabPanel(title=div(icon("book"),"Data Input"),value="pre02",
-                                 h3("Summary of input dataset "),
-                                 dataTableOutput("predictInputDataSummary")
+                        tabPanel(title=div(icon("book"),"PredictResult"),value="pre01",
 
-                        ),
-                        tabPanel(title=div(icon("book"),"Predict Result"),value="pre03"
+                                 downloadLink('DownloadPredictHeatmap', 'Download PDF'),
+                                 withSpinner(plotOutput("predictHeatmap",height = "800px"),color = "black")
 
                         )
                 )
@@ -146,7 +141,7 @@ shinyUI(dashboardPage(skin = "black",
               fluidRow(
                 #setting panel
                 box(
-                  title = "Phenotype Data input",solidHeader = TRUE,status = "success",width = 4,
+                  title = "Phenotype Data input",status = "success",width = 4, background = "black",
                   radioGroupButtons(
                     "data3",
                     label = strong("clinical Dataset"),

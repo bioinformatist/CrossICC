@@ -97,12 +97,12 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
-        fuck<-InterationResult()
+        crossICC.object<-InterationResult()
         validate(
           need(!is.null(input$iterslided), "Press submit button")
         )
 
-        arg.list.2<-fuck[[input$iterslided]]$arg.list
+        arg.list.2<-crossICC.object[[input$iterslided]]$arg.list
         tempname<-names(arg.list.2)
         tempname[1]="Input"
         df<-data.frame(Parameter=tempname,Value=unlist(as.character(arg.list.2), use.names=FALSE))
@@ -118,10 +118,10 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(input$iterslided), "Press submit button")
         )
-        fuck<-InterationResult()
+        crossICC.object<-InterationResult()
 
         Sys.sleep(1)
-        plot_balanced_heatmap(fuck[[input$iterslided]]$clusters$all.k)
+        plot_balanced_heatmap(crossICC.object[[input$iterslided]]$clusters$all.k)
 
       })
       output$Silhouette<-renderPlot({
@@ -132,8 +132,8 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(input$iterslided), "Press submit button")
         )
-        fuck<-InterationResult()
-        sih<-fuck[[input$iterslided]]$clusters$silhouette
+        crossICC.object<-InterationResult()
+        sih<-crossICC.object[[input$iterslided]]$clusters$silhouette
         plot_sihouttle_with_crossICCout(sih)
 
       })
@@ -148,14 +148,14 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(input$SelectPL), "Press submit button")
         )
-        fuck<-InterationResult()
+        crossICC.object<-InterationResult()
         #plot heatmap
         # get data
-        plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
-        platform.names <- names(fuck[[input$iterslided]]$platforms)
+        plot.matrix<-as.data.frame(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]])
+        platform.names <- names(crossICC.object[[input$iterslided]]$platforms)
         index <- which(platform.names %in% input$SelectPL)
-        cluster.table<-fuck[[input$iterslided]]$clusters$clusters
-        gsig<-fuck[[input$iterslided]]$gene.order
+        cluster.table<-crossICC.object[[input$iterslided]]$clusters$clusters
+        gsig<-crossICC.object[[input$iterslided]]$gene.order
         #plot
         plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
 
@@ -167,8 +167,8 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(input$iterslided), "Press submit button")
         )
-        fuck<-InterationResult()
-        ssGSEA.list<-ssGSEA(fuck[[input$iterslided]]$platforms[[input$SelectPL]], fuck[[input$iterslided]]$gene.signature, fuck[[input$iterslided]]$unioned.genesets,cluster = fuck[[input$iterslided]]$clusters$clusters)
+        crossICC.object<-InterationResult()
+        ssGSEA.list<-ssGSEA(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]], crossICC.object[[input$iterslided]]$gene.signature, crossICC.object[[input$iterslided]]$unioned.genesets,cluster = crossICC.object[[input$iterslided]]$clusters$clusters)
         ssGSEA.list[[1]]
       })
 
@@ -179,8 +179,8 @@ shinyServer(function(session,input, output) {
         },
         content = function(file) {
           pdf(file)
-          fuck<-InterationResult()
-          plot_balanced_heatmap(fuck[[input$iterslided]]$clusters$all.k)
+          crossICC.object<-InterationResult()
+          plot_balanced_heatmap(crossICC.object[[input$iterslided]]$clusters$all.k)
           dev.off()
         },
         contentType = 'image/pdf'
@@ -191,8 +191,8 @@ shinyServer(function(session,input, output) {
         },
         content = function(file) {
           pdf(file)
-          fuck<-InterationResult()
-          sih<-fuck[[input$iterslided]]$clusters$silhouette
+          crossICC.object<-InterationResult()
+          sih<-crossICC.object[[input$iterslided]]$clusters$silhouette
           plot_sihouttle_with_crossICCout(sih)
           dev.off()
         },
@@ -204,10 +204,10 @@ shinyServer(function(session,input, output) {
         },
         content = function(file) {
           pdf(file)
-          fuck<-InterationResult()
-          plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
-          cluster.table<-fuck[[input$iterslided]]$clusters$clusters
-          gsig<-fuck[[1]]$gene.signature
+          crossICC.object<-InterationResult()
+          plot.matrix<-as.data.frame(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]])
+          cluster.table<-crossICC.object[[input$iterslided]]$clusters$clusters
+          gsig<-crossICC.object[[1]]$gene.order
           #plot
           plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
           dev.off()
@@ -219,8 +219,8 @@ shinyServer(function(session,input, output) {
           paste("Clusterexpress_", Sys.time(), '.csv', sep='')
         },
         content = function(file) {
-          fuck<-InterationResult()
-          plot.matrix<-as.data.frame(fuck[[input$iterslided]]$platforms[[input$SelectPL]])
+          crossICC.object<-InterationResult()
+          plot.matrix<-as.data.frame(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]])
           write.csv(plot.matrix, file)
 
         },
@@ -233,14 +233,67 @@ shinyServer(function(session,input, output) {
         inFile <- input$file2
         data<-NULL
         if (!is.null(inFile)){
-          data<-read.csv(data,header=T,row.names=1,check.names = F)
+          data<-read.csv(inFile$datapath,header=T,row.names=1,check.names = F)
         }
         data
       })
       output$predictInputData<-renderDataTable({
         predict.inputdata()
       })
+      get_predict_result<-reactive({
+        validate(
+          need(!is.null(InterationResult()), "Press submit button")
+        )
+        validate(
+          need(!is.null(predict.inputdata()), "Press upload data to predict")
+        )
+        if(input$submit2==0){
+        return(NULL)
+        }
+        predict.data<-predict.inputdata()
+        crossICC.object<-InterationResult()
+        #validation.Data shoud be format features in rows and samples in columns
+        maxIter<-length(crossICC.object)
+        crossICC.object.summary<-summary.CrossICC(crossICC.object)
+        # get centroid
+        train.centroid<-cluster.centroid(crossICC.object[[maxIter]]$platforms[[1]],crossICC.object[[maxIter]]$gene.signature,crossICC.object.summary$clusters)
+        #prediction
+        vali.predict.bycentroid<-centroid2exp(train.centroid,predict.data)
+        #get prediction result
+        vali.predict.bycentroid.cluter<-vali.predict.bycentroid$cluster
+        vali.predict.normalized.matrix<-vali.predict.bycentroid$normalized.matrix
+        return(list(cluster=vali.predict.bycentroid.cluter,matrix=vali.predict.normalized.matrix))
+      })
+      # predict heatmap for replication
+      output$predictHeatmap<-renderPlot({
 
+        predict.list<-get_predict_result()
+        cfDNA.crossICC<-InterationResult()
+        max.iter<-length(cfDNA.crossICC)
+        cluster<-predict.list$cluster
+        plot.matrix<-predict.list$matrix
+        plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC[[max.iter]]$gene.order)
+
+      })
+      output$DownloadPredictHeatmap<-downloadHandler(
+        filename = function() {
+          paste("PredictHeatmap_", Sys.time(), '.pdf', sep='')
+        },
+        content = function(file) {
+          pdf(file)
+          predict.list<-get_predict_result()
+          cfDNA.crossICC<-InterationResult()
+          max.iter<-length(cfDNA.crossICC)
+          cluster<-predict.list$cluster
+          plot.matrix<-predict.list$matrix
+          validate(
+            need(!is.null(plot.matrix), "Press the prediction button")
+          )
+          plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC[[max.iter]]$gene.order)
+          dev.off()
+        },
+        contentType = 'image/pdf'
+      )
 # clinical correlation analysis
       clinicalRelatedData<-  reactive({
         example<- data()
