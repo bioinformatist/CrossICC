@@ -226,7 +226,20 @@ shinyServer(function(session,input, output) {
         },
         contentType = 'text/csv'
       )
+      output$geneSignature<-downloadHandler(
+        filename = function() {
+          paste("GeneSignarure", Sys.time(), '.csv', sep='')
+        },
+        content = function(file) {
+          temp.summary <-  CrossICC::summary.CrossICC(InterationResult(),iteration = input$iterslided)
+          df<-temp.summary$gene.signatures
+          colnames(df)<-c("Cluster","Feature")
+          df
+          write.csv(df, file)
 
+        },
+        contentType = 'text/csv'
+      )
 # Predict panel functions ----
 
       predict.inputdata<- reactive({

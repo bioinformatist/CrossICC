@@ -84,6 +84,7 @@ shinyUI(dashboardPage(skin = "black",
                                    h4("Dowload Clustering result"),
                                    downloadButton("OutputClusterResult"),
                                    h4("Gene signature for each cluster"),
+                                   downloadButton("geneSignature",label = "Download Matrix"),
                                    dataTableOutput("OutputResultSignature")
 
                           ),
