@@ -306,7 +306,9 @@ summary.CrossICC <- function(result, iteration = NULL) {
     final.cluster<-temp.object
   }
 
+  data.matrx.list<-result[[iteration]]$platforms
+
   colnames(final.geneset)=c("Cluster","Genes")
   list(gene.signatures = data.frame(final.geneset),
-       clusters = final.cluster)
+       clusters = final.cluster,normalized.matrix = data.matrx.list)
 }
