@@ -1,5 +1,6 @@
 #loading dependencies
 suppressMessages(library(cluster))
+suppressMessages(library(ggplot2))
 #plot heat map from matrix and annotation information
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes){
   plot.matrix<-df
@@ -31,7 +32,7 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes){
                      cluster_cols = FALSE,
                      cluster_rows = FALSE,
                      annotation_col = annotation.frame,
-                     annotation_colors = list(cluster=color.list),
+
                      show_colnames = FALSE,
                      colorRampPalette(c("blue", "white", "red"))(100))
 
@@ -40,7 +41,7 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes){
 # plot sihouttle ------
 # sih are a sih function from crossICC object
 plot_sihouttle_with_crossICCout <- function(sih){
-  max.sliw<-which.max(max(sih[,3])) + 1
+  # max.sliw<-which.max(max(sih[,3])) + 1
   color.list<-c()
   colorlength <- 3
   if(length(unique(sih[,1]))>3){
@@ -51,7 +52,7 @@ plot_sihouttle_with_crossICCout <- function(sih){
     color.list<-brewer.pal(3, "Set2")[1:colorlength]
   }
 
-  plot(sih,col=color.list[1:max.sliw])
+  plot(sih,col=color.list,border=NA)
 }
 
 plot_balanced_heatmap<-function(all.k){
@@ -63,4 +64,9 @@ plot_balanced_heatmap<-function(all.k){
 
 }
 
+#plot iterator
+plot_iter_with_crossICC<-function(crossICC.object){
+  df<-crossICC.object
+  ggplot() + geom_path(data = df$iter.sig, aes(x = Iteration, y = Signatures), linetype = 2) + geom_vline(xintercept = max(df$iter.sig$Iteration) -1, size = 2.5, color = 'pink')
+}
 

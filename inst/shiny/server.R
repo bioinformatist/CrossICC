@@ -23,24 +23,14 @@ shinyServer(function(session,input, output) {
     ))
   })
   #animate bar ---
-  output$interationNumberForplot <- renderUI({
-    if(is.null(InterationResult())){
-      tagList(div())
-    }else{
-      df=InterationResult()
-      iter.num<-length(df)
-      tagList(
-        sliderInput("iterslided","Total Iteration Time",min=1,max=iter.num,value = iter.num,step=1,animate=T)
-      )
-    }
-  })
+
   #heatmap control option of platform selection ui----
   output$expressionHeatmapSelectPlatform <- renderUI({
     if(is.null(InterationResult())){
       tagList(div())
     }else{
-      df=InterationResult()
-      platformnamelist<-names(df[[input$iterslided]]$platforms)
+      CrossICC.object=InterationResult()
+      platformnamelist<-names(CrossICC.object$platforms)
       tagList(
         selectInput("SelectPL", "SelectPlatform", choices=platformnamelist, selected = platformnamelist[1], multiple = FALSE)
       )
@@ -66,14 +56,14 @@ shinyServer(function(session,input, output) {
       })
 
         summary.data<-eventReactive(input$submit,{
-          temp.summary <-  CrossICC::summary.CrossICC(inputdata(),iteration = input$iterslided)
+          temp.summary <-  CrossICC::summary.CrossICC(inputdata())
           return(temp.summary)
         })
 
   #Summary crossICC result----
       output$OutputResultSignature <- renderDataTable({
 
-        temp.summary <-  CrossICC::summary.CrossICC(InterationResult(),iteration = input$iterslided)
+        temp.summary <-  CrossICC::summary.CrossICC(InterationResult())
         df<-temp.summary$gene.signatures
         colnames(df)<-c("Cluster","Feature")
         df
@@ -83,7 +73,7 @@ shinyServer(function(session,input, output) {
           paste("Final_cluster_result", Sys.time(), '.csv', sep='')
         },
         content = function(file) {
-          temp.summary <-  CrossICC::summary.CrossICC(InterationResult(),iteration = input$iterslided)
+          temp.summary <-  CrossICC::summary.CrossICC(InterationResult())
 
           write.csv(temp.summary$cluster, file)
 
@@ -98,11 +88,8 @@ shinyServer(function(session,input, output) {
           need(!is.null(InterationResult()), "Press submit button")
         )
         crossICC.object<-InterationResult()
-        validate(
-          need(!is.null(input$iterslided), "Press submit button")
-        )
 
-        arg.list.2<-crossICC.object[[input$iterslided]]$arg.list
+        arg.list.2<-crossICC.object$arg.list
         tempname<-names(arg.list.2)
         tempname[1]="Input"
         df<-data.frame(Parameter=tempname,Value=unlist(as.character(arg.list.2), use.names=FALSE))
@@ -115,13 +102,11 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
-        validate(
-          need(!is.null(input$iterslided), "Press submit button")
-        )
+
         crossICC.object<-InterationResult()
 
         Sys.sleep(1)
-        plot_balanced_heatmap(crossICC.object[[input$iterslided]]$clusters$all.k)
+        plot_balanced_heatmap(crossICC.object$clusters$all.k)
 
       })
       output$Silhouette<-renderPlot({
@@ -129,33 +114,36 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
-        validate(
-          need(!is.null(input$iterslided), "Press submit button")
-        )
+
         crossICC.object<-InterationResult()
-        sih<-crossICC.object[[input$iterslided]]$clusters$silhouette
+        sih<-crossICC.object$clusters$silhouette
         plot_sihouttle_with_crossICCout(sih)
 
+      })
+      platform<-reactive({
+        input$SelectPL
       })
       output$clusterexpress<-renderPlot({
         Sys.sleep(1)
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
-        validate(
-          need(!is.null(input$iterslided), "Press submit button")
-        )
+
         validate(
           need(!is.null(input$SelectPL), "Press submit button")
         )
         crossICC.object<-InterationResult()
         #plot heatmap
         # get data
-        plot.matrix<-as.data.frame(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]])
-        platform.names <- names(crossICC.object[[input$iterslided]]$platforms)
-        index <- which(platform.names %in% input$SelectPL)
-        cluster.table<-crossICC.object[[input$iterslided]]$clusters$clusters
-        gsig<-crossICC.object[[input$iterslided]]$gene.order
+
+        platform.names <- names(crossICC.object$platforms)
+        index <- which(platform.names %in% platform())
+        plot.matrix<-as.data.frame(crossICC.object$platforms[[index]])
+        cluster.table<-crossICC.object$clusters$clusters[[index]]
+        gsig<-crossICC.object$gene.order
+        # print(dim(plot.matrix))
+        # print(length(cluster.table))
+        # pheatmap(plot.matrix)
         #plot
         plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
 
@@ -164,14 +152,18 @@ shinyServer(function(session,input, output) {
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
-        validate(
-          need(!is.null(input$iterslided), "Press submit button")
-        )
+
         crossICC.object<-InterationResult()
-        ssGSEA.list<-ssGSEA(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]], crossICC.object[[input$iterslided]]$gene.signature, crossICC.object[[input$iterslided]]$unioned.genesets,cluster = crossICC.object[[input$iterslided]]$clusters$clusters)
+        ssGSEA.list<-ssGSEA(crossICC.object$platforms[[input$SelectPL]], crossICC.object$gene.signature, crossICC.object$unioned.genesets,cluster = crossICC.object$clusters$clusters)
         ssGSEA.list[[1]]
       })
-
+     output$IterationPlot<-renderPlot({
+       validate(
+         need(!is.null(InterationResult()), "Press submit button")
+       )
+       crossICC.object<-InterationResult()
+       plot_iter_with_crossICC(crossICC.object)
+       })
   #Download functions----
       output$DownloadSuperclusterPlot<-downloadHandler(
         filename = function() {
@@ -180,7 +172,7 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           pdf(file)
           crossICC.object<-InterationResult()
-          plot_balanced_heatmap(crossICC.object[[input$iterslided]]$clusters$all.k)
+          plot_balanced_heatmap(crossICC.object$clusters$all.k)
           dev.off()
         },
         contentType = 'image/pdf'
@@ -192,7 +184,7 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           pdf(file)
           crossICC.object<-InterationResult()
-          sih<-crossICC.object[[input$iterslided]]$clusters$silhouette
+          sih<-crossICC.object$clusters$silhouette
           plot_sihouttle_with_crossICCout(sih)
           dev.off()
         },
@@ -205,8 +197,8 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           pdf(file)
           crossICC.object<-InterationResult()
-          plot.matrix<-as.data.frame(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]])
-          cluster.table<-crossICC.object[[input$iterslided]]$clusters$clusters
+          plot.matrix<-as.data.frame(crossICC.object$platforms[[input$SelectPL]])
+          cluster.table<-crossICC.object$clusters$clusters
           gsig<-crossICC.object[[1]]$gene.order
           #plot
           plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
@@ -220,7 +212,7 @@ shinyServer(function(session,input, output) {
         },
         content = function(file) {
           crossICC.object<-InterationResult()
-          plot.matrix<-as.data.frame(crossICC.object[[input$iterslided]]$platforms[[input$SelectPL]])
+          plot.matrix<-as.data.frame(crossICC.object$platforms[[input$SelectPL]])
           write.csv(plot.matrix, file)
 
         },
@@ -231,7 +223,7 @@ shinyServer(function(session,input, output) {
           paste("GeneSignarure", Sys.time(), '.csv', sep='')
         },
         content = function(file) {
-          temp.summary <-  CrossICC::summary.CrossICC(InterationResult(),iteration = input$iterslided)
+          temp.summary <-  CrossICC::summary.CrossICC(InterationResult())
           df<-temp.summary$gene.signatures
           colnames(df)<-c("Cluster","Feature")
           df

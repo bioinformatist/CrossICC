@@ -74,7 +74,6 @@ shinyUI(dashboardPage(skin = "black",
                                               accept=c('application/rds', '.rds'))
                    ),
                    actionBttn("submit",div("Click ME to visualize result ",icon("hand-right",lib = "glyphicon")),style = "float"),
-                   uiOutput("interationNumberForplot"),
                    h4("Your running parameters "),
                    div(align='center',tableOutput("outputArguments"))
                   ),
@@ -102,9 +101,8 @@ shinyUI(dashboardPage(skin = "black",
                                    uiOutput("expressionHeatmapSelectPlatform"),
                                    withSpinner(plotOutput("clusterexpress",height = "800px"),color = "black")
                           ),
-                          tabPanel(title=div(icon("book"),"ssGSEA"),value="cr05",
-                                   plotOutput("ssGSEAheatmap",height = "800px"),
-                                   dataTableOutput("ssGSEAmatrix")
+                          tabPanel(title=div(icon("book"),"Iteration Record"),value="cr05",
+                                   plotOutput("IterationPlot",height = "800px")
                           )
                   )
             )

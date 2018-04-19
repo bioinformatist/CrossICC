@@ -263,14 +263,11 @@ run.shiny<-function(){
 #' CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
 #' summary.CrossICC(CrossICC.object)
 #' }
-summary.CrossICC <- function(result, iteration = NULL) {
-  # Use last time result as default
-  if(is.null(iteration)){
-    iteration<-length(result)
-  }
-  temp.object<-result[[iteration]]$clusters[[1]]
+summary.CrossICC <- function(result) {
+
+  temp.object<-result$clusters[[1]]
   # Get final gene2cluster set
-  union.geneset<-result[[iteration]]$unioned.genesets
+  union.geneset<-result$unioned.genesets
   colnames(union.geneset)=c("Cluster","Genes")
   final.geneset<-union.geneset
   # Get final clusterSample result
@@ -281,9 +278,9 @@ summary.CrossICC <- function(result, iteration = NULL) {
     final.cluster<-temp.object
   }
 
-  data.matrx.list<-result[[iteration]]$platforms
+  data.matrx.list<-result$platforms
 
   colnames(final.geneset)=c("Cluster","Genes")
   list(gene.signatures = data.frame(final.geneset),
-       clusters = final.cluster,normalized.matrix = data.matrx.list,order.gene=result[[iteration]]$gene.order)
+       clusters = final.cluster,normalized.matrix = data.matrx.list,order.gene=result$gene.order)
 }
