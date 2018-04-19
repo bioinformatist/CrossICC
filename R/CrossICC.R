@@ -109,6 +109,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   # Use the first datasets' feature names as default
   gene.sig <- rownames(platforms[[1]])
 
+  # Use matrix save iteration time with signature number
+  iter.sig <- data.table(Iteration = numeric(), Signatures = numeric())
+
   while(iteration <= max.iter){
     cat(paste(date(), iteration, sep=" -- start iteration: "), '\n')
     # Here a named vector is needed (for dir names), so (v)applys is necessary
@@ -187,69 +190,41 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     # Old version of sorting
     # sorted.gene.list <- lapply(ebayes.result, function(x) rownames(x$full.m[rownames(x$full.m) %in% gene.sig,][order(-x$full.m[rownames(x$full.m) %in% gene.sig,][,1]),]))
 
-    cat(length(gene.sig), "genes were engaged in this iteration.\n")
+    sig.num <- length(gene.sig)
+    iter.sig <- rbind(iter.sig, data.table(Iteration = iteration, Signatures = sig.num))
+    cat(sig.num, "genes were engaged in this iteration.\n")
 
     # Confirm those two atomic vectors are exactly equal
+    # Below is for perfect match (with the same order)
     # if(isTRUE(all.equal(pre.gene.sig, gene.sig)) && isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
     if(isTRUE(all.equal(sort(pre.gene.sig), sort(gene.sig)))){
-      # Remove final iteration results (repeated) from list, also reset iteration time
-      result[[iteration]] <- NULL
-      if (iteration == max.iter) {
-        warning("Max iteration time reached! May still not reach convergence.")
+      if (iteration ==1) {
+        warning("All reserved signatures after processing (merging, filtering and scaling) already reach convergence.")
       }
       break
     }
 
-
-    # # Modify heat map by sorting samples with cluster and annotation bar
-    # heatmap.fit<-function(x,cluster,gsig){
-    #   x<-data.frame(x,check.names = FALSE)
-    #   if (method == 'balanced') {
-    #     names(cluster) <- NULL
-    #     final.cluster <- do.call(c, cluster)
-    #   } else {
-    #     final.cluster <- cluster
-    #   }
-    #   annotation.list<-final.cluster[which(names(final.cluster)%in%colnames(x))]
-    #   annotation.list<-sort(annotation.list)
-    #   x<-x[,names(annotation.list)]
-    #   annotation.frame<-data.frame(cluster=as.factor(annotation.list))
-    #   rownames(annotation.frame)<-names(annotation.list)
-    #   #heatmap colors
-    #   colorlength <- 3
-    #   if(length(unique(annotation.frame[,1]))>3){
-    #     colorlength <- length(unique(annotation.frame[,1]))
-    #   }
-    #   color.list<-brewer.pal(colorlength, "Set2")
-    #
-    #   pheatmap::pheatmap(x[gsig,],
-    #                      scale = 'none',
-    #                      border_color = NA,
-    #                      cluster_cols = FALSE,
-    #                      cluster_rows = FALSE,
-    #                      annotation_col = annotation.frame,
-    #                      ann_colors = list(color.list),
-    #                      show_colnames = FALSE,
-    #                      colorRampPalette(c("blue", "white", "red"))(100))
-    # }
-    #
-    # heatmaps<- lapply(platforms,heatmap.fit,cluster=balanced.cluster$clusters,gsig=gene.sig)
-
-    result[[iteration]] <- list(# consensus.cluster = cc,  # For test only
-      # all.sig = all.sig,  # For test only
-      # er = ebayes.result,  # For test only
-      arg.list = arg.list,  # named vector object of arguments
-      platforms = platforms,  # For heatmap in shiny
-      gene.signature = gene.sig,
-      gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
-      # gene.sig.all = gene.sig.all,  # For test only
-      # MDEG = gene.sig.all,
-      clusters = balanced.cluster,
-      geneset2gene = geneset2gene,
-      unioned.genesets = unioned.genesets)
-
+    if (iteration == max.iter) {
+      warning("Max iteration time reached! May still not reach convergence.")
+      break
+    }
     iteration<- iteration + 1
   }
+
+  # Just report results of last iteration (To reduce the size of RDS used by shiny)
+  result <- list(# consensus.cluster = cc,  # For test only
+    # all.sig = all.sig,  # For test only
+    # er = ebayes.result,  # For test only
+    arg.list = arg.list,  # named vector object of arguments
+    platforms = platforms,  # For heatmap in shiny
+    gene.signature = gene.sig,
+    iter.sig = iter.sig,
+    gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
+    # gene.sig.all = gene.sig.all,  # For test only
+    # MDEG = gene.sig.all,  # For test only
+    clusters = balanced.cluster,
+    geneset2gene = geneset2gene,
+    unioned.genesets = unioned.genesets)
 
   saveRDS(result, file = path.expand('~/CrossICC.object.rds'))
   cat("A CrossICC.object.rds file will be generated in home directory by default.
