@@ -124,7 +124,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     dev.control('enable') # enable display list
     cc <- vapply(names(platforms),
                  function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
-                                                                             maxK = 7, reps=rep.runs, pItem=pItem,
+                                                                             maxK = 4, reps=rep.runs, pItem=pItem,
                                                                              pFeature=pFeature, title=run.dir[x],
                                                                              clusterAlg=clusterAlg, distance=distance,
                                                                              seed=cc.seed, plot = plot.suffix))),
@@ -193,6 +193,11 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     sig.num <- length(gene.sig)
     iter.sig <- rbind(iter.sig, data.table(Iteration = iteration, Signatures = sig.num))
     cat(sig.num, "genes were engaged in this iteration.\n")
+
+    if(sig.num == 0) {
+      warning("No signature was kept during last time iteration. You may change ebayes.mode to \"both\" then try again.")
+      break
+    }
 
     # Confirm those two atomic vectors are exactly equal
     # Below is for perfect match (with the same order)

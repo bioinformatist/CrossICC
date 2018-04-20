@@ -18,6 +18,9 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, m
 
   all.k <- cor.cc(sig.list, cc, k, method = method)
 
+  # Sometimes correlation matrix row number is less than max cutree k
+  if (dim(all.k)[1] < max.K) max.K <- dim(all.k)[1]
+
   silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, method = method)[[1]][,3])))
   max.silw <- which.max(silws) + 1
 
@@ -44,7 +47,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, m
   ), all.k = all.k, silhouette = si[[1]])
 }
 
-derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 7){
+derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 4){
   for(k in 2:maxK){
     A <- cal.auc(consencus.result, k)
     if(k == 2){
