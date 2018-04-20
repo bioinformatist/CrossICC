@@ -56,7 +56,7 @@ NULL
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, rep.runs = 1000,
                                pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', method = 'finer', use.shiny = TRUE){
+                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', method = 'finer', use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
   # Check method (sometimes spelling mistake here)
