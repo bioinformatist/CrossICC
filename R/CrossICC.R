@@ -112,6 +112,14 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   # Use matrix save iteration time with signature number
   iter.sig <- data.table(Iteration = numeric(), Signatures = numeric())
 
+  # To determine max k for ConsensusClusterPlus:
+  # https://github.com/renzhonglu/ConsensusClusterPlus/blob/master/R/ConsensusClusterPlus.R#L514
+  max.K <- 10
+  sampleN <- floor(min(vapply(platforms, function(x) dim(x)[2], 23333))*pItem)
+  if (sampleN < 10) {
+    max.K <- sampleN
+  }
+
   while(iteration <= max.iter){
     cat(paste(date(), iteration, sep=" -- start iteration: "), '\n')
     # Here a named vector is needed (for dir names), so (v)applys is necessary
@@ -124,7 +132,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     dev.control('enable') # enable display list
     cc <- vapply(names(platforms),
                  function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
-                                                                             maxK = 4, reps=rep.runs, pItem=pItem,
+                                                                             maxK = max.K, reps=rep.runs, pItem=pItem,
                                                                              pFeature=pFeature, title=run.dir[x],
                                                                              clusterAlg=clusterAlg, distance=distance,
                                                                              seed=cc.seed, plot = plot.suffix))),
