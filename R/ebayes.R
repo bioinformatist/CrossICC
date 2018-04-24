@@ -37,10 +37,10 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "both"){
   ml <- r[-1]
   names(ml) <- K
 
-  if (k <= 2 && mode == "both") {
-    warning("It's not allowed to perform ebayes with both mode when cluster type number is less than 2.\nAlready set it to up mode.")
-    mode = "up"
-  }
+  # if (k <= 2 && mode == "both") {
+  #   warning("It's not allowed to perform ebayes with both mode when cluster type number is less than 2.\nAlready set it to up mode.")
+  #   mode = "up"
+  # }
 
   # Some element (actually as data.frame) of ml may has 0 columns and 0 rows, remove them here
   ml <- ml[sapply(ml, function(x) dim(x)[1]) > 0]
