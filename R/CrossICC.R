@@ -160,6 +160,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     gene.sig.all <- lapply(ebayes.result, function(x) rownames(x$full.m))
     geneset2gene <- lapply(ebayes.result, function(x) x$geneset2gene)
+    # To avoid rbind raise "names do not match previous names"
+    geneset2gene <- lapply(geneset2gene , setNames , nm = c('super.cluster', 'signatures'))
 
     unioned.genesets <- as.matrix(unique(data.table(do.call(rbind, geneset2gene))))
 
