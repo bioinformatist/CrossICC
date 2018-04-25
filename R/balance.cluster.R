@@ -47,7 +47,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, m
   ), all.k = all.k, silhouette = si[[1]])
 }
 
-derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 4){
+derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 10){
   for(k in 2:maxK){
     A <- cal.auc(consencus.result, k)
     if(k == 2){
