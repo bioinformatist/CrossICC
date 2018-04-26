@@ -105,12 +105,10 @@ shinyServer(function(session,input, output) {
 
         crossICC.object<-InterationResult()
 
-        Sys.sleep(1)
         plot_balanced_heatmap(crossICC.object$clusters$all.k)
 
       })
       output$Silhouette<-renderPlot({
-        Sys.sleep(1)
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
@@ -124,7 +122,6 @@ shinyServer(function(session,input, output) {
         input$SelectPL
       })
       output$clusterexpress<-renderPlot({
-        Sys.sleep(1)
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
@@ -139,11 +136,13 @@ shinyServer(function(session,input, output) {
         platform.names <- names(crossICC.object$platforms)
         index <- which(platform.names %in% platform())
         plot.matrix<-as.data.frame(crossICC.object$platforms[[index]])
-        cluster.table<-crossICC.object$clusters$clusters[[index]]
+        if(class(crossICC.object$clusters$clusters)=="list"){
+
+          cluster.table<-crossICC.object$clusters$clusters[[index]]
+        }else{
+          cluster.table<-crossICC.object$clusters$clusters
+        }
         gsig<-crossICC.object$gene.order
-        # print(dim(plot.matrix))
-        # print(length(cluster.table))
-        # pheatmap(plot.matrix)
         #plot
         plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
 
@@ -197,9 +196,16 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           pdf(file)
           crossICC.object<-InterationResult()
-          plot.matrix<-as.data.frame(crossICC.object$platforms[[input$SelectPL]])
-          cluster.table<-crossICC.object$clusters$clusters
-          gsig<-crossICC.object[[1]]$gene.order
+          platform.names <- names(crossICC.object$platforms)
+          index <- which(platform.names %in% platform())
+          plot.matrix<-as.data.frame(crossICC.object$platforms[[index]])
+          if(class(crossICC.object$clusters$clusters)=="list"){
+
+            cluster.table<-crossICC.object$clusters$clusters[[index]]
+          }else{
+            cluster.table<-crossICC.object$clusters$clusters
+          }
+          gsig<-crossICC.object$gene.order
           #plot
           plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
           dev.off()
@@ -258,10 +264,10 @@ shinyServer(function(session,input, output) {
         predict.data<-predict.inputdata()
         crossICC.object<-InterationResult()
         #validation.Data shoud be format features in rows and samples in columns
-        maxIter<-length(crossICC.object)
+
         crossICC.object.summary<-summary.CrossICC(crossICC.object)
         # get centroid
-        train.centroid<-cluster.centroid(crossICC.object[[maxIter]]$platforms[[1]],crossICC.object[[maxIter]]$gene.signature,crossICC.object.summary$clusters)
+        train.centroid<-cluster.centroid(crossICC.object$platforms[[1]],crossICC.object$gene.signature,crossICC.object.summary$clusters)
         #prediction
         vali.predict.bycentroid<-centroid2exp(train.centroid,predict.data)
         #get prediction result
@@ -274,10 +280,9 @@ shinyServer(function(session,input, output) {
 
         predict.list<-get_predict_result()
         cfDNA.crossICC<-InterationResult()
-        max.iter<-length(cfDNA.crossICC)
         cluster<-predict.list$cluster
         plot.matrix<-predict.list$matrix
-        plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC[[max.iter]]$gene.order)
+        plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC$gene.order)
 
       })
       output$DownloadPredictHeatmap<-downloadHandler(
@@ -288,13 +293,12 @@ shinyServer(function(session,input, output) {
           pdf(file)
           predict.list<-get_predict_result()
           cfDNA.crossICC<-InterationResult()
-          max.iter<-length(cfDNA.crossICC)
           cluster<-predict.list$cluster
           plot.matrix<-predict.list$matrix
           validate(
             need(!is.null(plot.matrix), "Press the prediction button")
           )
-          plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC[[max.iter]]$gene.order)
+          plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC$gene.order)
           dev.off()
         },
         contentType = 'image/pdf'

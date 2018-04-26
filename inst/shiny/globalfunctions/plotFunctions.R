@@ -5,9 +5,7 @@ suppressMessages(library(ggplot2))
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes){
   plot.matrix<-df
   samplename<-colnames(plot.matrix)
-  if(class(sample.cluster)=="list"){
-    sample.cluster<-sample.cluster[[1]]
-  }
+
   annotation.list<-sample.cluster[samplename]
 
   annotation.list<-sort(annotation.list)
