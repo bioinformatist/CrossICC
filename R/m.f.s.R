@@ -7,15 +7,23 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
   }
 
   # Merge multiple probes for one gene here
+  cat(paste(date(), '--', 'Merging multiple probes for one feature'), '\n')
   non.duplicates <- lapply(platforms.list, merge.duplicates)
 
   # no.same <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !all(y==0)),])
   # no.same <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !zero_range(x)),])
 
   # Remove rows with all values are same
+  cat(paste(date(), '--', 'Removing features with no variance'), '\n')
   no.same <- lapply(non.duplicates, remove.all.same)
 
+  filter.sig <- rbind(vapply(platforms.list, function(x) dim(x)[1], 2333), vapply(non.duplicates, function(x) dim(x)[1], 2333), vapply(no.same, function(x) dim(x)[1], 2333))
+  rownames(filter.sig) <- c('Original', 'Duplicates removed', 'No variance removed')
+
   genes.com <- com.feature(lapply(no.same, rownames), method = "overlap")
+
+  filter.sig <- rbind(filter.sig, rep(length(genes.com), length(platforms.list)))
+  rownames(filter.sig)[nrow(filter.sig)] <- 'Common signature'
 
   if (length(platforms.list) > 1) {
     # Must pre-assigned here (deep copy, and must not be slice of list), or
@@ -25,6 +33,8 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
     # extent MergeMaid.R has been fine-adjusted in this package.
 
     genes.com.list <- lapply(no.same, function(x) unlist(x)[genes.com, ])
+
+    cat(paste(date(), '--', 'Performing Mergemaid'), '\n')
     merged <- mergeExprs(genes.com.list)
 
     # fig.size <- (length(platforms.list) + 1) * 400
@@ -39,11 +49,14 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
     dev.off()
 
     pval.genes <- apply(as.matrix(rowMeans(MergeMaid::pairwise.cors(MergeMaid::intCor(merged,
-      exact = FALSE)))), 1, function(x) {
-      pval.cal(x, d = null.ic, alt = "g")
-    })
+                                                                                      exact = FALSE)))), 1, function(x) {
+                                                                                        pval.cal(x, d = null.ic, alt = "g")
+                                                                                      })
     fdr.genes <- p.adjust(pval.genes, method = "fdr")
     genes.com.fdr <- names(which(fdr.genes < fdr.cutoff))
+
+    filter.sig <- rbind(filter.sig, rep(length(genes.com.fdr), length(platforms.list)))
+    rownames(filter.sig)[nrow(filter.sig)] <- 'After MergeMaid FDR filtering'
 
     if (length(genes.com.fdr) == 0) {
       stop("The dataset has no common signature gene which can pass FDR filtering!\n
@@ -51,20 +64,29 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
     }
 
     if (perform.mad) {
+      cat(paste(date(), '--', 'Performing MAD filtering'), '\n')
       filter.genes <- lapply(no.same, function(x) filter.mad(x[genes.com.fdr,
-                                                                ], p = filter.cutoff))
+                                                               ], p = filter.cutoff))
       filter.genes.com <- com.feature(unlist(filter.genes), method = "merge")  # remove unlist function when using `overlap` parameter
+
+      filter.sig <- rbind(filter.sig, rep(length(filter.genes.com), length(platforms.list)))
+      rownames(filter.sig)[nrow(filter.sig)] <- 'After MAD filtering'
+
     } else {
       filter.genes.com <- genes.com.fdr
     }
 
   } else {
     if (perform.mad) {
+      cat(paste(date(), '--', 'Performing MAD filtering'), '\n')
       filter.genes <- lapply(no.same, function(x) filter.mad(x, p = filter.cutoff))
       if(is.null(filter.genes)){
         warning("filter.cutoff is to large too get enough gene number in dataset")
       }
       filter.genes.com <- com.feature(unlist(filter.genes), method = "merge")  # remove unlist function when using `overlap` parameter
+
+      filter.sig <- rbind(filter.sig, rep(length(filter.genes.com), length(platforms.list)))
+      rownames(filter.sig)[nrow(filter.sig)] <- 'After MAD filtering'
     } else {
       filter.genes.com <- genes.com
     }
@@ -75,13 +97,17 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
          Try to re-run with adjusted parameters or check your data source (too few overlapped features among matrices).")
   }
 
+  cat(paste(date(), '--', 'Scaling'), '\n')
   filter.scale <- lapply(no.same, function(x) scale(t(scale(t(x[filter.genes.com,
     ])))))
-  #filter outlier with range
-  filter.scale<-lapply(filter.scale,function(x) replace(x, x < -2, -2) )
-  filter.scale<-lapply(filter.scale,function(x) replace(x, x > 2, 2) )
 
+  # Filter outlier with range
+  filter.scale<-lapply(filter.scale,function(x) replace(x, x < -2, -2))
+  filter.scale<-lapply(filter.scale,function(x) replace(x, x > 2, 2))
 
-  return(list(filtered.gene = filter.genes.com, filterd.scaled = filter.scale))
+  filter.sig <- rbind(filter.sig, filter.sig[nrow(filter.sig),])
+  rownames(filter.sig)[nrow(filter.sig)] <- 'After pre-processing / Before Iteration'
+
+  list(filtered.gene = filter.genes.com, filterd.scaled = filter.scale, filter.sig = filter.sig)
   # filter.genes.com
 }

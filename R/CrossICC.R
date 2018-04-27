@@ -84,7 +84,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   if ((length(arg) == 1) & (is.element(class(arg[[1]]), "list"))) {
     platforms.list <- unlist(arg, recursive = FALSE)
     if (length(platforms.list) == 1) {
-      message('Only one matrix detected. Will skip cross analysis.')
+      message('Only one matrix detected. MergeMaid will not work. Will skip cross analysis.')
       cross <- 'none'
     }
   } else {
@@ -236,6 +236,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     arg.list = arg.list,  # named vector object of arguments
     platforms = platforms,  # For heatmap in shiny
     gene.signature = gene.sig,
+    filter.sig = mfs.list$filter.sig,
     iter.sig = iter.sig,
     gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
     # gene.sig.all = gene.sig.all,  # For test only
@@ -251,7 +252,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
 
   if (use.shiny) {
-    warning('Result list would not be returned when use.shiny=TRUE.')
+    warning('Result list would not be returned when use.shiny = TRUE.')
     run.shiny()
   }
   # list(all.sig = all.sig, balanced.cluster = balanced.cluster)
