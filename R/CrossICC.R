@@ -17,7 +17,6 @@ NULL
 #'
 #' @param output.dir the results' output directory.
 #' @param max.iter the maximum number of iterations.
-#' @param max.K the maximum number of cluster center.
 #' @param rep.runs number of subsamples during clustering.
 #' @param pItem proportion of items to sample during clustering.
 #' @param pFeature proportion of features to sample during clustering.
@@ -35,10 +34,10 @@ NULL
 #' @param ebayes.cutoff p-value cutoff when select differentially expressed probes.
 #' @param study.names a vector containing all study names
 #' @param ... all datasets (matrices is better)
-#' @param method 'finer' (based on correlation between sample expression values and centroids) or 'balanced' (based on correlation of centroids).
-#' Which super-cluster strategy should be used?
 #' @param ebayes.mode 'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes.
-#' @param use.shiny If TRUE, a shiny app will appear after running this main function.
+#' @param use.shiny if TRUE, a shiny app will appear after running this main function.
+#' @param cross cross analysis object. Could be "cluster" for clusters, "sample" for samples or "none" (used for single dataset).
+#' @param max.K the maximum cluster number of ConsensusClusterPlus.
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -50,17 +49,15 @@ NULL
 #' @examples
 #' \donttest{
 #' # It takes too long time for running code below, so ignore them in R CMD check.
-#' CrossICC(example.matrices, max.iter = 20, use.shiny = FALSE)
-#' CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 20)
-#' fuck <- CrossICC(datalist, max.iter = 5, use.shiny = FALSE, method = "balanced",fdr.cutoff = 0.5, ebayes.cutoff = 0.01)
+#' fuck <- CrossICC(example.matrices, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 #' }
-CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.iter = 20, rep.runs = 1000,
+CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
                                pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', method = 'finer', use.shiny = TRUE){
+                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
-  # Check method (sometimes spelling mistake here)
-  method <- match.arg(method, c("finer","balanced"))
+  # Check cross object (sometimes users bring spelling mistake here)
+  cross <- match.arg(cross, c("cluster", "sample", "none"))
 
   # Get arguments as data.table
   arg.list <- unlist(as.list(match.call())[-1])
@@ -84,8 +81,10 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   # Already can auto-skip this filtering when there's only one sample.
   # if ((length(arg) == 1) & (is.element(class(arg[[1]]),"matrix"))) {
   #   stop("Number of studies should not less than 2.")
-  if ((length(arg) == 1) & (is.element(class(arg[[1]]),"list"))) {
+  if ((length(arg) == 1) & (is.element(class(arg[[1]]), "list"))) {
     platforms.list <- unlist(arg, recursive = FALSE)
+    message('Only one matrix detected. Will skip cross analysis.')
+    cross <- 'none'
   } else {
     platforms.list <- lapply(arg, check.eSet)
   }
@@ -94,7 +93,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   cat(paste(date(), '--', 'Pre-processing data'), '\n')
   mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff)
   iteration <- 1
-  platforms <- mfs.list[[2]]
+  platforms <- mfs.list$filterd.scaled
 
   if (missing(study.names)) sn <- c()
 
@@ -114,7 +113,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
   # To determine max k for ConsensusClusterPlus:
   # https://github.com/renzhonglu/ConsensusClusterPlus/blob/master/R/ConsensusClusterPlus.R#L514
-  max.K <- 10
   sampleN <- floor(min(vapply(platforms, function(x) dim(x)[2], 23333))*pItem)
   if (sampleN < 10) {
     max.K <- sampleN
@@ -145,13 +143,14 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     balanced.cluster <- balance.cluster(all.sig,
                                         cc = cc, cluster.cutoff = cluster.cutoff,
-                                        max.K = max.K, method = method)
+                                        max.K = max.K, cross = cross)
 
     ebayes.result <- lapply(names(all.sig),
                             function(x) ebayes(all.sig[[x]],
-                                               switch(method,
-                                                      'balanced' = balanced.cluster[[1]][[x]],
-                                                      'finer' = balanced.cluster[[1]]),
+                                               switch(cross,
+                                                      'cluster' = balanced.cluster[[1]][[x]],
+                                                      'none' = unlist(balanced.cluster),
+                                                      'sample' = balanced.cluster[[1]]),
                                                cutoff = ebayes.cutoff,
                                                mode = ebayes.mode))
 
@@ -170,9 +169,10 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
 
     merged.matrix <- do.call(cbind, all.sig)
-    merged.cluster <- switch (method,
-      'balanced' = do.call(c, balanced.cluster[[1]]),
-      'finer' = balanced.cluster[[1]]
+    merged.cluster <- switch (cross,
+      'cluster' = do.call(c, balanced.cluster[[1]]),
+      'none' = unlist(balanced.cluster),
+      'sample' = balanced.cluster[[1]]
     )
 
     design <- model.matrix(~ 0 + factor(merged.cluster))

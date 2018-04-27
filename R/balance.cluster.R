@@ -1,4 +1,4 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, method){
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, maxK = max.K), 2333)
 
   # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
@@ -16,20 +16,25 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, m
     max.K <- 2
   }
 
-  all.k <- cor.cc(sig.list, cc, k, method = method)
+  if (cross == 'none') {
+    clusters <- lapply(names(k), function(x) cc[[x]][[k[[x]]]]$consensusClass)
+    return(clusters)
+  }
+
+  all.k <- cor.cc(sig.list, cc, k, cross = cross)
 
   # Sometimes correlation matrix row number is less than max cutree k
   if (dim(all.k)[1] < max.K) max.K <- dim(all.k)[1]
 
-  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, method = method)[[1]][,3])))
+  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, cross = cross)[[1]][,3])))
   max.silw <- which.max(silws) + 1
 
-  si <- sil.width(all.k, max.silw, method = method)
+  si <- sil.width(all.k, max.silw, cross = cross)
   hc <- si[[2]]
 
 
 
-  if (method == "balanced") {
+  if (cross == "balanced") {
     hc.list <- lapply(names(k), function(x) hc[grep(x, names(hc))])
     names(hc.list) <- names(k)
 
@@ -41,10 +46,12 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, m
                                         # Must use <<- here for scope restrinction
                                         function(y) cc.k.balanced[[y]][which(cc.k.old[[y]] %in% which(hc.list[[y]] == x))] <<- x)))
   }
-  list(clusters = switch (method,
-    "balanced" = cc.k.balanced,
-    'finer' = hc
-  ), all.k = all.k, silhouette = si[[1]])
+  list(clusters = switch(cross,
+                         "balanced" = cc.k.balanced,
+                         'sample' = hc
+  ),
+  all.k = all.k, # For one heatmap
+  silhouette = si[[1]])
 }
 
 derive.clusternum <- function(consencus.result, cutoff = 0.05, maxK = 10){
@@ -82,7 +89,7 @@ cal.auc <- function(consencus.result, k){
   sum((t[-1] - lagged.t[-1]) * cdf.t[-1])
 }
 
-cor.cc <- function(xyz, cc, k, method = 'finer'){
+cor.cc <- function(xyz, cc, k, cross = 'sample'){
   centroids.list <- lapply(names(k),
                            function(p) lapply(1:k[[p]],
                                               # Thanks to https://stackoverflow.com/questions/28423275/dimx-must-have-a-positive-length-when-applying-function-in-data-frame/28423503#28423503
@@ -97,16 +104,16 @@ cor.cc <- function(xyz, cc, k, method = 'finer'){
   centroids.names <- unlist(centroids.names.list)
   setnames(centroids, centroids.names)
 
-  switch (method,
-          'balanced' = cor(centroids, method="pearson"),
-          'finer' = t(cor(centroids, do.call(cbind, xyz)))
+  switch (cross,
+          'cluster' = cor(centroids, method = "pearson"),
+          'sample' = t(cor(centroids, do.call(cbind, xyz)))
   )
 }
 
-sil.width <- function(cc.matrix, k, method = 'finer'){
-  dist.M <- switch (method,
-                    'balanced' = as.dist(1 - cc.matrix),
-                    'finer' = dist(cc.matrix)
+sil.width <- function(cc.matrix, k, cross = 'sample'){
+  dist.M <- switch (cross,
+                    'cluster' = as.dist(1 - cc.matrix),
+                    'sample' = dist(cc.matrix)
   )
 
   H <- hclust(dist.M, method = 'average')
