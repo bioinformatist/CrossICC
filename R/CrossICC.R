@@ -83,8 +83,10 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   #   stop("Number of studies should not less than 2.")
   if ((length(arg) == 1) & (is.element(class(arg[[1]]), "list"))) {
     platforms.list <- unlist(arg, recursive = FALSE)
-    message('Only one matrix detected. Will skip cross analysis.')
-    cross <- 'none'
+    if (length(platforms.list) == 1) {
+      message('Only one matrix detected. Will skip cross analysis.')
+      cross <- 'none'
+    }
   } else {
     platforms.list <- lapply(arg, check.eSet)
   }
