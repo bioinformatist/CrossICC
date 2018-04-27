@@ -2,7 +2,7 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "both"){
   class <- class[colnames(eSet.subset)]
   k <- length(unique(class))
   if (k == 1) {
-    warning("At least one matrix has only one cluster/has no significant DEGs, which will be omitted in ebayes step!")
+    # warning("At least one matrix has only one cluster/has no significant DEGs, which will be omitted in ebayes step!")
     return()
   }
   # Here use subset of cluster class, for finer method class contains all clusters
@@ -26,7 +26,7 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "both"){
   fit2 <- limma::eBayes(fit2)
   gene.signature <- limma::topTable(fit2, number = 20000, adjust.method = 'BH', p.value = cutoff)
   if (dim(gene.signature)[1] == 0) {
-    warning("At least one matrix has only one cluster/has no significant DEGs, which will be omitted in ebayes step!")
+    # warning("At least one matrix has only one cluster/has no significant DEGs, which will be omitted in ebayes step!")
     return()
   }
   r <- list(gene.signature)
