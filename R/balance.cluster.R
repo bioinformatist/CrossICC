@@ -1,5 +1,5 @@
 balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, method){
-  k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff), 2333)
+  k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, maxK = max.K), 2333)
 
   # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
   # Here, n is sum(k), Qi Fat suggests that max.K should be as half as n by default

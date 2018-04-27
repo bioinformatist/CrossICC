@@ -145,7 +145,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
     balanced.cluster <- balance.cluster(all.sig,
                                         cc = cc, cluster.cutoff = cluster.cutoff,
-                                        max.K = NULL, method = method)
+                                        max.K = max.K, method = method)
 
     ebayes.result <- lapply(names(all.sig),
                             function(x) ebayes(all.sig[[x]],
