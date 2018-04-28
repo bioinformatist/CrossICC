@@ -47,7 +47,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, c
                                         function(y) cc.k.balanced[[y]][which(cc.k.old[[y]] %in% which(hc.list[[y]] == x))] <<- x)))
   }
   list(clusters = switch(cross,
-                         "balanced" = cc.k.balanced,
+                         "cluster" = cc.k.balanced,
                          'sample' = hc
   ),
   all.k = all.k, # For one heatmap
