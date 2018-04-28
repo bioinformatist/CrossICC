@@ -34,7 +34,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, c
 
 
 
-  if (cross == "balanced") {
+  if (cross == "cluster") {
     hc.list <- lapply(names(k), function(x) hc[grep(x, names(hc))])
     names(hc.list) <- names(k)
 
