@@ -53,7 +53,7 @@ NULL
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
                                pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', use.shiny = TRUE){
+                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
   # Check cross object (sometimes users bring spelling mistake here)
@@ -93,7 +93,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
   # Merge, filter and scale here
   cat(paste(date(), '--', 'Pre-processing data'), '\n')
-  mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff)
+  mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, skip.merge.dup = skip.merge.dup)
   iteration <- 1
   platforms <- mfs.list$filterd.scaled
 
@@ -243,7 +243,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     # MDEG = gene.sig.all,  # For test only
     clusters = balanced.cluster,
     geneset2gene = geneset2gene,
-    unioned.genesets = unioned.genesets)
+    unioned.genesets = unioned.genesets
+    )
 
   saveRDS(result, file = path.expand('~/CrossICC.object.rds'))
   cat("A CrossICC.object.rds file will be generated in home directory by default.

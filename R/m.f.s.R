@@ -1,4 +1,4 @@
-m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE) {
+m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE, skip.merge.dup = TRUE) {
 
   # Check if has NAs in matrices
   if (!all(sapply(platforms.list, function(x) !any(is.na(x))))) {
@@ -6,9 +6,13 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
          You should process missing values first, for details, see https://github.com/bioinformatist/CrossICC#faqs")
   }
 
-  # Merge multiple probes for one gene here
-  cat(paste(date(), '--', 'Merging multiple probes for one feature'), '\n')
-  non.duplicates <- lapply(platforms.list, merge.duplicates)
+  if (!skip.merge.dup) {
+    # Merge multiple probes for one gene here
+    cat(paste(date(), '--', 'Merging multiple probes for one feature'), '\n')
+    non.duplicates <- lapply(platforms.list, merge.duplicates)
+  } else {
+    non.duplicates <- platforms.list
+  }
 
   # no.same <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !all(y==0)),])
   # no.same <- lapply(non.duplicates, function(x) x[apply(x[,-1], 1, function(y) !zero_range(x)),])
@@ -34,7 +38,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
 
     genes.com.list <- lapply(no.same, function(x) unlist(x)[genes.com, ])
 
-    cat(paste(date(), '--', 'Performing Mergemaid'), '\n')
+    cat(paste(date(), '--', 'Performing MergeMaid'), '\n')
     merged <- mergeExprs(genes.com.list)
 
     # fig.size <- (length(platforms.list) + 1) * 400
