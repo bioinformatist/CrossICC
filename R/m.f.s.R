@@ -1,4 +1,4 @@
-m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE, skip.merge.dup = TRUE) {
+m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE, skip.merge.dup = FALSE, skip.mm = FALSE) {
 
   # Check if has NAs in matrices
   if (!all(sapply(platforms.list, function(x) !any(is.na(x))))) {
@@ -29,7 +29,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
   filter.sig <- rbind(filter.sig, rep(length(genes.com), length(platforms.list)))
   rownames(filter.sig)[nrow(filter.sig)] <- 'Common signature'
 
-  if (length(platforms.list) > 1) {
+  if ((length(platforms.list) > 1) & (skip.mm == FALSE)) {
     # Must pre-assigned here (deep copy, and must not be slice of list), or
     # mergeExprs will raise error (exactly its bug):
     # https://github.com/Bioconductor-mirror/MergeMaid/blob/baf0cfc0d370917d55c4b4adbc1d75c1141a3661/R/MergeMaid.R#L323

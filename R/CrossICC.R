@@ -38,6 +38,8 @@ NULL
 #' @param use.shiny if TRUE, a shiny app will appear after running this main function.
 #' @param cross cross analysis object. Could be "cluster" for clusters, "sample" for samples or "none" (used for single dataset).
 #' @param max.K the maximum cluster number of ConsensusClusterPlus.
+#' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is FALSE (not skip).
+#' @param skip.mm skip call MergeMaid process or not. Default is FALSE (not skip).
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -52,8 +54,8 @@ NULL
 #' fuck <- CrossICC(example.matrices, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
-                               pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-                               cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, use.shiny = TRUE){
+                     pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
+                     cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
   # Check cross object (sometimes users bring spelling mistake here)
