@@ -28,7 +28,6 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes){
                      scale = 'none',
                      border_color = NA,
                      cluster_cols = FALSE,
-                     cluster_rows = FALSE,
                      annotation_col = annotation.frame,
 
                      show_colnames = FALSE,

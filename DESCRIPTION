@@ -12,7 +12,14 @@ Encoding: UTF-8
 LazyData: true
 Suggests: testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    shiny,
+    RColorBrewer,
+    ggplot2,
+    shinydashboard,
+    shinyWidgets,
+    shinycssloaders,
+    DT
 RoxygenNote: 6.0.1
 Imports: data.table,
     ConsensusClusterPlus,
