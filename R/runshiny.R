@@ -1,3 +1,4 @@
+
 #' Run the default shiny report independently
 #'
 #' \code{runShinyCrossICC} run shiny independently
