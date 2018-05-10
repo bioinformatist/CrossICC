@@ -4,7 +4,7 @@
 \alias{summary.CrossICC}
 \title{Title Summary the CrossICC-returned list to produce human-readable output}
 \usage{
-summary.CrossICC(result, iteration = NULL)
+summary.CrossICC(result)
 }
 \arguments{
 \item{result}{list-type CrossICC's return value.}

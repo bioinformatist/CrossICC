@@ -8,7 +8,7 @@ predictor(x, fs, gene.signature, geneset2gene, filter.cutoff = 1,
   fdr.cutoff = 1)
 }
 \arguments{
-\item{x}{a eSet object or eSet-like matrix.}
+\item{x}{a eSet object or eSet-like matrix. with features in rows and samples in columns}
 
 \item{fs}{return matrix of ssGSEA. See \code{\link{ssGSEA}}.}
 

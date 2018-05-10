@@ -8,10 +8,11 @@
 \title{CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.}
 \usage{
 CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
-  output.dir = NULL, max.iter = 20, max.K = 6, rep.runs = 1000,
+  output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
   pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-  cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 1,
-  ebayes.mode = "up", method = "finer", use.shiny = TRUE)
+  cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1,
+  ebayes.mode = "both", cross = "sample", skip.merge.dup = FALSE,
+  skip.mm = FALSE, use.shiny = TRUE)
 }
 \arguments{
 \item{...}{all datasets (matrices is better)}
@@ -24,9 +25,9 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
 
 \item{output.dir}{the results' output directory.}
 
-\item{max.iter}{the maximum number of iterations.}
+\item{max.K}{the maximum cluster number of ConsensusClusterPlus.}
 
-\item{max.K}{the maximum number of cluster center.}
+\item{max.iter}{the maximum number of iterations.}
 
 \item{rep.runs}{number of subsamples during clustering.}
 
@@ -51,10 +52,13 @@ or a function that returns a clustering.}
 
 \item{ebayes.mode}{'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes.}
 
-\item{method}{'finer' (based on correlation between sample expression values and centroids) or 'balanced' (based on correlation of centroids).
-Which super-cluster strategy should be used?}
+\item{cross}{cross analysis object. Could be "cluster" for clusters, "sample" for samples or "none" (used for single dataset).}
 
-\item{use.shiny}{If TRUE, a shiny app will appear after running this main function.}
+\item{skip.merge.dup}{skip merge multiple probes for one gene (duplicates) or not. Default is FALSE (not skip).}
+
+\item{skip.mm}{skip call MergeMaid process or not. Default is FALSE (not skip).}
+
+\item{use.shiny}{if TRUE, a shiny app will appear after running this main function.}
 }
 \value{
 A nested list with iteration time as its name and list containing consensus cluster,
@@ -74,8 +78,7 @@ The foo functions ...
 \examples{
 \donttest{
 # It takes too long time for running code below, so ignore them in R CMD check.
-CrossICC(example.matrices, max.iter = 20, use.shiny = FALSE)
-CrossICC(example.matrices, output.dir = 'handsome_Yu_Fat', max.iter = 20)
+fuck <- CrossICC(example.matrices, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 }
 }
 \seealso{
