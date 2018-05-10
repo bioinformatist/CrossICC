@@ -121,7 +121,8 @@ shinyServer(function(session,input, output) {
       platform<-reactive({
         input$SelectPL
       })
-      output$clusterexpress<-renderPlot({
+
+      getClusterexpress<-reactive({
         validate(
           need(!is.null(InterationResult()), "Press submit button")
         )
@@ -130,9 +131,6 @@ shinyServer(function(session,input, output) {
           need(!is.null(input$SelectPL), "Press submit button")
         )
         crossICC.object<-InterationResult()
-        #plot heatmap
-        # get data
-
         platform.names <- names(crossICC.object$platforms)
         index <- which(platform.names %in% platform())
         plot.matrix<-as.data.frame(crossICC.object$platforms[[index]])
@@ -144,7 +142,11 @@ shinyServer(function(session,input, output) {
         }
         gsig<-crossICC.object$gene.order
         #plot
-        plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
+        return(plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig,cluster_row = input$clusterRow))
+      })
+      output$clusterexpress<-renderPlot({
+
+        getClusterexpress()
 
       })
       output$ssGSEAmatrix<-renderDataTable({
@@ -195,19 +197,7 @@ shinyServer(function(session,input, output) {
         },
         content = function(file) {
           pdf(file)
-          crossICC.object<-InterationResult()
-          platform.names <- names(crossICC.object$platforms)
-          index <- which(platform.names %in% platform())
-          plot.matrix<-as.data.frame(crossICC.object$platforms[[index]])
-          if(class(crossICC.object$clusters$clusters)=="list"){
-
-            cluster.table<-crossICC.object$clusters$clusters[[index]]
-          }else{
-            cluster.table<-crossICC.object$clusters$clusters
-          }
-          gsig<-crossICC.object$gene.order
-          #plot
-          plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig)
+          getClusterexpress()
           dev.off()
         },
         contentType = 'image/pdf'
