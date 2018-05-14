@@ -75,7 +75,7 @@ shinyServer(function(session,input, output) {
         content = function(file) {
           temp.summary <-  CrossICC::summary.CrossICC(InterationResult())
 
-          write.csv(temp.summary$cluster, file)
+          write.csv(temp.summary$clusters, file)
 
         },
         contentType = 'text/csv'
