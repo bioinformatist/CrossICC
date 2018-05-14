@@ -99,10 +99,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   iteration <- 1
   platforms <- mfs.list$filterd.scaled
 
-  if (missing(study.names)) sn <- c()
-
-  # If study.names is not defined, use automatically generated ones instead
-  if ((!is.element(class(sn), "vector")) | (!length(sn) == length(mfs.list[[2]]))) {
+  # If study.names is not defined or seems not OK, use automatically generated ones instead
+  if (any(missing(study.names), !is.element(class(study.names), "character"), length(study.names) != length(platforms))) {
+    message('Something goes wrong with your study names. Will use auto-generated study names instead.')
     study.names <- sapply(1:length(platforms), function(x) paste0('Matrix.', x))
     names(platforms) <- study.names
   } else {
