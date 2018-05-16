@@ -1,4 +1,4 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross){
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross, sil.filter){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, maxK = max.K), 2333)
 
   # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
@@ -110,7 +110,7 @@ cor.cc <- function(xyz, cc, k, cross = 'sample'){
   )
 }
 
-sil.width <- function(cc.matrix, k, cross = 'sample'){
+sil.width <- function(cc.matrix, k, cross = 'sample', sil.filter){
   dist.M <- switch (cross,
                     'cluster' = as.dist(1 - cc.matrix),
                     'sample' = dist(cc.matrix)
@@ -119,5 +119,8 @@ sil.width <- function(cc.matrix, k, cross = 'sample'){
   H <- hclust(dist.M, method = 'average')
   HC <- cutree(H, k = k)
   si <- cluster::silhouette(HC, dist.M)
+  if (sil.filter == 'hard') {
+    si[,3][si[,3] < 0.5] <- 0
+  }
   return(list(si, HC))
 }

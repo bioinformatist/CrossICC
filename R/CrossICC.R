@@ -40,6 +40,7 @@ NULL
 #' @param max.K the maximum cluster number of ConsensusClusterPlus.
 #' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is FALSE (not skip).
 #' @param skip.mm skip call MergeMaid process or not. Default is FALSE (not skip).
+#' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -54,7 +55,7 @@ NULL
 #' fuck <- CrossICC(example.matrices, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
-                     pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
+                     pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft',
                      cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
@@ -145,7 +146,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     names(all.sig) <- names(platforms)
 
     balanced.cluster <- balance.cluster(all.sig,
-                                        cc = cc, cluster.cutoff = cluster.cutoff,
+                                        cc = cc, cluster.cutoff = cluster.cutoff, sil.filter = sil.filter,
                                         max.K = max.K, cross = cross)
 
     ebayes.result <- lapply(names(all.sig),

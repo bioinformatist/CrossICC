@@ -10,9 +10,9 @@
 CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
   output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
   pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-  cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1,
-  ebayes.mode = "both", cross = "sample", skip.merge.dup = FALSE,
-  skip.mm = FALSE, use.shiny = TRUE)
+  sil.filter = "soft", cc.seed = 5000, cluster.cutoff = 0.05,
+  ebayes.cutoff = 0.1, ebayes.mode = "both", cross = "sample",
+  skip.merge.dup = FALSE, skip.mm = FALSE, use.shiny = TRUE)
 }
 \arguments{
 \item{...}{all datasets (matrices is better)}
@@ -43,6 +43,8 @@ or a function that returns a clustering.}
 \item{distance}{Could be 'pearson': (1 - Pearson correlation),
 'spearman' (1 - Spearman correlation),
 'euclidean', 'binary', 'maximum', 'canberra', 'minkowski" or custom distance function.}
+
+\item{sil.filter}{silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).}
 
 \item{cc.seed}{sets random seed for reproducible results.}
 
