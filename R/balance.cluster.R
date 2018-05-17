@@ -1,4 +1,4 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross, sil.filter){
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross = 'sample', sil.filter = 'soft'){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, maxK = max.K), 2333)
 
   # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
