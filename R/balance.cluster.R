@@ -1,4 +1,4 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross = 'sample', sil.filter = 'soft'){
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross = 'sample', sil.filter){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, maxK = max.K), 2333)
 
   # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
@@ -26,10 +26,10 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, c
   # Sometimes correlation matrix row number is less than max cutree k
   if (dim(all.k)[1] < max.K) max.K <- dim(all.k)[1]
 
-  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, cross = cross)[[1]][,3])))
+  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, cross = cross, sil.filter = sil.filter)[[1]][,3])))
   max.silw <- which.max(silws) + 1
 
-  si <- sil.width(all.k, max.silw, cross = cross)
+  si <- sil.width(all.k, max.silw, cross = cross, sil.filter = sil.filter)
   hc <- si[[2]]
 
 
