@@ -10,7 +10,8 @@ Authors@R: as.person(c(
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
+Suggests: testthat,
+          rmarkdown
 RoxygenNote: 6.0.1
 Imports: data.table,
     ConsensusClusterPlus,
@@ -20,7 +21,6 @@ Imports: data.table,
     cluster,
     pheatmap,
     knitr,
-    rmarkdown,
     shiny,
     RColorBrewer,
     ggplot2,
