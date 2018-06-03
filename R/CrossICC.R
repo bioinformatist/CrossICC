@@ -96,7 +96,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
 
   # Merge, filter and scale here
   cat(paste(date(), '--', 'Pre-processing data'), '\n')
-  mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, skip.merge.dup = skip.merge.dup)
+  mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, skip.merge.dup = skip.merge.dup, skip.mm = skip.mm)
   iteration <- 1
   platforms <- mfs.list$filterd.scaled
 
