@@ -115,3 +115,19 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
   list(filtered.gene = filter.genes.com, filterd.scaled = filter.scale, filter.sig = filter.sig)
   # filter.genes.com
 }
+
+pval.cal <- function(x, d, alt="g"){
+  switch (alt,
+          "g" = 1 - pnorm(x, mean(d), sd(d)),
+          "l" = pnorm(x,mean(d),sd(d))
+  )
+}
+
+filter.mad <- function(x, p = 0.5, method = 'percent'){
+  x.mad <- apply(x, 1, function(xr) mad(xr[!is.na(xr)]))
+  x.mad.rank <- rank(-x.mad)
+  switch (method,
+          "percent" = names(x.mad.rank[x.mad.rank < p * length(x.mad)]),
+          "absolute" = names(x.mad[x.mad > p])
+  )
+}
