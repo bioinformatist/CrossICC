@@ -10,9 +10,10 @@
 CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
   output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
   pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean",
-  sil.filter = "soft", cc.seed = 5000, cluster.cutoff = 0.05,
-  ebayes.cutoff = 0.1, ebayes.mode = "both", cross = "sample",
-  skip.merge.dup = FALSE, skip.mm = FALSE, use.shiny = TRUE)
+  sil.filter = "soft", heatmap.order = "up.based", cc.seed = 5000,
+  cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "both",
+  cross = "sample", skip.merge.dup = FALSE, skip.mm = FALSE,
+  skip.mfs = FALSE, use.shiny = TRUE)
 }
 \arguments{
 \item{...}{all datasets (matrices is better)}
@@ -45,6 +46,8 @@ or a function that returns a clustering.}
 'euclidean', 'binary', 'maximum', 'canberra', 'minkowski" or custom distance function.}
 
 \item{sil.filter}{silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).}
+
+\item{heatmap.order}{gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.}
 
 \item{cc.seed}{sets random seed for reproducible results.}
 
@@ -80,7 +83,7 @@ The foo functions ...
 \examples{
 \donttest{
 # It takes too long time for running code below, so ignore them in R CMD check.
-fuck <- CrossICC(example.matrices, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
+fuck <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 }
 }
 \seealso{

@@ -2,6 +2,9 @@
 
 export(CrossICC)
 export(centroid2exp)
+export(get_jarrad_index_df_fromDF)
+export(get_jarrad_index_df_fromlist)
+export(get_overlap_test_by_fisher)
 export(predictor)
 export(runShinyCrossICC)
 export(ssGSEA)

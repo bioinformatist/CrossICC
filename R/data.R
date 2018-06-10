@@ -1,6 +1,6 @@
-#' list containing 3 different (eSet) matrix.
+#' list containing several different (eSet) matrix.
 #'
-#' each matrix comes from GSE file with artifical feature names.
+#' each matrix comes from GSE file with feature names.
 #'
 #' @format *Note: this is format of single matrix.* A matrix with rows of features (genes) and column of samples:
 #' \describe{
@@ -8,4 +8,4 @@
 #'   \item{sample2}{GSM*}
 #'   ...
 #' }
-"example.matrices"
+"demo.platforms"
