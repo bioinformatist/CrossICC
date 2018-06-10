@@ -10,7 +10,7 @@ Authors@R: as.person(c(
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: rmarkdown
+Suggests: rmarkdown, testthat
 RoxygenNote: 6.0.1
 Imports: data.table,
     ConsensusClusterPlus,
@@ -30,7 +30,6 @@ Imports: data.table,
 Depends: R (>= 2.10),
     MASS,
     Biobase
-Suggests: testthat
 biocViews: Software
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
