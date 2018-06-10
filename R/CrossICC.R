@@ -41,6 +41,7 @@ NULL
 #' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is FALSE (not skip).
 #' @param skip.mm skip call MergeMaid process or not. Default is FALSE (not skip).
 #' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
+#' @param heatmap.order gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -52,16 +53,16 @@ NULL
 #' @examples
 #' \donttest{
 #' # It takes too long time for running code below, so ignore them in R CMD check.
-#' fuck <- CrossICC(example.matrices, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
+#' fuck <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster",fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
-                     pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft',
-                     cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, use.shiny = TRUE){
+                     pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based',
+                     cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
-  # Check cross object (sometimes users bring spelling mistake here)
+  # Check parameter values (sometimes users bring spelling mistake here)
   cross <- match.arg(cross, c("cluster", "sample", "none"))
-
+  heatmap.order <- match.arg(heatmap.order, c('up.based', 'concordant'))
   # Get arguments as data.table
   arg.list <- unlist(as.list(match.call())[-1])
 
@@ -95,10 +96,16 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   }
 
   # Merge, filter and scale here
-  cat(paste(date(), '--', 'Pre-processing data'), '\n')
-  mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, skip.merge.dup = skip.merge.dup, skip.mm = skip.mm)
-  iteration <- 1
-  platforms <- mfs.list$filterd.scaled
+  if (skip.mfs) {
+    message('Merging, filtering and scaling are skipped.')
+    platforms <- platforms.list
+    filter.sig <- rownames(platforms[[1]])
+  } else {
+    cat(paste(date(), '--', 'Pre-processing data'), '\n')
+    mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, skip.merge.dup = skip.merge.dup, skip.mm = skip.mm)
+    platforms <- mfs.list$filterd.scaled
+    filter.sig <- mfs.list$filter.sig
+  }
 
   # If study.names is not defined or seems not OK, use automatically generated ones instead
   if (missing(study.names) || !is.element(class(study.names), "character") || length(study.names) != length(platforms)) {
@@ -122,6 +129,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     max.K <- sampleN
   }
 
+  iteration <- 1
   while(iteration <= max.iter){
     cat(paste(date(), iteration, sep=" -- start iteration: "), '\n')
     # Here a named vector is needed (for dir names), so (v)applys is necessary
@@ -134,10 +142,10 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     dev.control('enable') # enable display list
     cc <- vapply(names(platforms),
                  function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
-                                                                             maxK = max.K, reps=rep.runs, pItem=pItem,
-                                                                             pFeature=pFeature, title=run.dir[x],
-                                                                             clusterAlg=clusterAlg, distance=distance,
-                                                                             seed=cc.seed, plot = plot.suffix))),
+                                                                                              maxK = max.K, reps=rep.runs, pItem=pItem,
+                                                                                              pFeature=pFeature, title=run.dir[x],
+                                                                                              clusterAlg=clusterAlg, distance=distance,
+                                                                                              seed=cc.seed, plot = plot.suffix))),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
                  list(rep(list('fuck'), 7)))
     dev.off()
@@ -173,34 +181,46 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
 
     merged.matrix <- do.call(cbind, all.sig)
-    merged.cluster <- switch (cross,
-      'cluster' = do.call(c, balanced.cluster[[1]]),
-      'none' = unlist(balanced.cluster),
-      'sample' = balanced.cluster[[1]]
-    )
 
-    design <- model.matrix(~ 0 + factor(merged.cluster))
-    k <- length(unique(merged.cluster))
-    colnames(design) <- paste("K", 1:k, sep = "")
-    K <- colnames(design)
-    fit <- limma::lmFit(merged.matrix, design)
+    if (heatmap.order == 'concordant') {
+      merged.cluster <- switch (cross,
+                                'cluster' = do.call(c, balanced.cluster[[1]]),
+                                'none' = unlist(balanced.cluster),
+                                'sample' = balanced.cluster[[1]]
+      )
 
-    x <- c()
-    for(i in 1:(k - 1)){
-      for(j in (i + 1):k){
-        x <- c(x, paste(K[j], K[i], sep = "-"))
+      design <- model.matrix(~ 0 + factor(merged.cluster))
+      k <- length(unique(merged.cluster))
+      colnames(design) <- paste("K", 1:k, sep = "")
+      K <- colnames(design)
+      fit <- limma::lmFit(merged.matrix, design)
+
+      x <- c()
+      for(i in 1:(k - 1)){
+        for(j in (i + 1):k){
+          x <- c(x, paste(K[j], K[i], sep = "-"))
+        }
       }
-    }
-    for(i in 1:k){
-      x <- c(x, paste(K[i], paste("(", paste(K[-i], collapse="+"), ")", "/", k-1, sep=""), sep="-"))
+
+      for(i in 1:k){
+        x <- c(x, paste(K[i], paste("(", paste(K[-i], collapse="+"), ")", "/", k-1, sep=""), sep="-"))
+      }
+
+      contrast.matrix <- limma::makeContrasts(contrasts = x,levels = design)
+      fit2 <- limma::contrasts.fit(fit,contrast.matrix)
+      fit2 <- limma::eBayes(fit2)
+      FC.matrix <- limma::topTable(fit2, number = 20000, adjust.method = 'BH')
+      sorted.genes <- rownames(FC.matrix[order(-FC.matrix[,1]),])
+      gene.order <- sorted.genes[sorted.genes %in% gene.sig]
+    } else {
+      # Filtering: only keep 1 to all
+      FC.tables <- lapply(ebayes.result, function(x) x$full.m[,grep('\\.\\.', names(x$full.m))])
+      # Pre-ordering: From left to right, according to all columns
+      sorted.tables <- lapply(FC.tables, function(x) x[do.call(order, lapply(1:NCOL(x), function(i) -x[, i])), ])
+      sorted.genes <- lapply(sorted.tables, function(h) unique(unlist(lapply(1:ncol(h), function(x) row.names(h[h[,x] > 0,])))))
+      gene.order <- sorted.genes[sorted.genes %in% gene.sig]
     }
 
-    contrast.matrix <- limma::makeContrasts(contrasts = x,levels = design)
-    fit2 <- limma::contrasts.fit(fit,contrast.matrix)
-    fit2 <- limma::eBayes(fit2)
-    FC.matrix <- limma::topTable(fit2, number = 20000, adjust.method = 'BH')
-    sorted.genes <- rownames(FC.matrix[order(-FC.matrix[,1]),])
-    gene.order <- sorted.genes[sorted.genes %in% gene.sig]
 
     # Old version of sorting
     # sorted.gene.list <- lapply(ebayes.result, function(x) rownames(x$full.m[rownames(x$full.m) %in% gene.sig,][order(-x$full.m[rownames(x$full.m) %in% gene.sig,][,1]),]))
@@ -238,15 +258,14 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     arg.list = arg.list,  # named vector object of arguments
     platforms = platforms,  # For heatmap in shiny
     gene.signature = gene.sig,
-    filter.sig = mfs.list$filter.sig,
+    filter.sig = filter.sig,
     iter.sig = iter.sig,
     gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
     # gene.sig.all = gene.sig.all,  # For test only
-    # MDEG = gene.sig.all,  # For test only
     clusters = balanced.cluster,
     geneset2gene = geneset2gene,
     unioned.genesets = unioned.genesets
-    )
+  )
 
   saveRDS(result, file = path.expand('~/CrossICC.object.rds'))
   cat("A CrossICC.object.rds file will be generated in home directory by default.
