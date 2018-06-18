@@ -218,7 +218,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       # Pre-ordering: From left to right, according to all columns
       sorted.tables <- lapply(FC.tables, function(x) x[do.call(order, lapply(1:NCOL(x), function(i) -x[, i])), ])
       sorted.genes <- lapply(sorted.tables, function(h) unique(unlist(lapply(1:ncol(h), function(x) row.names(h[h[,x] > 0,])))))
-      gene.order <- sorted.genes[sorted.genes %in% gene.sig]
+      gene.order <- lapply(sorted.genes, function(x) x[x %in% gene.sig])
     }
 
 
