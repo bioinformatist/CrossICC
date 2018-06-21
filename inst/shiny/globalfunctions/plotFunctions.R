@@ -2,7 +2,7 @@
 suppressMessages(library(cluster))
 suppressMessages(library(ggplot2))
 #plot heat map from matrix and annotation information
-plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_row=FALSE){
+plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_row=FALSE,showRowname=FALSE){
   plot.matrix<-df
   samplename<-colnames(plot.matrix)
 
@@ -30,7 +30,7 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_
                      cluster_cols = FALSE,
                      cluster_rows = cluster_row,
                      annotation_col = annotation.frame,
-
+                    show_rownames = showRowname,
                      show_colnames = FALSE,
                      colorRampPalette(c("blue", "white", "red"))(100))
 

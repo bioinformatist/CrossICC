@@ -140,9 +140,9 @@ shinyServer(function(session,input, output) {
         }else{
           cluster.table<-crossICC.object$clusters$clusters
         }
-        gsig<-crossICC.object$gene.order
+        gsig<-crossICC.object$gene.order[[index]]
         #plot
-        return(plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig,cluster_row = input$clusterRow))
+        return(plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig,cluster_row = input$clusterRow,showRowname = input$showRowNames))
       })
       output$clusterexpress<-renderPlot({
 
