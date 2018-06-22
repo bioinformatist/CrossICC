@@ -210,20 +210,26 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
       fit2 <- limma::contrasts.fit(fit,contrast.matrix)
       fit2 <- limma::eBayes(fit2)
       FC.matrix <- limma::topTable(fit2, number = 20000, adjust.method = 'BH')
-      sorted.genes <- rownames(FC.matrix[order(-FC.matrix[,1]),])
-      gene.order <- sorted.genes[sorted.genes %in% gene.sig]
+      gene.order <- rownames(FC.matrix[order(-FC.matrix[,1]),])
+      # gene.order <- sorted.genes[sorted.genes %in% gene.sig]
     } else {
+      ebayes.result.2 <- lapply(names(all.sig),
+                              function(x) ebayes(all.sig[[x]],
+                                                 switch(cross,
+                                                        'cluster' = balanced.cluster[[1]][[x]],
+                                                        'none' = unlist(balanced.cluster),
+                                                        'sample' = balanced.cluster[[1]]),
+                                                 cutoff = 1,
+                                                 mode = ebayes.mode))
       # Filtering: only keep 1 to all
-      FC.tables <- lapply(ebayes.result, function(x) x$full.m[,grep('\\.\\.', names(x$full.m))])
+      FC.tables <- lapply(ebayes.result.2, function(x) x$full.m[,grep('\\.\\.', names(x$full.m))])
       # Pre-ordering: From left to right, according to all columns
       sorted.tables <- lapply(FC.tables, function(x) x[do.call(order, lapply(1:NCOL(x), function(i) -x[, i])), ])
-      sorted.genes <- lapply(sorted.tables, function(h) unique(unlist(lapply(1:ncol(h), function(x) row.names(h[h[,x] > 0,])))))
-      gene.order <- lapply(sorted.genes, function(x) x[x %in% gene.sig])
+      gene.order <- lapply(sorted.tables, function(h) unique(unlist(lapply(1:ncol(h), function(x) row.names(h[h[,x] > 0,])))))
+      # gene.order <- com.feature(unlist(lapply(sorted.genes, function(x) x[x %in% gene.sig])), method = 'merge')
+
     }
 
-
-    # Old version of sorting
-    # sorted.gene.list <- lapply(ebayes.result, function(x) rownames(x$full.m[rownames(x$full.m) %in% gene.sig,][order(-x$full.m[rownames(x$full.m) %in% gene.sig,][,1]),]))
 
     sig.num <- length(gene.sig)
     iter.sig <- rbind(iter.sig, data.table(Iteration = iteration, Signatures = sig.num))
