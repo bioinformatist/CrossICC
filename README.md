@@ -38,7 +38,7 @@ CrossICC will automatically iterate your data until it reaches convergence. By d
 
 Contact 
 -----
-[Qi Zhao](zhaoqi@sysucc.org.cn)
+[Qi Zhao](zhaoqi@sysucc.org.cn)  
 [Yu Sun](fill it anyway) 
 
 
