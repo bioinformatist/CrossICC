@@ -13,6 +13,7 @@ LazyData: true
 Suggests: rmarkdown, testthat
 RoxygenNote: 6.0.1
 Imports: data.table,
+    methods,
     ConsensusClusterPlus,
     limma,
     MergeMaid,
