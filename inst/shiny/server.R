@@ -295,7 +295,7 @@ shinyServer(function(session,input, output) {
       )
 # clinical correlation analysis
       clinicalRelatedData<-  reactive({
-        example<- data()
+        example<-  read.csv(file = path.expand('TCGA.COAD.csv'))
         inFile <- input$file3
         clinical.df<-NULL
         if (!is.null(inFile)){
@@ -306,4 +306,8 @@ shinyServer(function(session,input, output) {
                "Upload" = clinical.df
         )
       })
+      # view data
+    output$summaryCorrelationData<-renderDataTable(
+      clinicalRelatedData()
+    )
 })
