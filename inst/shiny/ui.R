@@ -157,30 +157,39 @@ shinyUI(dashboardPage(skin = "black",
                                    fileInput('file3', 'Input dataset in matrix file',
                                              accept=c('text/txt', '.rds'))
                   ),
+                  uiOutput("VariableSelectionUI1"),
+                  uiOutput("VariableSelectionUI2"),
                   actionBttn("submit3","Submit", style = "unite")
                 ),
-                tabBox (id="clinicalResultPanel",title=h3("Analysis"),width = 8, side = "right",
-                        selected = "ca02",
-                        tabPanel(title=div(icon("book"),"Read Me"),value="ca01",
-                                 p("Write introduction here")
 
-                        ),
-                        tabPanel(title=div(icon("book"),"Data"),value="ca02",
-                                 h3("Input Data "),
-                        dataTableOutput("summaryCorrelationData")
-                        ),
-                        tabPanel(title=div(icon("book"),"Result"),value="ca03",
-                                 h3("Data Summary"),
-                                 h3("Correlation"),
-                                 h3("Jaccard Index matrix")
-                        )
-                        ,
-                        tabPanel(title=div(icon("book"),"Overlap Analysis"),value="ca04",
-                                 h3("Jaccard Index matrix"),
-                                 h4("Overlap")
 
-                        )
-                )
+                       valueBoxOutput("getRAbox",width = 2),
+                       valueBoxOutput("getARIbox",width = 2)
+
+                       # tabBox (id="clinicalResultPanel",title=h3("Analysis"), side = "right",
+                       #         selected = "ca02",
+                       #         tabPanel(title=div(icon("book"),"Read Me"),value="ca01",
+                       #                  p("Write introduction here")
+                       #
+                       #         ),
+                       #         tabPanel(title=div(icon("book"),"Data"),value="ca02",
+                       #                  h3("Input Data "),
+                       #                  dataTableOutput("summaryCorrelationData")
+                       #         ),
+                       #         tabPanel(title=div(icon("book"),"Result"),value="ca03"
+                       #
+                       #
+                       #
+                       #         )
+                       #         ,
+                       #         tabPanel(title=div(icon("book"),"Overlap Analysis"),value="ca04",
+                       #                  h3("Jaccard Index matrix"),
+                       #                  h4("Overlap")
+                       #
+                       #         )
+                       # )
+
+
               )
 
               )
