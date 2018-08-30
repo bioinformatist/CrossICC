@@ -1,3 +1,4 @@
+#' @export
 cluster.centroid <- function(x, gene.signature, cluster){
   # gene.signature <- intersect(rownames(x),gene.signature)
   x.scale <- t(scale(t(x[gene.signature,])))
