@@ -175,6 +175,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     geneset2gene <- Filter(Negate(is.null), geneset2gene)
     geneset2gene <- lapply(geneset2gene , setNames , nm = c('super.cluster', 'signatures'))
 
+    # common.k <- unique(unlist(lapply(geneset2gene, function(x) unique(x$super.cluster)), recursive = FALSE))
+    # lapply(as.character(common.k), function(k) com.feature(unlist(lapply(geneset2gene, function(x) subset(x, super.cluster == k, select = signatures)), recursive = FALSE), method = 'overlap'))
+
     unioned.genesets <- as.matrix(unique(data.table(do.call(rbind, geneset2gene))))
 
     pre.gene.sig <- gene.sig
@@ -260,7 +263,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   # Just report results of last iteration (To reduce the size of RDS used by shiny)
   result <- list(# consensus.cluster = cc,  # For test only
     # all.sig = all.sig,  # For test only
-    # er = ebayes.result,  # For test only
+    er = ebayes.result,  # For test only
     arg.list = arg.list,  # named vector object of arguments
     platforms = platforms,  # For heatmap in shiny
     gene.signature = gene.sig,
