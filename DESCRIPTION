@@ -10,17 +10,15 @@ Authors@R: as.person(c(
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
-Suggests: rmarkdown, testthat
+Suggests: rmarkdown, testthat, knitr
 RoxygenNote: 6.0.1
 Imports: data.table,
     methods,
     ConsensusClusterPlus,
     limma,
     MergeMaid,
-    gplots,
     cluster,
     pheatmap,
-    knitr,
     shiny,
     RColorBrewer,
     ggplot2,
