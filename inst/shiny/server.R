@@ -349,6 +349,20 @@ shinyServer(function(session,input, output) {
           color = "red"
         )
       })
+      output$getJaccarddox<-renderInfoBox({
+        df<-clinicalRelatedData()
+        df<-df[complete.cases(df),]
+        x<-input$corAnalysisSelect1
+        y<-input$corAnalysisSelect2
+        JI<-round(Cal.ARI(df,x,y),digits = 4)
+
+        valueBox(
+          "Jaccard Index",
+          JI,
+          icon = icon("road",lib = "glyphicon"),
+          color = "green"
+        )
+      })
 
 
 })
