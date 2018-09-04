@@ -20,16 +20,36 @@ shinyUI(dashboardPage(skin = "black",
                   titleWidth = 600
                   ),
   # sider bar ----
-  dashboardSidebar(sidebarMenu(
+  dashboardSidebar(width = 300,sidebarMenu(id="sidername",
     menuItem("Home", tabName = "home", icon = icon("home")),
     menuItem("Analysis", icon = icon("search"),tabName = "analysis",
              collapsible = T,
              menuSubItem('CrossICC result', tabName = 'CrossICC'),
-             menuSubItem('Predict New Sample', tabName = 'predict'),
-             menuSubItem('Correlation analysis', tabName = 'correlation')
+             menuSubItem('Predict New Sample', tabName = 'predict')
+
+    ),
+    menuItem('Correlation analysis', tabName = 'correlation',icon = icon("th",lib = "glyphicon")),
+    conditionalPanel(
+      condition = "input.sidername == 'correlation'",
+      title = "Phenotype Data input",status = "success",width = 4, background = "black",
+      radioGroupButtons(
+        "data3",
+        label = strong("clinical Dataset"),
+        choices = c(Default = "Default", Upload = "Upload"),
+        selected = 'Default',status = "primary"
+      ),
+      conditionalPanel(condition = "input.data3 == 'Upload'",
+                       fileInput('file3', 'Input dataset in matrix file',
+                                 accept=c('text/txt', '.rds')
+                                 )
+      ),
+      uiOutput("VariableSelectionUI1"),
+      uiOutput("VariableSelectionUI2"),
+      actionBttn("submit3","Submit", style = "unite")
     ),
     menuItem("Help", tabName = "Help", icon = icon("question"))
-  )),
+  )
+  ),
   #body elements ----
   dashboardBody(
     tags$head(
@@ -45,13 +65,14 @@ shinyUI(dashboardPage(skin = "black",
       tabItem("home",
               fluidRow(
                 box(
-                  width = 6, status = "success", solidHeader = TRUE,collapsible = TRUE,
-                  title = "Read Me",
+                  width = 8, status = "success", solidHeader = TRUE,collapsible = TRUE,
+                  title = "Introduction",
                   includeMarkdown("Readmeshiny.md")
                 ),
                 box(
-                  width = 6, status = "info", solidHeader = TRUE,collapsible = TRUE,
-                  title = "Workflow",
+                  width = 4, status = "info", solidHeader = TRUE,collapsible = TRUE,
+                  title = "Workflow of CrossICC",
+
                   tags$img(src="images/workflow.png")
                 )
               )
@@ -144,32 +165,42 @@ shinyUI(dashboardPage(skin = "black",
               ),
       tabItem("correlation",
               fluidRow(
-                #setting panel
-                box(
-                  title = "Phenotype Data input",status = "success",width = 4, background = "black",
-                  radioGroupButtons(
-                    "data3",
-                    label = strong("clinical Dataset"),
-                    choices = c(Default = "Default", Upload = "Upload"),
-                    selected = 'Default',status = "primary"
-                  ),
-                  conditionalPanel(condition = "input.data3 == 'upload'",
-                                   fileInput('file3', 'Input dataset in matrix file',
-                                             accept=c('text/txt', '.rds'))
-                  ),
-                  actionBttn("submit3","Submit", style = "unite")
-                ),
-                tabBox (id="clinicalResultPanel",title=h3("Analysis"),width = 8, side = "right",
-                        selected = "ca01",
+                valueBoxOutput("getRAbox",width = 4),
+                valueBoxOutput("getARIbox",width = 4),
+                valueBoxOutput("getJaccarddox",width = 4)
+
+              ),
+              fluidRow(
+                tabBox (id="clinicalResultPanel",title=h3("Analysis"), side = "right",
+                        selected = "ca02",
                         tabPanel(title=div(icon("book"),"Read Me"),value="ca01",
                                  p("Write introduction here")
 
+                        ),
+                        tabPanel(title=div(icon("book"),"Data"),value="ca02",
+                                 h3("Input Data "),
+                                 dataTableOutput("summaryCorrelationData")
+                        ),
+                        tabPanel(title=div(icon("book"),"Result"),value="ca03"
+
+
+
                         )
+                        ,
+                        tabPanel(title=div(icon("book"),"Overlap Analysis"),value="ca04",
+                                 h3("Jaccard Index matrix"),
+                                 h4("Overlap")
 
+                        )
                 )
-              )
 
               )
+
+
+
+
+              )
+
 
       # analysis  panel ----
     )

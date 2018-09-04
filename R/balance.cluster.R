@@ -2,7 +2,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, c
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, maxK = max.K), 2333)
 
   # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
-  # Here, n is sum(k), Qi Fat suggests that max.K should be as half as n by default
+  # Here, n is sum(k), Qi suggests that max.K should be as half as n by default
   if (is.null(max.K)) {
     max.K <- ceiling(sum(k) / 2)
   } else {

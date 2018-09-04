@@ -147,7 +147,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                                                               clusterAlg=clusterAlg, distance=distance,
                                                                                               seed=cc.seed, plot = plot.suffix))),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
-                 list(rep(list('fuck'), 7)))
+                 list(rep(list('aString'), 7)))
     dev.off()
 
     all.sig <- lapply(names(platforms), function(x) platforms[[x]][gene.sig,])
@@ -333,4 +333,29 @@ summary.CrossICC <- function(result) {
   colnames(final.geneset)=c("Cluster","Genes")
   list(gene.signatures = data.frame(final.geneset),
        clusters = final.cluster,normalized.matrix = data.matrx.list,order.gene=result$gene.order)
+}
+
+
+#' Title Read file into CrossICC input
+#'
+#' @param files a list for filenames, usually a returned value of list.files() function
+#' @param sep the field separator character. Values on each line of the file are separated by this character.  sep = "\t" (the default for CrossICCInput).
+#' @return list contains matrixs from each platform parsing from file provided .
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' files<-list.files(path="",pattern = ".csv")
+#' crossicc.input <- CrossICCInput(files, sep=",")
+#' }
+
+CrossICCInput = function(files, sep = "\t"){
+  if(is.character(files) == TRUE){
+    library(data.table)
+    testfiles = vector(mode = "list", length = length(files))
+    for(i in 1:length(files)){
+      testfiles[[i]] = data.frame(fread(files[i], sep = sep, stringsAsFactors = FALSE, data.table = FALSE), row.names = 1)
+    }
+    return(testfiles)
+  }else{print("Please ensure the name of files you want to import is in a charachter")}
 }

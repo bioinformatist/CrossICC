@@ -295,15 +295,74 @@ shinyServer(function(session,input, output) {
       )
 # clinical correlation analysis
       clinicalRelatedData<-  reactive({
-        example<- data()
+        example<-  read.csv(file = path.expand('data/TCGA.COAD.csv'),header = T)
         inFile <- input$file3
         clinical.df<-NULL
         if (!is.null(inFile)){
           clinical.df<-read.csv(inFile,header=T,check.names = F)
         }
-        switch(input$dataset,
-               "Default" = outputdata,
+        switch(input$data3,
+               "Default" = example,
                "Upload" = clinical.df
         )
       })
+      # view data
+    output$summaryCorrelationData<-renderDataTable(
+      clinicalRelatedData()
+    )
+    # select data UI
+      output$VariableSelectionUI1<-renderUI({
+        condition=colnames(clinicalRelatedData())
+        conditionVector=as.character(condition)
+        selectInput("corAnalysisSelect1", "Variable 1:",choices=conditionVector,selected=conditionVector[1])
+      })
+      output$VariableSelectionUI2<-renderUI({
+        condition=colnames(clinicalRelatedData())
+        conditionVector=as.character(condition)
+        selectInput("corAnalysisSelect2", "Variable 2:",choices=conditionVector,selected=conditionVector[2])
+      })
+    # get correlation analysis result
+      output$getRAbox<-renderValueBox({
+        df<-clinicalRelatedData()
+        df<-df[complete.cases(df),]
+        x<-input$corAnalysisSelect1
+        y<-input$corAnalysisSelect2
+
+       RI<-round(rand.index(df,x,y),digits = 4)
+       valueBox(
+         "Rand Index",
+         RI,
+         icon = icon("credit-card")
+       )
+      })
+      output$getARIbox<-renderInfoBox({
+        df<-clinicalRelatedData()
+        df<-df[complete.cases(df),]
+        x<-input$corAnalysisSelect1
+        y<-input$corAnalysisSelect2
+        ARI<-round(Cal.ARI(df,x,y),digits = 4)
+
+        valueBox(
+          "Adjust Rand Index",
+          ARI,
+          icon = icon("cog",lib = "glyphicon"),
+          color = "red"
+        )
+      })
+      output$getJaccarddox<-renderInfoBox({
+        df<-clinicalRelatedData()
+        df<-df[complete.cases(df),]
+        x<-input$corAnalysisSelect1
+        y<-input$corAnalysisSelect2
+        JI<-round(Cal.ARI(df,x,y),digits = 4)
+
+        valueBox(
+          "Jaccard Index",
+          JI,
+          icon = icon("road",lib = "glyphicon"),
+          color = "green"
+        )
+      })
+
+
 })

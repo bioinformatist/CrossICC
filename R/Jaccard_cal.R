@@ -87,3 +87,68 @@ get_jarrad_index_df_fromDF<-function(df1,df2,universe=NULL){
   }
 
 }
+
+#get Rand index
+#' Title Adjust Rank Index
+
+#' @param df input data frame
+#' @param col1 name of interest variable 1 column in df
+#' @param col2 name of interest variable 2 column in df
+#' @return adjust ARI value
+#' @export
+rand.index <- function(df, col1, col2){
+  group1 <- as.numeric(as.factor(df[, col1]))
+  group2 <- as.numeric(as.factor(df[, col2]))
+
+  x <- abs(sapply(group1, function(x) x - group1))
+  x[x > 1] <- 1
+  y <- abs(sapply(group2, function(x) x - group2))
+  y[y > 1] <- 1
+  sg <- sum(abs(x - y))/2
+  bc <- choose(dim(x)[1], 2)
+  ri <- 1 - sg/bc
+  return(ri)
+}
+
+
+
+
+
+#get adjust Rand index
+#' Title Adjust Rank Index
+#' @param df input data frame
+#' @param col1 name of interest variable 1 column in df
+#' @param col2 name of interest variable 2 column in df
+#' @return adjust ARI value
+#' @export
+#'
+Cal.ARI <- function(df, col1, col2){
+  x = df[, col1]
+  y = df[, col2]
+
+  if (length(x) != length(y)) {
+    stop("two vectors have different lengths!\n")
+  }
+
+  cdsum = function(x){
+    y = x*(x-1)/2
+    return(y)
+  }
+
+  mkMatrix = table(x, y)
+  mkMatrixSum = apply(mkMatrix, 1, cdsum)
+  matrixSum = sum(mkMatrixSum)
+
+  matrixColsum = colSums(mkMatrix)
+  matrixRowsum = rowSums(mkMatrix)
+  n = length(x)
+
+  statRow = sum(cdsum(matrixRowsum))
+  statCol = sum(cdsum(matrixColsum))
+
+  ARI = (matrixSum-(statRow*statCol)/(cdsum(n)))/(((statRow+statCol)/2)-(statRow*statCol/cdsum(n)))
+
+
+
+  return(ARI)
+}
