@@ -42,6 +42,11 @@ NULL
 #' @param skip.mm skip call MergeMaid process or not. Default is FALSE (not skip).
 #' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
 #' @param heatmap.order gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.
+#' @param n.platform To filter the signature with it's super-cluster group in platforms.
+#' That is, if the parameter is set to 2 (default),
+#' the signature (like hgnc symbol ESR1) in a certain super-cluser (like K1) must exists more than 2 times among data of all platforms;
+#' otherwise, it will not be reported.
+#' @param skip.mfs To skip our internal filtering and normalization, etc. Default is FALSE. Only try when you're using a pre-processed data.
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -55,7 +60,7 @@ NULL
 #' # It takes too long time for running code below, so ignore them in R CMD check.
 #' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster", fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 #' }
-CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
+CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based',
                      cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
@@ -175,10 +180,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     geneset2gene <- Filter(Negate(is.null), geneset2gene)
     geneset2gene <- lapply(geneset2gene , setNames , nm = c('super.cluster', 'signatures'))
 
-    # common.k <- unique(unlist(lapply(geneset2gene, function(x) unique(x$super.cluster)), recursive = FALSE))
-    # lapply(as.character(common.k), function(k) com.feature(unlist(lapply(geneset2gene, function(x) subset(x, super.cluster == k, select = signatures)), recursive = FALSE), method = 'overlap'))
+    data.table(do.call(rbind, geneset2gene))
 
-    unioned.genesets <- as.matrix(unique(data.table(do.call(rbind, geneset2gene))))
+    unioned.genesets <- data.table(do.call(rbind, geneset2gene))[, .(count = .N), by = 'super.cluster,signatures'][count > n.platform, ][, 1:2]
 
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')

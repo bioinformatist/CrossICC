@@ -8,7 +8,7 @@
 \usage{
 CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
   output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
-  pItem = 0.8, pFeature = 1, clusterAlg = "hc",
+  n.platform = 2, pItem = 0.8, pFeature = 1, clusterAlg = "hc",
   distance = "euclidean", sil.filter = "soft",
   heatmap.order = "up.based", cc.seed = 5000, cluster.cutoff = 0.05,
   ebayes.cutoff = 0.1, ebayes.mode = "both", cross = "sample",
@@ -31,6 +31,11 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
 \item{max.iter}{the maximum number of iterations.}
 
 \item{rep.runs}{number of subsamples during clustering.}
+
+\item{n.platform}{To filter the signature with it's super-cluster group in platforms.
+That is, if the parameter is set to 2 (default),
+the signature (like hgnc symbol ESR1) in a certain super-cluser (like K1) must exists more than 2 times among data of all platforms;
+otherwise, it will not be reported.}
 
 \item{pItem}{proportion of items to sample during clustering.}
 
@@ -62,6 +67,8 @@ or a function that returns a clustering.}
 \item{skip.merge.dup}{skip merge multiple probes for one gene (duplicates) or not. Default is FALSE (not skip).}
 
 \item{skip.mm}{skip call MergeMaid process or not. Default is FALSE (not skip).}
+
+\item{skip.mfs}{To skip our internal filtering and normalization, etc. Default is FALSE. Only try when you're using a pre-processed data.}
 
 \item{use.shiny}{if TRUE, a shiny app will appear after running this main function.}
 }
