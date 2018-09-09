@@ -180,9 +180,11 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     geneset2gene <- Filter(Negate(is.null), geneset2gene)
     geneset2gene <- lapply(geneset2gene , setNames , nm = c('super.cluster', 'signatures'))
 
-    data.table(do.call(rbind, geneset2gene))
-
-    unioned.genesets <- data.table(do.call(rbind, geneset2gene))[, .(count = .N), by = 'super.cluster,signatures'][count > n.platform, ][, 1:2]
+    if (length(platforms) >= 2) {
+      unioned.genesets <- data.table(do.call(rbind, geneset2gene))[, .(count = .N), by = 'super.cluster,signatures'][count >= n.platform,][, 1:2]
+    } else {
+      unioned.genesets <- as.matrix(unique(data.table(do.call(rbind, geneset2gene))))
+    }
 
     pre.gene.sig <- gene.sig
     gene.sig <- com.feature(unlist(gene.sig.all), method = 'merge')
