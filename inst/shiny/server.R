@@ -11,7 +11,7 @@ suppressMessages(library(CrossICC))
 suppressMessages(library(RColorBrewer))
 source("globalfunctions/plotFunctions.R")
 shinyServer(function(session,input, output) {
-# CrossICC panel functions ----
+
   # ui setting----
   output$workflowImage <- renderImage({
     return(list(
@@ -22,6 +22,16 @@ shinyServer(function(session,input, output) {
       alt = "Face"
     ))
   })
+
+#=============================#
+# CrossICC panel functions ----
+#=============================#
+
+  cross_size <- reactive({
+    return(input$cross_size)
+  })
+
+
   #animate bar ---
 
   #heatmap control option of platform selection ui----
@@ -49,7 +59,7 @@ shinyServer(function(session,input, output) {
                "upload" = CrossICC.object
         )
       })
-  #Interation CrossICC
+  #Interation CrossICC----
       InterationResult <- eventReactive(input$submit, {
         CrossICC.object=inputdata()
         CrossICC.object
@@ -107,7 +117,11 @@ shinyServer(function(session,input, output) {
 
         plot_balanced_heatmap(crossICC.object$clusters$all.k)
 
-      })
+      },
+        width = cross_size,
+        height = cross_size,
+        outputArgs = list()
+      )
       output$Silhouette<-renderPlot({
         validate(
           need(!is.null(InterationResult()), "Press submit button")
@@ -117,7 +131,12 @@ shinyServer(function(session,input, output) {
         sih<-crossICC.object$clusters$silhouette
         plot_sihouttle_with_crossICCout(sih)
 
-      })
+      },
+        width = cross_size,
+        height = cross_size,
+        outputArgs = list()
+      )
+
       platform<-reactive({
         input$SelectPL
       })
@@ -148,7 +167,26 @@ shinyServer(function(session,input, output) {
 
         getClusterexpress()
 
-      })
+      },
+        width = cross_size,
+        height = cross_size,
+        outputArgs = list()
+      )
+
+
+      output$IterationPlot<-renderPlot({
+        validate(
+          need(!is.null(InterationResult()), "Press submit button")
+        )
+        crossICC.object<-InterationResult()
+        plot_iter_with_crossICC(crossICC.object)
+      },
+        width = cross_size,
+        height = cross_size,
+        outputArgs = list()
+      )
+
+#GSEA analysis----
       output$ssGSEAmatrix<-renderDataTable({
         validate(
           need(!is.null(InterationResult()), "Press submit button")
@@ -158,13 +196,7 @@ shinyServer(function(session,input, output) {
         ssGSEA.list<-ssGSEA(crossICC.object$platforms[[input$SelectPL]], crossICC.object$gene.signature, crossICC.object$unioned.genesets,cluster = crossICC.object$clusters$clusters)
         ssGSEA.list[[1]]
       })
-     output$IterationPlot<-renderPlot({
-       validate(
-         need(!is.null(InterationResult()), "Press submit button")
-       )
-       crossICC.object<-InterationResult()
-       plot_iter_with_crossICC(crossICC.object)
-       })
+
   #Download functions----
       output$DownloadSuperclusterPlot<-downloadHandler(
         filename = function() {
