@@ -9,6 +9,7 @@ suppressMessages(library(shiny))
 suppressMessages(library(pheatmap))
 suppressMessages(library(CrossICC))
 suppressMessages(library(RColorBrewer))
+suppressMessages(library(reshape2                  ))
 source("globalfunctions/plotFunctions.R")
 shinyServer(function(session,input, output) {
 
@@ -31,6 +32,20 @@ shinyServer(function(session,input, output) {
     return(input$cross_size)
   })
 
+  corre_size <- reactive({
+    return(input$corre_size)
+  })
+
+  predict_size <- reactive({
+    return(input$predict_size)
+  })
+
+  ssgsea_size <- reactive({
+    return(input$ssgsea_size)
+  })
+  survival_size <- reactive({
+    return(input$survival_size)
+  })
 
   #animate bar ---
 
@@ -325,9 +340,12 @@ shinyServer(function(session,input, output) {
         },
         contentType = 'image/pdf'
       )
-# clinical correlation analysis
+# ----------------
+
+# Correlation analysis -----------
+
       clinicalRelatedData<-  reactive({
-        example<-  read.csv(file = path.expand('data/TCGA.COAD.csv'),header = T)
+        example<-  read.csv(file = path.expand('data/TCGA.COAD.csv'),header = T,row.names = 1)
         inFile <- input$file3
         clinical.df<-NULL
         if (!is.null(inFile)){
@@ -339,10 +357,10 @@ shinyServer(function(session,input, output) {
         )
       })
       # view data
-    output$summaryCorrelationData<-renderDataTable(
-      clinicalRelatedData()
-    )
-    # select data UI
+      output$summaryCorrelationData<-renderDataTable(
+        clinicalRelatedData()
+      )
+      # select data UI
       output$VariableSelectionUI1<-renderUI({
         condition=colnames(clinicalRelatedData())
         conditionVector=as.character(condition)
@@ -353,19 +371,19 @@ shinyServer(function(session,input, output) {
         conditionVector=as.character(condition)
         selectInput("corAnalysisSelect2", "Variable 2:",choices=conditionVector,selected=conditionVector[2])
       })
-    # get correlation analysis result
+      # get correlation analysis result
       output$getRAbox<-renderValueBox({
         df<-clinicalRelatedData()
         df<-df[complete.cases(df),]
         x<-input$corAnalysisSelect1
         y<-input$corAnalysisSelect2
 
-       RI<-round(rand.index(df,x,y),digits = 4)
-       valueBox(
-         "Rand Index",
-         RI,
-         icon = icon("credit-card")
-       )
+        RI<-round(rand.index(df,x,y),digits = 4)
+        valueBox(
+          "Rand Index",
+          RI,
+          icon = icon("credit-card")
+        )
       })
       output$getARIbox<-renderInfoBox({
         df<-clinicalRelatedData()
@@ -395,6 +413,21 @@ shinyServer(function(session,input, output) {
           color = "green"
         )
       })
+
+      getContingencyTable<-reactive({
+        df<-clinicalRelatedData()
+        df<-df[complete.cases(df),]
+        x<-input$corAnalysisSelect1
+        y<-input$corAnalysisSelect2
+        temp<-data.frame(table(df[,c(x,y)]))
+        return(temp)
+      })
+
+      output$ContingencyTableRender<-renderDataTable({
+        getContingencyTable()
+      })
+
+# -------------------------------
 
 
 })

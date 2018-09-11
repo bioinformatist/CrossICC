@@ -40,21 +40,27 @@ bodyHome <- tabItem("home",
                       box(
                         width = 4,
                         status = "info",
-                        solidHeader = FALSE,
+                        solidHeader = TRUE,
                         title =  strong("CrossICC result viewer"),
-                        tags$img(src = "images/workflow.png")
+                        p("This module provide several plot functions to help inteprate CrossICC result."),
+                        img(src = "images/home_crossICC.png", align = "center", width="100%")
                       ),
                       box(
                         width = 4,
                         status = "info",
-                        solidHeader = FALSE,
-                        title =  strong("Predicting new samples")
+                        solidHeader = TRUE,
+                        title =  strong("new sample allocator"),
+                        p("After obtain a cluster system based on trained data, it would be applicable if we are going to allocate new samples.
+                          In this module, users are encoraged uploading expression data of testing samples to figure out which cluster they belong to."),
+                        img(src = "images/workflow.png", align = "center", width="100%")
                       ),
                       box(
                         width = 4,
                         status = "info",
-                        solidHeader = FALSE,
-                        title =  strong("Cancer related analysis functions")
+                        solidHeader = TRUE,
+                        title =  strong("Cancer related analysis functions"),
+                        includeMarkdown("home_cancerR.md"),
+                        img(src = "images/cancerRelated.png", align = "center", width="100%")
                       )
                     ),
                     fluidRow(
@@ -71,6 +77,7 @@ bodyHome <- tabItem("home",
 #bodyCrossICC ----
 
 bodyCrossICC <- tabItem("CrossICC",
+                        h2("Visualize CrossICC object"),
                         fluidRow(
                           #setting panel
                           box(
@@ -126,11 +133,11 @@ bodyCrossICC <- tabItem("CrossICC",
                           ),
                           box(
                             width = 8,
+                            title = "Visualization",
                             tabBox (
                               height = "100%", width = "100%",
                               id = "crossICCresultPanel",
-                              title = "",
-                              side = "right",
+                              side = "left",
                               selected = "cr01",
                               tabPanel(
                                 title = div(icon("book"), "Summary"),
@@ -311,14 +318,15 @@ bodyCorrelation <- tabItem(
         h3("Input Data "),
         dataTableOutput("summaryCorrelationData")
       ),
-      tabPanel(title = div(icon("book"), "Result"), value =
-                 "ca03")
+      tabPanel(title = div(icon("book"), "Contingency Table "),
+               value ="ca03",
+               dataTableOutput("ContingencyTableRender")
+
+               )
       ,
       tabPanel(
-        title = div(icon("book"), "Overlap Analysis"),
-        value = "ca04",
-        h3("Jaccard Index matrix"),
-        h4("Overlap")
+        title = div(icon("book"), "Plot"),
+        value = "ca04"
 
       )
     )
@@ -332,10 +340,72 @@ bodySsGSEA <- tabItem("ssgsea",
                         #setting panel
                         box(
                           title = "Input dataset",
-                          background = "black",
-                          width = 4
+                          width = 4,
+                          tabBox (id = "ssGseaSettingPanel",width = NULL, side = "left", selected = "ssgseaset01",
+                            tabPanel(
+                              title = div(icon("book"), "Loading"),
+                              value = "ssgseaset01",
+                              # ssgsea data
+                              radioGroupButtons(
+                                "ssGSEAdata",
+                                label = strong("Expression Data"),
+                                choices = c(Example = "Example", Upload = "Upload"),
+                                selected = 'Example',
+                                status = "primary"
+                              ),
+                              conditionalPanel(
+                                condition = "input.ssGSEAdata == 'Upload'",
+                                fileInput(
+                                  'ssGSEAdatafile',
+                                  'Input dataset in matrix file',
+                                  accept =
+                                    c('text/txt', '.csv')
+                                )
+                              ),
+                              radioGroupButtons(
+                                "ssGSEASet",
+                                label = strong("GENE SET"),
+                                choices = c(KEGG = "KEGG",Hallmarks= "Hallmarks",Upload = "Upload"),
+                                selected = 'KEGG',
+                                status = "primary"
+                              ),
+                              conditionalPanel(
+                                condition = "input.ssGSEASet == 'Upload'",
+                                fileInput(
+                                  'ssGSEAgenesetfile',
+                                  'Input Geneset file',
+                                  accept =
+                                    c('text/txt', '.csv')
+                                )
+                              )
+
+
+                            ),
+                            tabPanel(
+                              title = div(icon("book"), "Setting"),
+                              value = "ssgseaset02",
+                              sliderInput("ssgsea_size", "Zoom in/out graph:",min = 500, max = 1000, value = 800)
+
+                            )
+                          )
                         ),
-                        tabBox (width = 8)
+                        box(
+                          title = "Analysis Result",
+                          width = 8,
+                          tabBox (
+                            id = "ssGseaResultPanel",width = NULL, side = "left",selected = "ssgseaRes01",
+                            tabPanel(
+                              title = div(icon("book"), "PredictResult"),
+                              value = "ssgseaRes01"
+
+                            ),
+                            tabPanel(
+                              title = div(icon("book"), "Plot"),
+                              value = "ssgseaRes02"
+
+                            )
+                          )
+                        )
                       ))
 
 # bodySurvival ----
@@ -346,10 +416,37 @@ bodySurival <- tabItem(
     #setting panel
     box(
       title = "Input dataset",
-      background = "black",
-      width = 4
+      width = 4,
+      tabBox (id = "SurvivalSettingPanel", width = NULL,   side = "left",selected = "ssgseaset01",
+              tabPanel(
+                title = div(icon("book"), "Loading"),
+                value = "survivalset01"
+
+              ),
+              tabPanel(
+                title = div(icon("book"), "Setting"),
+                value = "survivalset02",
+
+                sliderInput("survival_size", "Zoom in/out graph:",min = 500, max = 1000, value = 800)
+
+              )
+      )
     ),
-    tabBox (width = 8)
+    box(
+      title = "Analysis Result",
+      width = 8,
+      tabBox (id = "survivalResultPanel",  width = NULL,  side = "left", selected = "survivalRes01",
+        tabPanel(
+          title = div(icon("book"), "PredictResult"),
+          value = "survivalRes01"
+        ),
+        tabPanel(
+          title = div(icon("book"), "Plot"),
+          value = "survivalRes02"
+
+        )
+      )
+    )
   )
 )
 
