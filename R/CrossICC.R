@@ -60,10 +60,14 @@ NULL
 #' # It takes too long time for running code below, so ignore them in R CMD check.
 #' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster", fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 #' }
-CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
+CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based',
                      cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
+
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
+
+  dir.create(output.dir, showWarnings = FALSE)
+  setwd(output.dir)
 
   # Check parameter values (sometimes users bring spelling mistake here)
   cross <- match.arg(cross, c("cluster", "sample", "none"))
@@ -72,14 +76,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
   arg.list <- unlist(as.list(match.call())[-1])
 
   graphics.off()
-
-  if(is.null(output.dir)) {
-    plot.suffix = NULL
-  } else {
-    plot.suffix = 'png'
-    dir.create(output.dir)
-    setwd(output.dir)
-  }
 
   arg <- list(...)
   result <- list()
@@ -150,7 +146,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
                                                                                               maxK = max.K, reps=rep.runs, pItem=pItem,
                                                                                               pFeature=pFeature, title=run.dir[x],
                                                                                               clusterAlg=clusterAlg, distance=distance,
-                                                                                              seed=cc.seed, plot = plot.suffix))),
+                                                                                              seed=cc.seed, plot = NULL))),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
                  list(rep(list('aString'), 7)))
     dev.off()
@@ -282,7 +278,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     unioned.genesets = unioned.genesets
   )
 
-  saveRDS(result, file = path.expand('~/CrossICC.object.rds'))
+  saveRDS(result, file = 'CrossICC.object.rds')
   cat("A CrossICC.object.rds file will be generated in home directory by default.
       Note that the previous file will be overridden.\n")
 
