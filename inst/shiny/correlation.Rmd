@@ -1,0 +1,24 @@
+In order to evaluate the result of clustering, we implemented a tool for analyzing the correlation of clusters obtained from two cluster systems. By default, the consensus molecular subtypes (CMSs) of Colorectal cancer (CRC) samples ([Guinney, J., Dienstmann, R., 2015](https://www.nature.com/articles/nm.3967)) as well as [CrossICC](https://github.com/bioinformatist/CrossICC)-clustered subtypes with same data were used for comparison.
+
+The input file should be *csv* format (comma-separated), with three columns:
+
+| ID                       | Which cluster? (by method 1) | Which cluster? (by method 2) |
+|--------------------------|------------------------------|------------------------------|
+| XXXXXXX                  | C1                           | K5                           |
+| XXXXXXX                  | C7                           | K8                           |
+| XXXXXXX                  | C4                           | K2                           |
+| ...                      | ...                          | ...                          |
+
+The correlation can be calculated based on:
+
+- Rand Index
+
+![Hongwan pls fill the equation here.](https://www.baidu.com/img/bd_logo1.png)
+
+- Adjust Rand Index
+
+![Hongwan pls fill the equation here.](https://www.baidu.com/img/bd_logo1.png)
+
+- Jaccard Index
+
+![Hongwan pls fill the equation here.](https://www.baidu.com/img/bd_logo1.png)
