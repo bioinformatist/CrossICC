@@ -1,0 +1,15 @@
+#### The CrossICC object
+
+Here, CrossICC object is defined as a file which stores compressed binary R object in *rds* format. Once you finished running the function `CrossICC`, the main function of R package [CrossICC](https://github.com/bioinformatist/CrossICC), a file named as *CrossICC.object.rds* will be placed under your `$HOME` directory (a.k.a `~/`) by default. The object is actually a *list* in R, which consists of several parts of the results.
+
+#### Load the CrossICC object
+
+If you've run the `CrossICC` function with its default `output.dir` parameter value (`~/`), you may choose "Default" in the left panel when loading the object. Otherwise, you could choose "Upload" for a self-defined path.
+
+#### Running parameters
+
+All parameters not using the default value will be listed at the bottom of the left panel.
+
+#### To visualize
+
+You can also make some configures in the *Settings* tab of the left panel.
