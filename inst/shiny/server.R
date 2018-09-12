@@ -9,7 +9,9 @@ suppressMessages(library(shiny))
 suppressMessages(library(pheatmap))
 suppressMessages(library(CrossICC))
 suppressMessages(library(RColorBrewer))
-suppressMessages(library(reshape2                  ))
+suppressMessages(library(reshape2))
+suppressMessages(library(ggsci))
+suppressMessages(library(ggthemes))
 source("globalfunctions/plotFunctions.R")
 shinyServer(function(session,input, output) {
 
@@ -426,6 +428,46 @@ shinyServer(function(session,input, output) {
       output$ContingencyTableRender<-renderDataTable({
         getContingencyTable()
       })
+
+      getcorplot<-reactive({
+        df<-clinicalRelatedData()
+        df<-df[complete.cases(df),]
+        x<-input$corAnalysisSelect1
+        y<-input$corAnalysisSelect2
+        print(str(df))
+        g<-plotStackBarplot(df,int.vect1 = x,int.vect2 = y,input.theme = input$cor_theme)
+        print(g)
+      })
+      #correlation plot
+     output$getCorplotRender<-renderPlot({
+       getcorplot()
+     },
+       width = corre_size,
+       height = corre_size,
+       outputArgs = list()
+     )
+      #download plot
+     output$DownloadCorrelationPlot<-downloadHandler(
+       filename = function() {
+         paste("correlattion_", Sys.time(), '.',input$DownloadCorrelationPlot_check, sep='')
+       },
+       content = function(file) {
+         switch (input$DownloadCorrelationPlot_check,
+                pdf=pdf(file),
+                png=png(file),
+                tiff=tiff(file))
+         getcorplot()
+         validate(
+           need(!is.null(plot.matrix), "No data input")
+         )
+         dev.off()
+       },
+       contentType =  switch (input$DownloadCorrelationPlot_check,
+                              pdf='image/pdf',
+                              png='image/pdf',
+                              tiff='image/tiff')
+     )
+
 
 # -------------------------------
 

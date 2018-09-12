@@ -1,6 +1,7 @@
 #loading dependencies
 suppressMessages(library(cluster))
 suppressMessages(library(ggplot2))
+suppressMessages(library(ggsci))
 #plot heat map from matrix and annotation information
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_row=FALSE,showRowname=FALSE){
   plot.matrix<-df
@@ -82,5 +83,46 @@ plotDefaultTheme2=theme(
   legend.text = element_text(color = "black", size = 20)
 )
 
+
+plotStackBarplot<-function(df,int.vect1,int.vect2,input.theme){
+
+
+  plotdata<-data.frame(X=as.factor(df[,int.vect1]),Y=as.factor(df[,int.vect2]))
+
+  g<-ggplot(plotdata,aes(X))+geom_bar(aes(fill = Y),position = "fill")+xlab(int.vect1)+ylab(int.vect2)+scale_fill_aaas()
+
+  if(input.theme=="default"){
+    g=g+theme(legend.position = "none")+ plotDefaultTheme2
+  }else if(input.theme=="Tufte"){
+    g=g+geom_rangeframe() + theme_tufte()
+  }else if(input.theme=="Economist"){
+    g=g+ theme_economist()+ scale_colour_economist()
+  }else if(input.theme=="Solarized"){
+    g=g+ theme_solarized()+ scale_colour_solarized("blue")
+  }else if(input.theme=="Stata"){
+    g=g+ theme_stata() + scale_colour_stata()
+  }else if(input.theme=="Excel 2003"){
+    g=g+ theme_excel() + scale_colour_excel()
+  }else if(input.theme=="Inverse Gray"){
+    g=g+ theme_igray()
+  }else if(input.theme=="Fivethirtyeight"){
+    g=g+scale_color_fivethirtyeight()+ theme_fivethirtyeight()
+  }else if(input.theme=="Tableau"){
+    g=g+theme_igray()+ scale_colour_tableau()
+  }else if(input.theme=="Stephen"){
+    g=g+theme_few()+ scale_colour_few()
+  }else if(input.theme=="Wall Street"){
+    g=g+theme_wsj()+ scale_colour_wsj("colors6", "")
+  }else if(input.theme=="GDocs"){
+    g=g+theme_gdocs()+ scale_color_gdocs()
+  }else if(input.theme=="Calc"){
+    g=g+theme_calc()+ scale_color_calc()
+  }else if(input.theme=="Pander"){
+    g=g+theme_pander()+ scale_colour_pander()
+  }else if(input.theme=="Highcharts"){
+    g=g+theme_hc()+ scale_colour_hc()
+  }
+  return(g)
+}
 
 

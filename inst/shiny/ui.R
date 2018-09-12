@@ -49,7 +49,7 @@ bodyHome <- tabItem("home",
                         width = 4,
                         status = "info",
                         solidHeader = TRUE,
-                        title =  strong("new sample allocator"),
+                        title =  strong("New sample allocator"),
                         p("After obtain a cluster system based on trained data, it would be applicable if we are going to allocate new samples.
                           In this module, users are encoraged uploading expression data of testing samples to figure out which cluster they belong to."),
                         img(src = "images/workflow.png", align = "center", width="100%")
@@ -159,7 +159,7 @@ bodyCrossICC <- tabItem("CrossICC",
                                 withSpinner(plotOutput("superclusterPlot", height = "100%"), color = "black"),
                                 box(
                                   width = NULL,  status = "success",
-                                  checkboxGroupInput("DownloadSuperclusterPlot_check","Choose file type to download:",
+                                  radioButtons("DownloadSuperclusterPlot_check","Choose file type to download:",
                                     c("png", "pdf", "tiff"),inline = TRUE
                                   ),
                                   downloadButton('DownloadSuperclusterPlot', 'Download')
@@ -173,7 +173,7 @@ bodyCrossICC <- tabItem("CrossICC",
                                 ,
                                 box(
                                   width = NULL,  status = "success",
-                                  checkboxGroupInput("DownloadSilhouette_check","Choose file type to download:",
+                                  radioButtons("DownloadSilhouette_check","Choose file type to download:",
                                                      c("png", "pdf", "tiff"),inline = TRUE
                                   ),
                                   downloadLink('DownloadSilhouette', 'Download')
@@ -189,7 +189,7 @@ bodyCrossICC <- tabItem("CrossICC",
                                 withSpinner(plotOutput("clusterexpress",height = "100%"), color = "black"),
                                 box(
                                   width = NULL,  status = "success",
-                                  checkboxGroupInput("DownloadClusterexpressPlot_check","Choose file type to download:",
+                                  radioButtons("DownloadClusterexpressPlot_check","Choose file type to download:",
                                                      c("png", "pdf", "tiff"),inline = TRUE
                                   ),
                                   downloadLink('DownloadClusterexpressPlot', 'Download'),
@@ -202,7 +202,7 @@ bodyCrossICC <- tabItem("CrossICC",
                                 plotOutput("IterationPlot", height = "100%"),
                                 box(
                                   width = NULL,  status = "success",
-                                  checkboxGroupInput("DownloadIterationPlot_check","Choose file type to download:",
+                                  radioButtons("DownloadIterationPlot_check","Choose file type to download:",
                                                      c("png", "pdf", "tiff"),inline = TRUE
                                   )
                                 # to be added
@@ -210,7 +210,8 @@ bodyCrossICC <- tabItem("CrossICC",
                               ),
                               tabPanel(
                                 title = div(icon("book"), "Readme"),
-                                value = "cr06"
+                                value = "cr06",
+                                includeMarkdown("CrossICCObject.Rmd")
                               )
                             )
                           )
@@ -278,64 +279,89 @@ bodyCorrelation <- tabItem(
     valueBoxOutput("getJaccarddox", width = 4)
 
   ),
+
   fluidRow(
-    tabBox (
-      width = 4,
-      selected = "caInput01",
-      side = "left",
-      tabPanel(
-        title = div(icon("table"), "Data Input"),
-        value = "caInput01",
-        radioGroupButtons(
-          "data3",
-          label = strong("clinical Dataset"),
-          choices = c(Default = "Default", Upload = "Upload"),
-          selected = 'Default',
-          status = "primary"
-        ),
-        conditionalPanel(
-          condition = "input.data3 == 'Upload'",
-          fileInput(
-            'file3',
-            'Input dataset in matrix file',
-            accept =
-              c('text/txt', '.rds')
+    box( width = 4,
+         title = "Analysis",
+          tabBox (
+            height = "100%", width = "100%",
+            selected = "caInput01",
+            side = "left",
+            tabPanel(
+              title = div(icon("table"), "Data Input"),
+              value = "caInput01",
+              radioGroupButtons(
+                "data3",
+                label = strong("clinical Dataset"),
+                choices = c(Default = "Default", Upload = "Upload"),
+                selected = 'Default',
+                status = "primary"
+              ),
+              conditionalPanel(
+                condition = "input.data3 == 'Upload'",
+                fileInput(
+                  'file3',
+                  'Input dataset in matrix file',
+                  accept =
+                    c('text/txt', '.rds')
+                )
+              ),
+              uiOutput("VariableSelectionUI1"),
+              uiOutput("VariableSelectionUI2"),
+              actionBttn("submit3", "Submit", style = "unite")
+
+            ),
+            tabPanel(
+              title = div(icon("cog"), "Setting"),
+              value = "caInput01",
+              selectInput("cor_theme", "Plot Theme:",
+                          c("default","Tufte","Economist","Solarized","Stata","Excel 2003","Inverse Gray","Fivethirtyeight","Tableau","Stephen","Wall Street","GDocs","Calc","Pander","Highcharts"))
+              ,
+              sliderInput("corre_size", "Zoom in/out graph:",min = 500, max = 1000, value = 800)
+              )
           )
-        ),
-        uiOutput("VariableSelectionUI1"),
-        uiOutput("VariableSelectionUI2"),
-        actionBttn("submit3", "Submit", style = "unite")
-
-      )
     ),
-    tabBox (
-      width = 8,
-      id = "clinicalResultPanel",
-      title = h3("Analysis"),
-      side = "left",
-      selected = "ca04",
-      tabPanel(
-        title = div(icon("book"), "Data"),
-        value = "ca01",
-        h3("Input Data "),
-        dataTableOutput("summaryCorrelationData")
-      ),
-      tabPanel(title = div(icon("book"), "Contingency Table "),
-               value ="ca02",
-               dataTableOutput("ContingencyTableRender")
 
-      ),
-      tabPanel(
-        title = div(icon("book"), "Plot"),
-        value = "ca03"
-      ),
-      tabPanel(
-        title = div(icon("book"), "Read Me"),
-        value = "ca04",
-        p("Write introduction here")
+    box( width = 8,
+         title = "Analysis",
+         tabBox (
+           height = "100%", width = "100%",
+           id = "clinicalResultPanel",
+           side = "left",
+           selected = "ca04",
+           tabPanel(
+             title = div(icon("book"), "Data"),
+             value = "ca01",
+             h3("Input Data "),
+             dataTableOutput("summaryCorrelationData")
+           ),
+           tabPanel(title = div(icon("book"), "Contingency Table "),
+                    value ="ca02",
+                    dataTableOutput("ContingencyTableRender")
 
-      )
+           ),
+           tabPanel(
+             title = div(icon("book"), "Plot"),
+             value = "ca03",
+             withSpinner(plotOutput("getCorplotRender",height = "100%"), color = "black"),
+             box(
+               width = NULL,  status = "success",
+               radioButtons("DownloadCorrelationPlot_check","Choose file type to download:",
+                            c("png", "pdf", "tiff"),inline = TRUE,selected = "pdf"
+               ),
+               downloadBttn('DownloadCorrelationPlot', 'Download')
+               # to be added
+             )
+           ),
+           tabPanel(
+             title = div(icon("book"), "Read Me"),
+             value = "ca04",
+             includeMarkdown("correlation.Rmd")
+
+           )
+         )
     )
+
   )
 )
 
@@ -347,7 +373,8 @@ bodySsGSEA <- tabItem("ssgsea",
                         box(
                           title = "Input dataset",
                           width = 4,
-                          tabBox (id = "ssGseaSettingPanel",width = NULL, side = "left", selected = "ssgseaset01",
+                          tabBox (id = "ssGseaSettingPanel",side = "left", selected = "ssgseaset01",
+                                  height = "100%", width = "100%",
                             tabPanel(
                               title = div(icon("book"), "Loading"),
                               value = "ssgseaset01",
@@ -399,7 +426,8 @@ bodySsGSEA <- tabItem("ssgsea",
                           title = "Analysis Result",
                           width = 8,
                           tabBox (
-                            id = "ssGseaResultPanel",width = NULL, side = "left",selected = "ssgseaRes01",
+                            height = "100%", width = "100%",
+                            id = "ssGseaResultPanel", side = "left",selected = "ssgseaRes01",
                             tabPanel(
                               title = div(icon("book"), "PredictResult"),
                               value = "ssgseaRes01"
@@ -429,7 +457,8 @@ bodySurival <- tabItem(
     box(
       title = "Input dataset",
       width = 4,
-      tabBox (id = "SurvivalSettingPanel", width = NULL,   side = "left",selected = "ssgseaset01",
+      tabBox (id = "SurvivalSettingPanel" , side = "left",selected = "ssgseaset01",
+              height = "100%", width = "100%",
               tabPanel(
                 title = div(icon("book"), "Loading"),
                 value = "survivalset01"
@@ -447,7 +476,8 @@ bodySurival <- tabItem(
     box(
       title = "Analysis Result",
       width = 8,
-      tabBox (id = "survivalResultPanel",  width = NULL,  side = "left", selected = "survivalRes01",
+      tabBox (id = "survivalResultPanel",   side = "left", selected = "survivalRes01",
+              height = "100%", width = "100%",
         tabPanel(
           title = div(icon("book"), "PredictResult"),
           value = "survivalRes01"
