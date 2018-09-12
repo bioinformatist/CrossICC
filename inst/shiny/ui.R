@@ -199,7 +199,7 @@ bodyCrossICC <- tabItem("CrossICC",
                               tabPanel(
                                 title = div(icon("book"), "Iteration Record"),
                                 value = "cr05",
-                                plotOutput("IterationPlot", height = "800px"),
+                                plotOutput("IterationPlot", height = "100%"),
                                 box(
                                   width = NULL,  status = "success",
                                   checkboxGroupInput("DownloadIterationPlot_check","Choose file type to download:",
@@ -207,6 +207,10 @@ bodyCrossICC <- tabItem("CrossICC",
                                   )
                                 # to be added
                                 )
+                              ),
+                              tabPanel(
+                                title = div(icon("book"), "Readme"),
+                                value = "cr06"
                               )
                             )
                           )
@@ -253,6 +257,10 @@ bodyPredict <- tabItem(
         downloadLink('DownloadPredictHeatmap', 'Download PDF'),
         withSpinner(plotOutput("predictHeatmap", height = "800px"), color = "black")
 
+      ),
+      tabPanel(
+        title = div(icon("book"), "Readme"),
+        value = "pre02"
       )
     )
   )
@@ -304,29 +312,27 @@ bodyCorrelation <- tabItem(
       width = 8,
       id = "clinicalResultPanel",
       title = h3("Analysis"),
-      side = "right",
-      selected = "ca02",
-      tabPanel(
-        title = div(icon("book"), "Read Me"),
-        value = "ca01",
-        p("Write introduction here")
-
-      ),
+      side = "left",
+      selected = "ca04",
       tabPanel(
         title = div(icon("book"), "Data"),
-        value = "ca02",
+        value = "ca01",
         h3("Input Data "),
         dataTableOutput("summaryCorrelationData")
       ),
       tabPanel(title = div(icon("book"), "Contingency Table "),
-               value ="ca03",
+               value ="ca02",
                dataTableOutput("ContingencyTableRender")
 
-               )
-      ,
+      ),
       tabPanel(
         title = div(icon("book"), "Plot"),
-        value = "ca04"
+        value = "ca03"
+      ),
+      tabPanel(
+        title = div(icon("book"), "Read Me"),
+        value = "ca04",
+        p("Write introduction here")
 
       )
     )
@@ -403,6 +409,12 @@ bodySsGSEA <- tabItem("ssgsea",
                               title = div(icon("book"), "Plot"),
                               value = "ssgseaRes02"
 
+                            ),
+                            tabPanel(
+                              title = div(icon("book"), "Read Me"),
+                              value = "ssgseaRes03",
+                              p("Write introduction here")
+
                             )
                           )
                         )
@@ -444,6 +456,11 @@ bodySurival <- tabItem(
           title = div(icon("book"), "Plot"),
           value = "survivalRes02"
 
+        ),
+        tabPanel(
+          title = div(icon("book"), "Read Me"),
+          value = "survivalRes03",
+          p("Write introduction here")
         )
       )
     )
