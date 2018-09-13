@@ -441,7 +441,7 @@ bodySsGSEA <- tabItem("ssgsea",
                             tabPanel(
                               title = div(icon("book"), "Read Me"),
                               value = "ssgseaRes03",
-                              p("Write introduction here")
+                              includeMarkdown("ssGSEA.md")
 
                             )
                           )
@@ -490,7 +490,7 @@ bodySurival <- tabItem(
         tabPanel(
           title = div(icon("book"), "Read Me"),
           value = "survivalRes03",
-          p("Write introduction here")
+          includeMarkdown("survival.md")
         )
       )
     )

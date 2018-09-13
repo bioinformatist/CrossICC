@@ -434,7 +434,6 @@ shinyServer(function(session,input, output) {
         df<-df[complete.cases(df),]
         x<-input$corAnalysisSelect1
         y<-input$corAnalysisSelect2
-        print(str(df))
         g<-plotStackBarplot(df,int.vect1 = x,int.vect2 = y,input.theme = input$cor_theme)
         print(g)
       })

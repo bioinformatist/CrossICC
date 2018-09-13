@@ -11,14 +11,19 @@ The input file should be *csv* format (comma-separated), with three columns:
 
 The correlation can be calculated based on:
 
-- Rand Index
+##Rand index
+a measure of the similarity between two data clusterings.
+A true positive (TP) decision assigns two similar documents to the same cluster, a true negative (TN) decision assigns two dissimilar documents to different clusters. There are two types of errors we can commit. A (FP) decision assigns two dissimilar documents to the same cluster. A (FN) decision assigns two similar documents to different clusters. The Rand index measures the percentage of decisions that are correct.
 
-![Hongwan pls fill the equation here.](https://www.baidu.com/img/bd_logo1.png)
+$$RI=((TP+TN))/((TP+FP+FN+TN))$$
 
-- Adjust Rand Index
+##adjusted Rand index
+The adjusted Rand index is the corrected-for-chance version of the Rand index
 
-![Hongwan pls fill the equation here.](https://www.baidu.com/img/bd_logo1.png)
 
-- Jaccard Index
+$$ARI=((RI-Expetced RI))/((maxa(RI)-Expected RI))$$
 
-![Hongwan pls fill the equation here.](https://www.baidu.com/img/bd_logo1.png)
+##Jaccard index
+a statistic used for comparing the similarity and diversity of sample sets. The Jaccard coefficient measures similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the sample sets:
+
+$$J(A,B)=(|A∩B|)/|A∪B| =(|A∩B|)/(|A|+|B|-|A∩B|)$$
