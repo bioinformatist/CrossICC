@@ -1,0 +1,17 @@
+#### Instructions for Survival analysis module  
+
+To use Survival analysis module, you can upload a Survival matrix file in .csv/txt format. Before uploading the file, choose the correct separator, wheather the matrix file is seperated by a `,` choose comma, by a `;` choose semicolon, or by tabs choose tab. Header names (first row) will be used as set names.
+
+#### List type data:  
+
+List data is a correctly formatted csv/text file. Each column represents a set, and each row represents an element (Sample /Event/ Time.days).First column represent sample name,Event repression living state,Time.days repression survive days;
+
+To run survival evaluation, you need provide a *csv* formatted table, with at least two columns:
+
+| Sample ID | Days to last known alive | Vital status | Other fields |
+|-----------|--------------------------|--------------|--------------|
+| XXXXXX    | 784                      | Dead         | ...          |
+| XXXXXX    | 475                      | Alive        | ...          |
+| XXXXXX    | 1331                     | Alive        | ...          |
+| ...       | ...                      | ...          | ...          |
+

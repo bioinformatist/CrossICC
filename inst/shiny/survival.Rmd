@@ -1,9 +1,0 @@
-To run survival evaluation, you need provide a *csv* formatted table, with at least two columns:
-
-| Sample ID | Days to last known alive | Vital status | Other fields |
-|-----------|--------------------------|--------------|--------------|
-| XXXXXX    | 784                      | Dead         | ...          |
-| XXXXXX    | 475                      | Alive        | ...          |
-| XXXXXX    | 1331                     | Alive        | ...          |
-| ...       | ...                      | ...          | ...          |
-

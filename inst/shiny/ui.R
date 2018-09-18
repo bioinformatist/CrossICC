@@ -11,14 +11,13 @@ suppressMessages(library(DT))
 #sider bar----
 
 sidebar <- dashboardSidebar(width = 300,
-                            sidebarMenu(id="sidername",
+                            sidebarMenu(id="sidername",selected='home',
                                         menuItem("Home", tabName = "home", icon = icon("home")),
                                         menuItem("CrossICC result viewer", icon = icon("eye"),tabName = "CrossICC"),
                                         menuItem("Allocate New Sample", icon = icon("location-arrow"),tabName = "predict" ),
                                         menuItem('Correlation analysis', tabName = 'correlation',icon = icon("th",lib = "glyphicon")),
                                         menuItem('ssGSEA analysis', tabName = 'ssgsea',icon = icon("bar-chart")),
-                                        menuItem('Survival analysis', tabName = 'Survival',icon = icon("line-chart")),
-                                        menuItem("Help", tabName = "Help", icon = icon("question"))
+                                        menuItem('Survival analysis', tabName = 'Survival',icon = icon("line-chart"))
                             )
 )
 
@@ -32,7 +31,7 @@ bodyHome <- tabItem("home",
                         status = "success",
                         solidHeader = TRUE,
                         title = strong("Wellcome to the CrossICC reporter"),
-                        includeMarkdown("Readmeshiny.md")
+                        includeMarkdown("dom/Readmeshiny.md")
                       )
                     ),
 
@@ -59,7 +58,7 @@ bodyHome <- tabItem("home",
                         status = "info",
                         solidHeader = TRUE,
                         title =  strong("Cancer related analysis functions"),
-                        includeMarkdown("home_cancerR.md"),
+                        includeMarkdown("dom/home_cancerR.md"),
                         img(src = "images/cancerRelated.png", align = "center", width="100%")
                       )
                     ),
@@ -138,7 +137,7 @@ bodyCrossICC <- tabItem("CrossICC",
                               height = "100%", width = "100%",
                               id = "crossICCresultPanel",
                               side = "left",
-                              selected = "cr01",
+                              selected = "cr06",
                               tabPanel(
                                 title = div(icon("book"), "Summary"),
                                 value = "cr01",
@@ -211,7 +210,7 @@ bodyCrossICC <- tabItem("CrossICC",
                               tabPanel(
                                 title = div(icon("book"), "Readme"),
                                 value = "cr06",
-                                includeMarkdown("CrossICCObject.Rmd")
+                                includeMarkdown("dom/CrossICCObject.Rmd")
                               )
                             )
                           )
@@ -250,7 +249,7 @@ bodyPredict <- tabItem(
       title = h3("Analysis"),
       width = 8,
       side = "right",
-      selected = "pre01",
+      selected = "pre02",
       tabPanel(
         title = div(icon("book"), "PredictResult"),
         value = "pre01",
@@ -356,7 +355,7 @@ bodyCorrelation <- tabItem(
            tabPanel(
              title = div(icon("book"), "Read Me"),
              value = "ca04",
-             includeMarkdown("correlation.Rmd")
+             includeHTML("dom/correlation.html")
 
            )
          )
@@ -427,7 +426,7 @@ bodySsGSEA <- tabItem("ssgsea",
                           width = 8,
                           tabBox (
                             height = "100%", width = "100%",
-                            id = "ssGseaResultPanel", side = "left",selected = "ssgseaRes01",
+                            id = "ssGseaResultPanel", side = "left",selected = "ssgseaRes03",
                             tabPanel(
                               title = div(icon("book"), "PredictResult"),
                               value = "ssgseaRes01"
@@ -441,8 +440,7 @@ bodySsGSEA <- tabItem("ssgsea",
                             tabPanel(
                               title = div(icon("book"), "Read Me"),
                               value = "ssgseaRes03",
-                              includeMarkdown("ssGSEA.md")
-
+                              includeMarkdown("dom/ssGSEA.html")
                             )
                           )
                         )
@@ -476,7 +474,7 @@ bodySurival <- tabItem(
     box(
       title = "Analysis Result",
       width = 8,
-      tabBox (id = "survivalResultPanel",   side = "left", selected = "survivalRes01",
+      tabBox (id = "survivalResultPanel",   side = "left", selected = "survivalRes03",
               height = "100%", width = "100%",
         tabPanel(
           title = div(icon("book"), "PredictResult"),
@@ -490,7 +488,7 @@ bodySurival <- tabItem(
         tabPanel(
           title = div(icon("book"), "Read Me"),
           value = "survivalRes03",
-          includeMarkdown("survival.md")
+          includeHTML("dom/survival.html")
         )
       )
     )

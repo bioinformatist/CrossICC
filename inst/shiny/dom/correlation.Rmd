@@ -1,3 +1,5 @@
+#### Brief instructions  
+
 In order to evaluate the result of clustering, we implemented a tool for analyzing the correlation of clusters obtained from two cluster systems. By default, the consensus molecular subtypes (CMSs) of Colorectal cancer (CRC) samples ([Guinney, J., Dienstmann, R., 2015](https://www.nature.com/articles/nm.3967)) as well as [CrossICC](https://github.com/bioinformatist/CrossICC)-clustered subtypes with same data were used for comparison.
 
 The input file should be *csv* format (comma-separated), with three columns:
@@ -9,21 +11,24 @@ The input file should be *csv* format (comma-separated), with three columns:
 | XXXXXXX                  | C4                           | K2                           |
 | ...                      | ...                          | ...                          |
 
-The correlation can be calculated based on:
+The comparison were evaluated by the following statistics:
 
-##Rand index
+#### Rand index  
+
 a measure of the similarity between two data clusterings.
 A true positive (TP) decision assigns two similar documents to the same cluster, a true negative (TN) decision assigns two dissimilar documents to different clusters. There are two types of errors we can commit. A (FP) decision assigns two dissimilar documents to the same cluster. A (FN) decision assigns two similar documents to different clusters. The Rand index measures the percentage of decisions that are correct.
 
 $$RI=((TP+TN))/((TP+FP+FN+TN))$$
 
-##adjusted Rand index
-The adjusted Rand index is the corrected-for-chance version of the Rand index
+#### adjusted Rand index  
+
+The adjusted Rand index is the corrected-for-chance version of the Rand index  
 
 
 $$ARI=((RI-Expetced RI))/((maxa(RI)-Expected RI))$$
 
-##Jaccard index
+#### Jaccard index  
+
 a statistic used for comparing the similarity and diversity of sample sets. The Jaccard coefficient measures similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the sample sets:
 
 $$J(A,B)=(|A∩B|)/|A∪B| =(|A∩B|)/(|A|+|B|-|A∩B|)$$

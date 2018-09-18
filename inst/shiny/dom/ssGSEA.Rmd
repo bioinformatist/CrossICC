@@ -1,17 +1,18 @@
 ####List type data:
 List data is a correctly formatted csv/text file,Each col represents a set, and each row represents an element (pathsway/gene/ Source). 
 
-####Instructions for ssGSEA module and expression file (Required)
+#### Instructions for ssGSEA module and expression file (Required)
 To use this module you can upload a correctly formatted .csv or text file. A mandatory file is a gene expression metrix that each row represent a gene and column are sample ID. To note, the genename should be the official gene sympol of human genes corresponding to the gene set file. e.g kegg gene set or hall mark file. an exapmle expression matrix from TCGA colon cancer can be downloaded from the bottom of sidebar.  
 
 #### Gene set input file (Optional)
 For gene set file, CrossICC provide two example genesets of KEGG and HALLMARKS pathways from (GSEA) MSigDB(http://software.broadinstitute.org/gsea/msigdb/index.jsp) . For user defined geneset, you just need format the gene set into the following content(tab delimitted).
-* Here is a sample format for gene set file:
+* Here is a sample format for gene set file:  
+
 | pathways| gene name | Source |
-| ------ | ------ | ------ |
-| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	JUNB	| HALLMARK| 
-| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	CXCL2| 	HALLMARK| 
-| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	ATF3	| HALLMARK| 
-| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	NFKBIA| 	HALLMARK| 
-| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	TNFAIP3| 	HALLMARK| 
-| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	PTGS2| 	HALLMARK| 
+|-----------------------------------|----------|---------|
+| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	JUNB	 | HALLMARK| 
+| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	CXCL2  | HALLMARK| 
+| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	ATF3	 | HALLMARK| 
+| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	NFKBIA | HALLMARK| 
+| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	TNFAIP3| HALLMARK| 
+| HALLMARK_TNFA_SIGNALING_VIA_NFKB	| 	PTGS2  | HALLMARK| 
