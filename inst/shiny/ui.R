@@ -354,8 +354,8 @@ bodyCorrelation <- tabItem(
            ),
            tabPanel(
              title = div(icon("book"), "Read Me"),
-             value = "ca04",
-             includeHTML("dom/correlation.html")
+             value = "ca04"
+             # ,includeHTML("dom/correlation.html")
 
            )
          )
@@ -439,8 +439,8 @@ bodySsGSEA <- tabItem("ssgsea",
                             ),
                             tabPanel(
                               title = div(icon("book"), "Read Me"),
-                              value = "ssgseaRes03",
-                              includeMarkdown("dom/ssGSEA.html")
+                              value = "ssgseaRes03"
+                              # ,includeMarkdown("dom/ssGSEA.html")
                             )
                           )
                         )
@@ -487,8 +487,8 @@ bodySurival <- tabItem(
         ),
         tabPanel(
           title = div(icon("book"), "Read Me"),
-          value = "survivalRes03",
-          includeHTML("dom/survival.html")
+          value = "survivalRes03"
+          # , includeHTML("dom/survival.html")
         )
       )
     )

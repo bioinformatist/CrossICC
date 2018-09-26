@@ -50,7 +50,7 @@ CrossICC will automatically iterate your data until it reaches convergence. By d
 
 - Question 1: NA values involved in our data set, how to go through them?
 
-> A: Users may encounter other unexpected error due to NA values in raw dataset. Therefore, we strong recommanded that users checked the NA valus in thire data set before loading it into `CrossICC`. To check the completed cases in matrix, `completed.cases` can be a good option to do that. Here, we also present an example for users to impute there data in case they don't want to remove case in the dataset. The imputation method shown here are KNN method from impute package.
+> A: Users may encounter unexpected errors due to NA values in raw dataset. Therefore, we strongly recommanded that users checked the NA valus in their data set before loading it into `CrossICC`. To check the completed cases in matrix, `completed.cases` can be a good option to do that. Here, we also present an example for users to impute there data in case they don't want to remove case in the dataset. The imputation method shown here are KNN method from impute package.
 
 ```{r}
 # for a individual matrix, plz do imputation using the following r code
