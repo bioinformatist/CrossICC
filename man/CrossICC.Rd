@@ -7,7 +7,7 @@
 \title{CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.}
 \usage{
 CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
-  output.dir = NULL, max.K = 10, max.iter = 20, rep.runs = 1000,
+  output.dir = "~/", max.K = 10, max.iter = 20, rep.runs = 1000,
   n.platform = 2, pItem = 0.8, pFeature = 1, clusterAlg = "hc",
   distance = "euclidean", sil.filter = "soft",
   heatmap.order = "up.based", cc.seed = 5000, cluster.cutoff = 0.05,

@@ -341,7 +341,7 @@ summary.CrossICC <- function(result) {
 #' Title Read file into CrossICC input
 #'
 #' @param files a list for filenames, usually a returned value of list.files() function
-#' @param sep the field separator character. Values on each line of the file are separated by this character.  sep = "\t" (the default for CrossICCInput).
+#' @param sep the field separator character. Values on each line of the file are separated by the sperator. (tablar the default for CrossICCInput).
 #' @return list contains matrixs from each platform parsing from file provided .
 #' @export
 #'
@@ -351,13 +351,14 @@ summary.CrossICC <- function(result) {
 #' crossicc.input <- CrossICCInput(files, sep=",")
 #' }
 
-CrossICCInput = function(files, sep = "\t"){
+#### new CrossICCInput function ####
+CrossICCInput <- function(files, sep = "\t"){
   if(is.character(files) == TRUE){
-    library(data.table)
-    testfiles = vector(mode = "list", length = length(files))
-    for(i in 1:length(files)){
-      testfiles[[i]] = data.frame(fread(files[i], sep = sep, stringsAsFactors = FALSE, data.table = FALSE), row.names = 1)
+    dfinput <- function(x, sep = "\t"){
+      outputdf <- data.frame(fread(x, sep = sep, stringsAsFactors = FALSE, data.table = FALSE), row.names = 1)
+      return(outputdf)
     }
-    return(testfiles)
+    testData <- lapply(files, dfinput, sep = sep)
+    return(testData)
   }else{print("Please ensure the name of files you want to import is in a charachter")}
 }
