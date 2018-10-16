@@ -132,7 +132,8 @@ shinyServer(function(session,input, output) {
 
         crossICC.object<-InterationResult()
 
-        plot_balanced_heatmap(crossICC.object$clusters$all.k)
+        xx<-plot_balanced_heatmap(crossICC.object$clusters$all.k)
+        grid::grid.draw(xx$gtable)
 
       },
         width = cross_size,
@@ -178,7 +179,8 @@ shinyServer(function(session,input, output) {
         }
         gsig<-crossICC.object$gene.order[[index]]
         #plot
-        return(plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig,cluster_row = input$clusterRow,showRowname = input$showRowNames))
+        xx<-plot_expression_heatmap_with_cluster(plot.matrix,cluster.table,gsig,cluster_row = input$clusterRow,showRowname = input$showRowNames)
+        return(xx)
       })
       output$clusterexpress<-renderPlot({
 
