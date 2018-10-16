@@ -305,16 +305,8 @@ shinyServer(function(session,input, output) {
         predict.data<-predict.inputdata()
         crossICC.object<-InterationResult()
         #validation.Data shoud be format features in rows and samples in columns
-
-        crossICC.object.summary<-summary.CrossICC(crossICC.object)
-        # get centroid
-        train.centroid<-cluster.centroid(crossICC.object$platforms[[1]],crossICC.object$gene.signature,crossICC.object.summary$clusters)
-        #prediction
-        vali.predict.bycentroid<-centroid2exp(train.centroid,predict.data)
-        #get prediction result
-        vali.predict.bycentroid.cluter<-vali.predict.bycentroid$cluster
-        vali.predict.normalized.matrix<-vali.predict.bycentroid$normalized.matrix
-        return(list(cluster=vali.predict.bycentroid.cluter,matrix=vali.predict.normalized.matrix))
+        res.pred<-predictor(predict.data,crossICC.object)
+        return(res.pred)
       })
       # predict heatmap for replication
       output$predictHeatmap<-renderPlot({

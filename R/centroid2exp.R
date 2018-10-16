@@ -36,10 +36,12 @@ centroid2exp <- function(centroid,vd){
     maxk=which.max(c.cor)
     group=names(maxk)
     vcor=rbind(vcor,c(colnames(vd)[i],group,c.cor[maxk],pv[maxk]))
-    # if(pv[maxk]<0.05){
-    #   vclass[colnames(vd)[i]]=group
-    # }
-    vclass[colnames(vd)[i]]=group
+    if(pv[maxk]<0.05){
+      vclass[colnames(vd)[i]]=group
+    }else{
+      vclass[colnames(vd)[i]]=NA
+    }
+    # vclass[colnames(vd)[i]]=group
   }
   return(list(overlap.gene=gene.sig,cluster=vclass,correlation=vcor,normalized.matrix=vd))
 }

@@ -13,12 +13,16 @@
 #'
 predictor <- function(pre.dat, model) {
   predict.data<-pre.dat
-  crossICC.object<-InterationResult()
+  crossICC.object<-model
   #validation.Data shoud be format features in rows and samples in columns
 
   crossICC.object.summary<-summary.CrossICC(crossICC.object)
   # get centroid
-  train.centroid<-cluster.centroid(crossICC.object$platforms[[1]],crossICC.object$gene.signature,crossICC.object.summary$clusters)
+  centroid.list<-lapply(crossICC.object$platforms, cluster.centroid, gene.signature = crossICC.object$gene.signature,cluster = crossICC.object.summary$clusters)
+
+  # get centroid of the centroid
+
+  train.centroid<-centroidOfcentroid(centroid.list,cluster = crossICC.object.summary$clusters)
   #prediction
   vali.predict.bycentroid<-centroid2exp(train.centroid,predict.data)
   #get prediction result
@@ -27,6 +31,17 @@ predictor <- function(pre.dat, model) {
   return(list(cluster=vali.predict.bycentroid.cluter,matrix=vali.predict.normalized.matrix))
 }
 
+#' Title Return centroid of centroid from each plat form
+#'
+#' @param centroid.list a list stored the centroid
+#' @param model a CrossICC Object
+#' @return a list contains a vecter that store the predict clusters and a normalized expression matrix
+centroidOfcentroid<-function(centroid.list,cluster){
+  cluster.name<-unlist(lapply(centroid.list,colnames))
+  final.matrix<-do.call(cbind,centroid.list)
+  res<-t(apply(final.matrix, 1,tapply,cluster.name,mean))
+  return(res)
+}
 # predictor <- function(x, fs, gene.signature, geneset2gene, filter.cutoff = 1, fdr.cutoff = 1) {
 #   filtered.x <- m.f.s(list(x), fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, perform.mad = FALSE)[[2]][[1]]
 #   genewprobe <- gene.signature

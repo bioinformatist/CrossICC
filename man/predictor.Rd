@@ -4,30 +4,23 @@
 \alias{predictor}
 \title{Title To calculate the correlation between the predictor centroid and the validation centroid.}
 \usage{
-predictor(x, fs, gene.signature, geneset2gene, filter.cutoff = 1,
-  fdr.cutoff = 1)
+predictor(pre.dat, model)
 }
 \arguments{
-\item{x}{a eSet object or eSet-like matrix. with features in rows and samples in columns}
+\item{pre.dat}{a eSet object or eSet-like matrix. with features in rows and samples in columns}
 
-\item{fs}{return matrix of ssGSEA. See \code{\link{ssGSEA}}.}
-
-\item{gene.signature}{gene signatures calculated by CrossICC.}
-
-\item{geneset2gene}{a matrix contains geneset (cluster name) mapping to gene.}
-
-\item{filter.cutoff}{cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.}
-
-\item{fdr.cutoff}{cutoff value while performing merging-filtering-scaling. See \code{\link{CrossICC}}.}
+\item{model}{a CrossICC Object}
 }
 \value{
-a correlation matrix.
+a list contains a vecter that store the predict clusters and a normalized expression matrix
 }
 \description{
 Title To calculate the correlation between the predictor centroid and the validation centroid.
 }
 \examples{
 \donttest{
-predictor(example.matrices$x, ssGSEA.matrix, CrossICC.object[[1]]$gene.signature, CrossICC.object[[1]]$unioned.genesets)
+predictor(example.matrices$x, crossICC.object)
 }
+
+
 }
