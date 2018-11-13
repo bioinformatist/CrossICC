@@ -10,10 +10,10 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
   output.dir = "~/", max.K = 10, max.iter = 20, rep.runs = 1000,
   n.platform = 2, pItem = 0.8, pFeature = 1, clusterAlg = "hc",
   distance = "euclidean", sil.filter = "soft",
-  heatmap.order = "up.based", cc.seed = 5000, cluster.cutoff = 0.05,
-  ebayes.cutoff = 0.1, ebayes.mode = "both", cross = "sample",
-  skip.merge.dup = FALSE, skip.mm = FALSE, skip.mfs = FALSE,
-  use.shiny = TRUE)
+  heatmap.order = "up.based", com.mode = "overlap", cc.seed = 5000,
+  cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "both",
+  cross = "sample", skip.merge.dup = FALSE, skip.mm = FALSE,
+  skip.mfs = FALSE, use.shiny = TRUE)
 }
 \arguments{
 \item{...}{all datasets (matrices is better)}
@@ -32,7 +32,7 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
 
 \item{rep.runs}{number of subsamples during clustering.}
 
-\item{n.platform}{To filter the signature with it's super-cluster group in platforms.
+\item{n.platform}{to filter the signature with it's super-cluster group in platforms.
 That is, if the parameter is set to 2 (default),
 the signature (like hgnc symbol ESR1) in a certain super-cluser (like K1) must exists more than 2 times among data of all platforms;
 otherwise, it will not be reported.}
@@ -54,6 +54,8 @@ or a function that returns a clustering.}
 
 \item{heatmap.order}{gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.}
 
+\item{com.mode}{mode for choose common features when pre-processing data. Could be "overlap" (use intersection, default) or "merge" (keep all features).}
+
 \item{cc.seed}{sets random seed for reproducible results.}
 
 \item{cluster.cutoff}{cutoff value during determining cluster numbers.}
@@ -68,7 +70,7 @@ or a function that returns a clustering.}
 
 \item{skip.mm}{skip call MergeMaid process or not. Default is FALSE (not skip).}
 
-\item{skip.mfs}{To skip our internal filtering and normalization, etc. Default is FALSE. Only try when you're using a pre-processed data.}
+\item{skip.mfs}{to skip our internal filtering and normalization, etc. Default is FALSE. Only try when you're using a pre-processed data.}
 
 \item{use.shiny}{if TRUE, a shiny app will appear after running this main function.}
 }

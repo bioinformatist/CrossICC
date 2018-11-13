@@ -42,11 +42,12 @@ NULL
 #' @param skip.mm skip call MergeMaid process or not. Default is FALSE (not skip).
 #' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
 #' @param heatmap.order gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.
-#' @param n.platform To filter the signature with it's super-cluster group in platforms.
+#' @param n.platform to filter the signature with it's super-cluster group in platforms.
 #' That is, if the parameter is set to 2 (default),
 #' the signature (like hgnc symbol ESR1) in a certain super-cluser (like K1) must exists more than 2 times among data of all platforms;
 #' otherwise, it will not be reported.
-#' @param skip.mfs To skip our internal filtering and normalization, etc. Default is FALSE. Only try when you're using a pre-processed data.
+#' @param skip.mfs to skip our internal filtering and normalization, etc. Default is FALSE. Only try when you're using a pre-processed data.
+#' @param com.mode mode for choose common features when pre-processing data. Could be "overlap" (use intersection, default) or "merge" (keep all features).
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -61,7 +62,7 @@ NULL
 #' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster", fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
-                     pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based',
+                     pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
                      cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
 
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
@@ -103,7 +104,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1, ou
     filter.sig <- rownames(platforms[[1]])
   } else {
     cat(paste(date(), '--', 'Pre-processing data'), '\n')
-    mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, skip.merge.dup = skip.merge.dup, skip.mm = skip.mm)
+    mfs.list <- m.f.s(platforms.list, fdr.cutoff = fdr.cutoff, filter.cutoff = filter.cutoff, skip.merge.dup = skip.merge.dup, skip.mm = skip.mm, com.mode = com.mode)
     platforms <- mfs.list$filterd.scaled
     filter.sig <- mfs.list$filter.sig
   }

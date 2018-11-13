@@ -1,4 +1,4 @@
-m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE, skip.merge.dup = FALSE, skip.mm = FALSE) {
+m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE, skip.merge.dup = FALSE, skip.mm = FALSE, com.mode = 'overlap') {
 
   # Check if has NAs in matrices
   if (!all(sapply(platforms.list, function(x) !any(is.na(x))))) {
@@ -71,7 +71,11 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
       cat(paste(date(), '--', 'Performing MAD filtering'), '\n')
       filter.genes <- lapply(no.same, function(x) filter.mad(x[genes.com.fdr,
                                                                ], p = filter.cutoff))
-      filter.genes.com <- com.feature(unlist(filter.genes), method = "merge")  # remove unlist function when using `overlap` parameter
+      if (com.mode == 'overlap') {
+        filter.genes.com <- com.feature(filter.genes, method = "overlap")
+      } else {
+        filter.genes.com <- com.feature(unlist(filter.genes), method = "merge")  # remove unlist function when using `overlap` parameter
+      }
 
       filter.sig <- rbind(filter.sig, rep(length(filter.genes.com), length(platforms.list)))
       rownames(filter.sig)[nrow(filter.sig)] <- 'After MAD filtering'
@@ -87,7 +91,12 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
       if(is.null(filter.genes)){
         warning("filter.cutoff is to large too get enough gene number in dataset")
       }
-      filter.genes.com <- com.feature(unlist(filter.genes), method = "merge")  # remove unlist function when using `overlap` parameter
+
+      if (com.mode == 'overlap') {
+        filter.genes.com <- com.feature(filter.genes, method = "overlap")
+      } else {
+        filter.genes.com <- com.feature(unlist(filter.genes), method = "merge")  # remove unlist function when using `overlap` parameter
+      }
 
       filter.sig <- rbind(filter.sig, rep(length(filter.genes.com), length(platforms.list)))
       rownames(filter.sig)[nrow(filter.sig)] <- 'After MAD filtering'
