@@ -1,8 +1,11 @@
 # x is a list object only containing one element (used in apply)
 check.eSet <- function(x) {
+  if (is.data.frame(x)) {
+    as.matrix(x)
+  }
   if (!is.numeric(x[1])) {
     stop("The first element from your data is not numeric:\n
-         Currently, we only support matrix (data.frame) with sample names as column names
+         Currently, we only support matrix (data.frame) with sample names as column names\n
          and feature names as row names.")
   } else {
     if (!is.matrix(x)) {
