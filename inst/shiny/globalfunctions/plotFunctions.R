@@ -58,9 +58,9 @@ plot_sihouttle_with_crossICCout <- function(sih){
 plot_balanced_heatmap<-function(all.k){
  xx<- pheatmap::pheatmap(all.k,
                      border_color = NA,
-                     show_rownames = FALSE,
-                     show_colnames = FALSE,
-                     colorRampPalette(c("#FC8D59", "#FFFFBF", "#91CF60"))(50))
+                     show_rownames = TRUE,
+                     show_colnames = TRUE,
+                     colorRampPalette(c("#91CF60", "#FFFFBF","#FC8D59" ))(50))
  return(xx)
 
 }
