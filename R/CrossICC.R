@@ -38,7 +38,7 @@ NULL
 #' @param use.shiny if TRUE, a shiny app will appear after running this main function.
 #' @param cross cross analysis object. Could be "cluster" for clusters, "sample" for samples or "none" (used for single dataset).
 #' @param max.K the maximum cluster number of ConsensusClusterPlus.
-#' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is FALSE (not skip).
+#' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is TRUE (it is highly recommended that user has their data pre-processed well).
 #' @param skip.mm skip call MergeMaid process or not. Default is FALSE (not skip).
 #' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
 #' @param heatmap.order gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.
@@ -63,7 +63,7 @@ NULL
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
-                     cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = FALSE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
+                     cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'both', cross = 'sample', skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
 
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 

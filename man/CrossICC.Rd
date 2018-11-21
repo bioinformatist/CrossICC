@@ -6,13 +6,13 @@
 \alias{CrossICC-package}
 \title{CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.}
 \usage{
-CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.1,
+CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001,
   output.dir = "~/", max.K = 10, max.iter = 20, rep.runs = 1000,
   n.platform = 2, pItem = 0.8, pFeature = 1, clusterAlg = "hc",
   distance = "euclidean", sil.filter = "soft",
   heatmap.order = "up.based", com.mode = "overlap", cc.seed = 5000,
   cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "both",
-  cross = "sample", skip.merge.dup = FALSE, skip.mm = FALSE,
+  cross = "sample", skip.merge.dup = TRUE, skip.mm = FALSE,
   skip.mfs = FALSE, use.shiny = TRUE)
 }
 \arguments{
@@ -66,7 +66,7 @@ or a function that returns a clustering.}
 
 \item{cross}{cross analysis object. Could be "cluster" for clusters, "sample" for samples or "none" (used for single dataset).}
 
-\item{skip.merge.dup}{skip merge multiple probes for one gene (duplicates) or not. Default is FALSE (not skip).}
+\item{skip.merge.dup}{skip merge multiple probes for one gene (duplicates) or not. Default is TRUE (it is highly recommended that user has their data pre-processed well).}
 
 \item{skip.mm}{skip call MergeMaid process or not. Default is FALSE (not skip).}
 
