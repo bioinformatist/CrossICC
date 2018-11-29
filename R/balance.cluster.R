@@ -80,7 +80,7 @@ cal.auc <- function(consencus.result, k){
   cdf <- ecdf(c(consencus.matrix))
 
   # Get diagonal after removing first column and last row
-  t <- sort(diag(consencus.matrix[-nrow(consencus.matrix), -1]))
+  t <- sort(consencus.matrix[upper.tri(consencus.matrix)])
 
   # Make a "lagged" t for performing vectorized calculation
   lagged.t <- c(NA, head(t, -1))
