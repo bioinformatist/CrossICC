@@ -79,7 +79,7 @@ cal.auc <- function(consencus.result, k){
   consencus.matrix <- consencus.result[[k]]$consensusMatrix
   cdf <- ecdf(c(consencus.matrix))
 
-  # Get diagonal after removing first column and last row
+  # Get upper triangle
   t <- sort(consencus.matrix[upper.tri(consencus.matrix)])
 
   # Make a "lagged" t for performing vectorized calculation
