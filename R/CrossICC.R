@@ -356,9 +356,7 @@ summary.CrossICC <- function(result) {
 CrossICCInput <- function(files){
   if (is.character(files) == TRUE) {
     dfinput <- function(x){
-      outputdf <- fread(x, stringsAsFactors = FALSE,  check.names = FALSE) %>%
-                  data.frame(row.names = 1, check.names = FALSE) %>%
-                  as.matrix()
+      outputdf <- as.matrix(data.frame(fread(x, stringsAsFactors = FALSE,  check.names = FALSE), row.names = 1, check.names = FALSE))
       return(outputdf)
     }
     testData <- lapply(files, dfinput)
