@@ -354,13 +354,19 @@ summary.CrossICC <- function(result) {
 #' }
 
 #### new CrossICCInput function ####
-CrossICCInput <- function(files, sep = "\t"){
-  if(is.character(files) == TRUE){
-    dfinput <- function(x, sep = "\t"){
-      outputdf <- data.frame(fread(x, sep = sep, stringsAsFactors = FALSE, data.table = FALSE), row.names = 1)
+CrossICCInput <- function(files){
+  if (is.character(files) == TRUE) {
+    dfinput <- function(x){
+      outputdf <- fread(x, stringsAsFactors = FALSE,  check.names = FALSE) %>%
+                  data.frame(row.names = 1, check.names = FALSE) %>%
+                  as.matrix()
       return(outputdf)
     }
-    testData <- lapply(files, dfinput, sep = sep)
+    testData <- lapply(files, dfinput)
     return(testData)
-  }else{print("Please ensure the name of files you want to import is in a charachter")}
+  }
+  else {
+    print("Please ensure the name of files you want to import is in a charachter")
+  }
 }
+
