@@ -28,7 +28,7 @@ NULL
 #' 'spearman' (1 - Spearman correlation),
 #' 'euclidean', 'binary', 'maximum', 'canberra', 'minkowski" or custom distance function.
 #' @param cc.seed sets random seed for reproducible results.
-#' @param filter.cutoff cutoff value during mad filtering.
+#' @param filter.cutoff low variability (median absolute deviation (MAD)) cutoff threshold, default is 0.5.
 #' @param fdr.cutoff cutoff value during fdr filtering.
 #' @param cluster.cutoff cutoff value during determining cluster numbers.
 #' @param ebayes.cutoff p-value cutoff when select differentially expressed probes.
@@ -39,14 +39,15 @@ NULL
 #' @param cross cross analysis object. Could be "cluster" for clusters, "sample" for samples or "none" (used for single dataset).
 #' @param max.K the maximum cluster number of ConsensusClusterPlus.
 #' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is TRUE (it is highly recommended that user has their data pre-processed well).
-#' @param skip.mm skip call MergeMaid process or not. Default is FALSE (not skip).
+#' @param skip.mm skip MergeMaid processing or not. Default is FALSE (not skip).
 #' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
 #' @param heatmap.order gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.
 #' @param n.platform to filter the signature with it's super-cluster group in platforms.
 #' That is, if the parameter is set to 2 (default),
 #' the signature (like hgnc symbol ESR1) in a certain super-cluser (like K1) must exists more than 2 times among data of all platforms;
 #' otherwise, it will not be reported.
-#' @param skip.mfs to skip our internal filtering and normalization, etc. Default is FALSE. Only try when you're using a pre-processed data.
+#' @param skip.mfs by default, the datasets will be normalized at the start,
+#' and the genes or features that have no or few contributions to the final clusters will be filtered out. To skip this process, you can set this parameter to TRUE. Only try when you're sure that you're working with pre-processed datasets.
 #' @param com.mode mode for choose common features when pre-processing data. Could be "overlap" (use intersection, default) or "merge" (keep all features).
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
