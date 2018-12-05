@@ -361,7 +361,7 @@ CrossICCInput <- function(files){
                   as.matrix()
       return(outputdf)
     }
-    testData <- lapply(files, dfinput, sep = sep)
+    testData <- lapply(files, dfinput)
     return(testData)
   }
   else {
