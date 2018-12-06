@@ -4,7 +4,7 @@
 \alias{CrossICCInput}
 \title{Title Read file into CrossICC input}
 \usage{
-CrossICCInput(files, sep = "\\t")
+CrossICCInput(files)
 }
 \arguments{
 \item{files}{a list for filenames, usually a returned value of list.files() function}
