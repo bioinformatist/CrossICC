@@ -34,17 +34,17 @@ NULL
 #' @param ebayes.cutoff p-value cutoff when select differentially expressed probes.
 #' @param study.names a vector containing all study names
 #' @param ... all datasets (matrices is better)
-#' @param ebayes.mode 'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes.
+#' @param ebayes.mode 'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes when determining MDEGs.
 #' @param use.shiny if TRUE, a shiny app will appear after running this main function.
-#' @param cross cross analysis object. Could be "cluster" for clusters, "sample" for samples or "none" (used for single dataset).
+#' @param cross object type when determining meta-cluster. Could be "cluster" for clusters by ConsencusClusterPlus, "sample" for samples or "none" (only used for single dataset).
 #' @param max.K the maximum cluster number of ConsensusClusterPlus.
 #' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is TRUE (it is highly recommended that user has their data pre-processed well).
 #' @param skip.mm skip MergeMaid processing or not. Default is FALSE (not skip).
 #' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
-#' @param heatmap.order gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in super-clusters across all matrices. Or can be set to "concordant" for all in same order.
-#' @param n.platform to filter the signature with it's super-cluster group in platforms.
+#' @param heatmap.order gene order for heatmaps. Default is "up.based", with which genes will be arranged as up-regulated order in meta-clusters across all matrices. Or can be set to "concordant" for all in same order.
+#' @param n.platform to filter the signature with it's meta-cluster group in platforms.
 #' That is, if the parameter is set to 2 (default),
-#' the signature (like hgnc symbol ESR1) in a certain super-cluser (like K1) must exists more than 2 times among data of all platforms;
+#' the signature (like hgnc symbol ESR1) in a certain meta-cluser (like K1) must exists more than 2 times among data of all platforms;
 #' otherwise, it will not be reported.
 #' @param skip.mfs by default, the datasets will be normalized at the start,
 #' and the genes or features that have no or few contributions to the final clusters will be filtered out. To skip this process, you can set this parameter to TRUE. Only try when you're sure that you're working with pre-processed datasets.
