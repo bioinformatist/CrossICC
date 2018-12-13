@@ -54,12 +54,11 @@ Contact
 
 For implementation:  
 
-\* [Qi Zhao](https://github.com/likelet) <zhaoqi@sysucc.org.cn>, Sun Yat-sen University Cancer Center; 
+\* [Qi Zhao](https://github.com/likelet)  From Sun Yat-sen University Cancer Center; 
 
-\* [Yu Sun](http://icannotendure.space) <sun_yu@mail.nankai.edu.cn>, Nan kai University;  
+\* [Yu Sun](http://icannotendure.space)  Sun Yat-sen University;  
 
 For project design and new feature request:  
 
-\* [Qi Zhao](https://github.com/likelet) <zhaoqi@sysucc.org.cn>, Sun Yat-sen University Cancer Center; 
+\* [Qi Zhao](https://github.com/likelet) and [Zhixiang Zuo](https://scholar.google.com/citations?user=Ln_bw9AAAAAJ&hl=zh-CN) from  Sun Yat-sen University Cancer Center; 
 
-\* [Zhixiang Zuo]() <zuozhx@sysucc.org.cn>, Sun Yat-sen University Cancer Center;  
