@@ -1,4 +1,4 @@
-ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "both"){
+ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up"){
   class <- class[colnames(eSet.subset)]
   k <- length(unique(class))
   if (k == 1) {
