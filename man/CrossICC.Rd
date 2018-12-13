@@ -48,7 +48,7 @@ or a function that returns a clustering.}
 
 \item{distance}{Could be 'pearson': (1 - Pearson correlation),
 'spearman' (1 - Spearman correlation),
-'euclidean', 'binary', 'maximum', 'canberra', 'minkowski" or custom distance function.}
+'euclidean', 'canberra', 'minkowski" or custom distance function.}
 
 \item{sil.filter}{silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).}
 

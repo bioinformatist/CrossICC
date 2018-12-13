@@ -26,7 +26,7 @@ NULL
 #' or a function that returns a clustering.
 #' @param distance Could be 'pearson': (1 - Pearson correlation),
 #' 'spearman' (1 - Spearman correlation),
-#' 'euclidean', 'binary', 'maximum', 'canberra', 'minkowski" or custom distance function.
+#' 'euclidean', 'canberra', 'minkowski" or custom distance function.
 #' @param cc.seed sets random seed for reproducible results.
 #' @param filter.cutoff low variability (median absolute deviation (MAD)) cutoff threshold, default is 0.5.
 #' @param fdr.cutoff cutoff value during fdr filtering.
