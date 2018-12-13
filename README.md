@@ -52,9 +52,14 @@ normalize.Data=as.data.frame(tempdata.impute$data)
 Contact
 -------
 
-For implementation:
-\* [Qi Zhao](https://github.com/likelet) <zhaoqi@sysucc.org.cn>, Sun Yat-sen University Cancer Center;
-\* [Yu Sun](http://icannotendure.space) <sun_yu@mail.nankai.edu.cn>, Nan kai University;
-For project design and new feature request:
-\* [Qi Zhao](https://github.com/likelet) <zhaoqi@sysucc.org.cn>, Sun Yat-sen University Cancer Center;
-\* [Zhixiang Zuo]() <zuozhx@sysucc.org.cn>, Sun Yat-sen University Cancer Center;
+For implementation:  
+
+\* [Qi Zhao](https://github.com/likelet) <zhaoqi@sysucc.org.cn>, Sun Yat-sen University Cancer Center; 
+
+\* [Yu Sun](http://icannotendure.space) <sun_yu@mail.nankai.edu.cn>, Nan kai University;  
+
+For project design and new feature request:  
+
+\* [Qi Zhao](https://github.com/likelet) <zhaoqi@sysucc.org.cn>, Sun Yat-sen University Cancer Center; 
+
+\* [Zhixiang Zuo]() <zuozhx@sysucc.org.cn>, Sun Yat-sen University Cancer Center;  
