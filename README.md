@@ -56,15 +56,6 @@ tempdata.impute=impute.knn(as.matrix(tempdata) ,k = 10, rowmax = 0.5, colmax = 0
 normalize.Data=as.data.frame(tempdata.impute$data)
 ```
 
-## Contact
+## Contribution  
 
-For implementation:  
-
-* [Qi Zhao](https://github.com/likelet)  From Sun Yat-sen University Cancer Center; 
-
-* [Yu Sun](http://icannotendure.space)  Sun Yat-sen University;  
-
-For project design and new feature request:  
-
-* [Qi Zhao](https://github.com/likelet) and [Zhixiang Zuo](https://scholar.google.com/citations?user=Ln_bw9AAAAAJ&hl=zh-CN) from  Sun Yat-sen University Cancer Center; 
-
+   Qi Zhao [@likelet](https://github.com/likelet)  and Yu Sun [@bioinformatist](https://github.com/bioinformatist) implemented the packages. Zhixiang Zuo [@zhixiang](https://scholar.google.com/citations?user=Ln_bw9AAAAAJ&hl=zh-CN) supervise the project. Zekun Liu performed the test and helped run an example of the package. For more information or questions, plz contact either of the authors above. 
