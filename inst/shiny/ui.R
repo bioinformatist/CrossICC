@@ -81,7 +81,7 @@ bodyCrossICC <- tabItem("CrossICC",
                           #setting panel
                           box(
                             title = div(shiny::icon("gear"), "Data upload & Configuration", inline =T),
-                            width = 4,
+                            width = 3,
                             tabBox (
                               height = "100%", width = "100%",
                               id = "crossICCsettingPanel",
@@ -131,7 +131,7 @@ bodyCrossICC <- tabItem("CrossICC",
                             )
                           ),
                           box(
-                            width = 8,
+                            width = 9,
                             title = "Visualization",
                             tabBox (
                               height = "100%", width = "100%",
@@ -144,7 +144,7 @@ bodyCrossICC <- tabItem("CrossICC",
                                 dataTableOutput("OutputResultSignature"),
                                 box(
                                   width = NULL,  status = "success",
-                                  h4("Dowload Clustering result"),
+                                  h4("Download Clustering result"),
                                   downloadButton("OutputClusterResult"),
                                   h4("Gene signature for each cluster"),
                                   downloadButton("geneSignature", label = "Download Matrix")
@@ -158,7 +158,7 @@ bodyCrossICC <- tabItem("CrossICC",
                                 withSpinner(plotOutput("superclusterPlot", height = "100%"), color = "black"),
                                 box(
                                   width = NULL,  status = "success",
-                                  radioButtons("DownloadSuperclusterPlot_check","Choose file type to download:",
+                                  radioButtons("DownloadSuperclusterPlotCheck","Choose file type to download:",
                                     c("png", "pdf", "tiff"),inline = TRUE
                                   ),
                                   downloadButton('DownloadSuperclusterPlot', 'Download')
@@ -172,10 +172,10 @@ bodyCrossICC <- tabItem("CrossICC",
                                 ,
                                 box(
                                   width = NULL,  status = "success",
-                                  radioButtons("DownloadSilhouette_check","Choose file type to download:",
+                                  radioButtons("DownloadSilhouetteCheck","Choose file type to download:",
                                                      c("png", "pdf", "tiff"),inline = TRUE
                                   ),
-                                  downloadLink('DownloadSilhouette', 'Download')
+                                  downloadButton('DownloadSilhouette', 'Download Plot')
                                   )
 
                               ),
@@ -188,10 +188,10 @@ bodyCrossICC <- tabItem("CrossICC",
                                 withSpinner(plotOutput("clusterexpress",height = "100%"), color = "black"),
                                 box(
                                   width = NULL,  status = "success",
-                                  radioButtons("DownloadClusterexpressPlot_check","Choose file type to download:",
+                                  radioButtons("DownloadClusterexpressPlotCheck","Choose file type to download:",
                                                      c("png", "pdf", "tiff"),inline = TRUE
                                   ),
-                                  downloadLink('DownloadClusterexpressPlot', 'Download'),
+                                  downloadButton('DownloadClusterexpressPlot', 'Download Plot'),
                                   downloadButton('DownloadClusterExpressMatrix', 'Download Matrix')
                                 )
                               ),
@@ -201,7 +201,7 @@ bodyCrossICC <- tabItem("CrossICC",
                                 plotOutput("IterationPlot", height = "100%"),
                                 box(
                                   width = NULL,  status = "success",
-                                  radioButtons("DownloadIterationPlot_check","Choose file type to download:",
+                                  radioButtons("DownloadIterationPlotCheck","Choose file type to download:",
                                                      c("png", "pdf", "tiff"),inline = TRUE
                                   )
                                 # to be added
@@ -226,7 +226,7 @@ bodyPredict <- tabItem(
     box(
       title = "Input your data set for prediction",
       background = "black",
-      width = 4,
+      width = 3,
       radioButtons(
         "dataset2",
         strong("Data to predict"),
@@ -247,7 +247,7 @@ bodyPredict <- tabItem(
     tabBox (
       id = "PredictResultPanel",
       title = h3("Analysis"),
-      width = 8,
+      width =9,
       side = "right",
       selected = "pre02",
       tabPanel(
@@ -280,7 +280,7 @@ bodyCorrelation <- tabItem(
   ),
 
   fluidRow(
-    box( width = 4,
+    box( width = 3,
          title = "Analysis",
           tabBox (
             height = "100%", width = "100%",
@@ -321,7 +321,7 @@ bodyCorrelation <- tabItem(
           )
     ),
 
-    box( width = 8,
+    box( width =9,
          title = "Analysis",
          tabBox (
            height = "100%", width = "100%",
@@ -345,7 +345,7 @@ bodyCorrelation <- tabItem(
              withSpinner(plotOutput("getCorplotRender",height = "100%"), color = "black"),
              box(
                width = NULL,  status = "success",
-               radioButtons("DownloadCorrelationPlot_check","Choose file type to download:",
+               radioButtons("DownloadCorrelationPlotCheck","Choose file type to download:",
                             c("png", "pdf", "tiff"),inline = TRUE,selected = "pdf"
                ),
                downloadBttn('DownloadCorrelationPlot', 'Download')
@@ -371,7 +371,7 @@ bodySsGSEA <- tabItem("ssgsea",
                         #setting panel
                         box(
                           title = "Input dataset",
-                          width = 4,
+                          width = 3,
                           tabBox (id = "ssGseaSettingPanel",side = "left", selected = "ssgseaset01",
                                   height = "100%", width = "100%",
                             tabPanel(
@@ -423,7 +423,7 @@ bodySsGSEA <- tabItem("ssgsea",
                         ),
                         box(
                           title = "Analysis Result",
-                          width = 8,
+                          width =9,
                           tabBox (
                             height = "100%", width = "100%",
                             id = "ssGseaResultPanel", side = "left",selected = "ssgseaRes03",
@@ -454,7 +454,7 @@ bodySurival <- tabItem(
     #setting panel
     box(
       title = "Input dataset",
-      width = 4,
+      width = 3,
       tabBox (id = "SurvivalSettingPanel" , side = "left",selected = "ssgseaset01",
               height = "100%", width = "100%",
               tabPanel(
@@ -473,7 +473,7 @@ bodySurival <- tabItem(
     ),
     box(
       title = "Analysis Result",
-      width = 8,
+      width =9,
       tabBox (id = "survivalResultPanel",   side = "left", selected = "survivalRes03",
               height = "100%", width = "100%",
         tabPanel(

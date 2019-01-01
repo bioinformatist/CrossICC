@@ -2,38 +2,34 @@
 suppressMessages(library(cluster))
 suppressMessages(library(ggplot2))
 suppressMessages(library(ggsci))
+suppressMessages(library(tibble))
 #plot heat map from matrix and annotation information
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_row=FALSE,showRowname=FALSE){
-  plot.matrix<-df
-  samplename<-colnames(plot.matrix)
+  clustercolor <- list(Cluster = c(Cluster1 = "#E41A1C", Cluster2 = "#377EB8", Cluster3 = "#4DAF4A", Cluster4 = "#984EA3",
+                                   Cluster5 = "#FF7F00", Cluster6 = "#FFFF33", Cluster7 = "#A65628", Cluster8 = "#F781BF", Cluster9 = "#999999"))
 
-  annotation.list<-sample.cluster[samplename]
+  plot.matrix <- df
+  sample.cluster <- data.frame(Cluster = sample.cluster)
+  sample.cluster$Cluster <- paste("Cluster", sample.cluster$Cluster, sep = "")
 
-  annotation.list<-sort(annotation.list)
-  plot.matrix<-plot.matrix[,names(annotation.list)]
-  annotation.frame<-data.frame(cluster=as.factor(annotation.list))
-  rownames(annotation.frame)<-names(annotation.list)
-  #heatmap colors
-  colorlength <- 3
-  if(length(unique(annotation.frame[,1]))>3){
-    colorlength <- length(unique(annotation.frame[,1]))
-    color.list<-brewer.pal(colorlength, "Set2")
-  }else{
-    colorlength <- length(unique(annotation.frame[,1]))
-    color.list<-brewer.pal(3, "Set2")[1:colorlength]
-  }
+  sample.cluster <- tibble::rownames_to_column(sample.cluster, var = "sampleid") %>%
+    filter(sampleid %in% samplename) %>%
+    arrange(Cluster) %>%
+    data.frame(row.names = 1)
 
-  names(color.list)<-unique(annotation.frame[,1])
+  plot.matrix <- plot.matrix[, rownames(sample.cluster)]
   #plot heatmap
   xx<-pheatmap::pheatmap(plot.matrix[genes,],
                      scale = 'none',
+                     annotation_colors = clustercolor,
                      border_color = NA,
                      cluster_cols = FALSE,
                      cluster_rows = cluster_row,
-                     annotation_col = annotation.frame,
-                    show_rownames = showRowname,
+                     annotation_col = sample.cluster,
+                     show_rownames = showRowname,
                      show_colnames = FALSE,
                      colorRampPalette(c("blue", "white", "red"))(100))
+
   return(xx)
 
 }
@@ -42,15 +38,7 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_
 # sih are a sih function from crossICC object
 plot_sihouttle_with_crossICCout <- function(sih){
   # max.sliw<-which.max(max(sih[,3])) + 1
-  color.list<-c()
-  colorlength <- 3
-  if(length(unique(sih[,1]))>3){
-    colorlength <- length(unique(sih[,1]))
-    color.list<-brewer.pal(colorlength, "Set2")
-  }else{
-    colorlength <- length(unique(sih[,1]))
-    color.list<-brewer.pal(3, "Set2")[1:colorlength]
-  }
+  color.list<-c( "#E41A1C", "#377EB8",  "#4DAF4A", "#984EA3","#FF7F00", "#FFFF33", "#A65628",  "#F781BF",  "#999999")
 
   plot(sih,col=color.list,border=NA)
 }

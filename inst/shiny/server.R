@@ -12,6 +12,7 @@ suppressMessages(library(RColorBrewer))
 suppressMessages(library(reshape2))
 suppressMessages(library(ggsci))
 suppressMessages(library(ggthemes))
+suppressMessages(library(tibble))
 source("globalfunctions/plotFunctions.R")
 shinyServer(function(session,input, output) {
 
@@ -172,7 +173,6 @@ shinyServer(function(session,input, output) {
         index <- which(platform.names %in% platform())
         plot.matrix<-as.data.frame(crossICC.object$platforms[[index]])
         if(class(crossICC.object$clusters$clusters)=="list"){
-
           cluster.table<-crossICC.object$clusters$clusters[[index]]
         }else{
           cluster.table<-crossICC.object$clusters$clusters
@@ -217,42 +217,68 @@ shinyServer(function(session,input, output) {
       })
 
   #Download functions----
+      #plot
       output$DownloadSuperclusterPlot<-downloadHandler(
+
         filename = function() {
-          paste("SuperclusterPlot_", Sys.time(), '.pdf', sep='')
+          paste("SuperclusterPlot_", Sys.time(), '.',input$DownloadSuperclusterPlotCheck, sep='')
         },
         content = function(file) {
-          pdf(file)
+          pixelratio <- 2
+
+          if (input$DownloadSuperclusterPlotCheck == "png")
+            png(file, res=72*pixelratio, units = "px")
+          else if (input$DownloadSuperclusterPlotCheck == "pdf")
+            pdf(file)
+          else
+            tiff(file)
+
           crossICC.object<-InterationResult()
           plot_balanced_heatmap(crossICC.object$clusters$all.k)
           dev.off()
         },
-        contentType = 'image/pdf'
+        contentType = paste('image/',input$DownloadSuperclusterPlotCheck,sep="")
       )
       output$DownloadSilhouette<-downloadHandler(
         filename = function() {
-          paste("Silhouette_", Sys.time(), '.pdf', sep='')
+          paste("Silhouette_", Sys.time(),  '.',input$DownloadSilhouetteCheck, sep='')
         },
         content = function(file) {
-          pdf(file)
+          pixelratio <- 2
+
+          if (input$DownloadSilhouetteCheck == "png")
+            png(file, res=72*pixelratio, units = "px")
+          else if (input$DownloadSilhouetteCheck == "pdf")
+            pdf(file)
+          else
+            tiff(file)
           crossICC.object<-InterationResult()
           sih<-crossICC.object$clusters$silhouette
           plot_sihouttle_with_crossICCout(sih)
           dev.off()
         },
-        contentType = 'image/pdf'
+        contentType = paste('image/',input$DownloadSilhouetteCheck,sep="")
       )
       output$DownloadClusterexpressPlot<-downloadHandler(
         filename = function() {
-          paste("Clusterexpress_", Sys.time(), '.pdf', sep='')
+          paste("Clusterexpress_", Sys.time(), '.',input$DownloadClusterexpressPlotCheck, sep='')
         },
         content = function(file) {
-          pdf(file)
+          pixelratio <- 2
+          if (input$DownloadClusterexpressPlotCheck == "png")
+            png(file, res=72*pixelratio, units = "px")
+          else if (input$DownloadClusterexpressPlotCheck == "pdf")
+            pdf(file)
+          else
+            tiff(file)
+
           getClusterexpress()
           dev.off()
         },
-        contentType = 'image/pdf'
+
+        contentType = paste('image/',input$DownloadClusterexpressPlotCheck,sep="")
       )
+      #matrix
       output$DownloadClusterExpressMatrix<-downloadHandler(
         filename = function() {
           paste("Clusterexpress_", Sys.time(), '.csv', sep='')
@@ -265,6 +291,7 @@ shinyServer(function(session,input, output) {
         },
         contentType = 'text/csv'
       )
+      #matrix
       output$geneSignature<-downloadHandler(
         filename = function() {
           paste("GeneSignarure", Sys.time(), '.csv', sep='')
