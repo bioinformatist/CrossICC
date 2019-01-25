@@ -17,8 +17,20 @@ predictor <- function(pre.dat, model) {
   #validation.Data shoud be format features in rows and samples in columns
 
   crossICC.object.summary<-summary.CrossICC(crossICC.object)
+
+  # using interset gene list for prediction
+  predictFeaturelist<-row.names(pre.dat)
+  overlap.feature<-intersect(predictFeaturelist,crossICC.object$gene.signature)
+
+  differ.length<-length(crossICC.object$gene.signature)-length(overlap.feature)
+  if(differ.length>0 & differ.length < 5 ){
+    warning(paste("missing ",differ.length," features in your expression data set, continute predicting any way ",sep=""))
+  }else if (differ.length >= 5){
+
+    stop(paste("missing too many (",differ.length,") features in your expression data set, plz replace your predict data set",sep=""))
+  }
   # get centroid
-  centroid.list<-lapply(crossICC.object$platforms, cluster.centroid, gene.signature = crossICC.object$gene.signature,cluster = crossICC.object.summary$clusters)
+  centroid.list<-lapply(crossICC.object$platforms, cluster.centroid, gene.signature = overlap.feature,cluster = crossICC.object.summary$clusters)
 
   # get centroid of the centroid
 
