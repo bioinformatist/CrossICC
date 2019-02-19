@@ -9,6 +9,7 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_
                                    Cluster5 = "#FF7F00", Cluster6 = "#FFFF33", Cluster7 = "#A65628", Cluster8 = "#F781BF", Cluster9 = "#999999"))
 
   plot.matrix <- df
+  samplename <- colnames(plot.matrix)
   sample.cluster <- data.frame(Cluster = sample.cluster)
   sample.cluster$Cluster <- paste("Cluster", sample.cluster$Cluster, sep = "")
 
