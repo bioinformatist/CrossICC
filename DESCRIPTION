@@ -26,7 +26,9 @@ Imports: data.table,
     shinyWidgets,
     shinycssloaders,
     DT,
-    ggthemes
+    ggthemes,
+    dplyr,
+    tibble
 Depends: R (>= 2.10),
     MASS,
     Biobase
