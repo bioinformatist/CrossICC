@@ -2,18 +2,18 @@
 % Please edit documentation in R/predictor.R
 \name{centroidOfcentroid}
 \alias{centroidOfcentroid}
-\title{Title Return centroid of centroid from each plat form}
+\title{Title Return centroid of centroid from each platform}
 \usage{
 centroidOfcentroid(centroid.list, cluster)
 }
 \arguments{
 \item{centroid.list}{a list stored the centroid}
 
-\item{model}{a CrossICC Object}
+\item{cluster}{a named vector with gene names as name and the cluster number as vector value}
 }
 \value{
 a list contains a vecter that store the predict clusters and a normalized expression matrix
 }
 \description{
-Title Return centroid of centroid from each plat form
+Title Return centroid of centroid from each platform
 }

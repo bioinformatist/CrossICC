@@ -8,8 +8,6 @@ summary.CrossICC(result)
 }
 \arguments{
 \item{result}{list-type CrossICC's return value.}
-
-\item{iteration}{the result from which iteration time should be exhibited. Default is the last iteration.}
 }
 \value{
 list contains: a matrix of genesets mapping to genes; a named atomic vetor of samples mapping to super clusters.

@@ -17,8 +17,6 @@ ssGSEA(x, gene.signature, geneset2gene, color = c("purple", "#910202",
 \item{color}{to be deprecated.}
 
 \item{cluster}{only used when plot.file is provided. Single super cluster vector of list from CrossICC result list.}
-
-\item{plot.file}{to be deprecated.}
 }
 \value{
 a matrix with samples' eigenvalue in different super clusters.
