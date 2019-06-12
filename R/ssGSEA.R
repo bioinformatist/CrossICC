@@ -3,7 +3,6 @@
 #' @param x a eSet object or eSet-like matrix.
 #' @param cluster only used when plot.file is provided. Single super cluster vector of list from CrossICC result list.
 #' @param gene.signature gene signatures calculated by CrossICC.
-#' @param plot.file to be deprecated.
 #' @param color to be deprecated.
 #' @param geneset2gene a matrix contains geneset (cluster name) mapping to gene.
 #'

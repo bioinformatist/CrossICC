@@ -307,7 +307,6 @@ run.shiny<-function(){
 #' Title Summary the CrossICC-returned list to produce human-readable output
 #'
 #' @param result list-type CrossICC's return value.
-#' @param iteration the result from which iteration time should be exhibited. Default is the last iteration.
 #'
 #' @return list contains: a matrix of genesets mapping to genes; a named atomic vetor of samples mapping to super clusters.
 #' @export
