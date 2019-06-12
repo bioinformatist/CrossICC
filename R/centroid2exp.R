@@ -6,7 +6,7 @@
 #'
 #' @examples
 #' \donttest{
-#'crossICC.object <- CrossICC(example.matrices, max.iter = 5, use.shiny = FALSE, method = "balanced",fdr.cutoff = 0.5, ebayes.cutoff = 0.01)
+#'crossICC.object <- CrossICC(example.matrices, max.iter = 5, use.shiny = FALSE)
 #'train.centroid<-cluster.centroid(crossICC.object[[2]]$platforms[[1]],crossICC.object[[2]]$gene.signature,crossICC.object[[2]]$clusters$clusters)
 #'data(test.data)
 #'predict.result<-centroid2exp(train.centroid,test.data)
@@ -36,7 +36,7 @@ centroid2exp <- function(centroid,vd){
     maxk=which.max(c.cor)
     group=names(maxk)
     vcor=rbind(vcor,c(colnames(vd)[i],group,c.cor[maxk],pv[maxk]))
-    if(pv[maxk]<0.05){
+    if(c.cor[maxk]>0.1){
       vclass[colnames(vd)[i]]=group
     }else{
       vclass[colnames(vd)[i]]="Unclassified"

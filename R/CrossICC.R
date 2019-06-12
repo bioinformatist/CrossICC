@@ -60,7 +60,7 @@ NULL
 #' @examples
 #' \donttest{
 #' # It takes too long time for running code below, so ignore them in R CMD check.
-#' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster", fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
+#' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster")
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
@@ -343,7 +343,6 @@ summary.CrossICC <- function(result) {
 #' Title Read file into CrossICC input
 #'
 #' @param files a list for filenames, usually a returned value of list.files() function
-#' @param sep the field separator character. Values on each line of the file are separated by the sperator. (tablar the default for CrossICCInput).
 #' @return list contains matrixs from each platform parsing from file provided .
 #' @export
 #'
@@ -352,8 +351,6 @@ summary.CrossICC <- function(result) {
 #' files<-list.files(path="",pattern = ".csv")
 #' crossicc.input <- CrossICCInput(files, sep=",")
 #' }
-
-#### new CrossICCInput function ####
 CrossICCInput <- function(files){
   if (is.character(files) == TRUE) {
     dfinput <- function(x){
