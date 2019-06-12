@@ -13,6 +13,8 @@ export(rand.index)
 export(runShinyCrossICC)
 export(ssGSEA)
 export(summary.CrossICC)
+
+S3method(summary.CrossICC)
 import(Biobase)
 import(MASS)
 import(MergeMaid)
