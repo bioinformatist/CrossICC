@@ -39,7 +39,7 @@ centroid2exp <- function(centroid,vd){
     if(pv[maxk]<0.05){
       vclass[colnames(vd)[i]]=group
     }else{
-      vclass[colnames(vd)[i]]=NA
+      vclass[colnames(vd)[i]]="Unclassified"
     }
     # vclass[colnames(vd)[i]]=group
   }
