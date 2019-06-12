@@ -11,8 +11,8 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001,
   n.platform = 2, pItem = 0.8, pFeature = 1, clusterAlg = "hc",
   distance = "euclidean", sil.filter = "soft",
   heatmap.order = "up.based", com.mode = "overlap", cc.seed = 5000,
-  cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "both",
-  cross = "sample", skip.merge.dup = TRUE, skip.mm = FALSE,
+  cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "up",
+  cross = "cluster", skip.merge.dup = TRUE, skip.mm = FALSE,
   skip.mfs = FALSE, use.shiny = TRUE)
 }
 \arguments{
@@ -62,7 +62,7 @@ or a function that returns a clustering.}
 
 \item{ebayes.cutoff}{p-value cutoff when select differentially expressed probes.}
 
-\item{ebayes.mode}{'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes when determining MDEGs.}
+\item{ebayes.mode}{'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes when determining MDEGs. default is 'up'}
 
 \item{cross}{object type when determining meta-cluster. Could be "cluster" for clusters by ConsencusClusterPlus, "sample" for samples or "none" (only used for single dataset).}
 
@@ -91,7 +91,7 @@ The foo functions ...
 \examples{
 \donttest{
 # It takes too long time for running code below, so ignore them in R CMD check.
-CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster", fdr.cutoff = 0.1, ebayes.cutoff = 0.1, filter.cutoff = 0.1)
+CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster")
 }
 }
 \seealso{

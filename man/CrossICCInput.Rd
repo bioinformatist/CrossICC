@@ -8,8 +8,6 @@ CrossICCInput(files)
 }
 \arguments{
 \item{files}{a list for filenames, usually a returned value of list.files() function}
-
-\item{sep}{the field separator character. Values on each line of the file are separated by the sperator. (tablar the default for CrossICCInput).}
 }
 \value{
 list contains matrixs from each platform parsing from file provided .
