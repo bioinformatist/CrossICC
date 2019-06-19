@@ -300,7 +300,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
   # ebayes.result
 }
 
-run.shiny<-function(){
+run.shiny <- function(){
   shiny::runApp(system.file("shiny", package = "CrossICC"))
 }
 
@@ -314,9 +314,9 @@ run.shiny<-function(){
 #' @examples
 #' \donttest{
 #' CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
-#' summary.CrossICC(CrossICC.object)
+#' summaryCrossICC(CrossICC.object)
 #' }
-summary.CrossICC <- function(result) {
+summaryCrossICC <- function(result) {
 
   temp.object<-result$clusters[[1]]
   # Get final gene2cluster set

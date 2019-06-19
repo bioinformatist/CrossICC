@@ -84,14 +84,14 @@ shinyServer(function(session,input, output) {
       })
 
         summary.data<-eventReactive(input$submit,{
-          temp.summary <-  CrossICC::summary.CrossICC(inputdata())
+          temp.summary <-  CrossICC::summaryCrossICC(inputdata())
           return(temp.summary)
         })
 
   #Summary crossICC result----
       output$OutputResultSignature <- renderDataTable({
 
-        temp.summary <-  CrossICC::summary.CrossICC(InterationResult())
+        temp.summary <-  CrossICC::summaryCrossICC(InterationResult())
         df<-temp.summary$gene.signatures
         colnames(df)<-c("Cluster","Feature")
         df
@@ -101,7 +101,7 @@ shinyServer(function(session,input, output) {
           paste("Final_cluster_result", Sys.time(), '.csv', sep='')
         },
         content = function(file) {
-          temp.summary <-  CrossICC::summary.CrossICC(InterationResult())
+          temp.summary <-  CrossICC::summaryCrossICC(InterationResult())
 
           write.csv(temp.summary$clusters, file)
 
@@ -297,7 +297,7 @@ shinyServer(function(session,input, output) {
           paste("GeneSignarure", Sys.time(), '.csv', sep='')
         },
         content = function(file) {
-          temp.summary <-  CrossICC::summary.CrossICC(InterationResult())
+          temp.summary <-  CrossICC::summaryCrossICC(InterationResult())
           df<-temp.summary$gene.signatures
           colnames(df)<-c("Cluster","Feature")
           df

@@ -16,7 +16,7 @@ predictor <- function(pre.dat, model) {
   crossICC.object<-model
   #validation.Data shoud be format features in rows and samples in columns
 
-  crossICC.object.summary<-summary.CrossICC(crossICC.object)
+  crossICC.object.summary<-summaryCrossICC(crossICC.object)
 
   # using interset gene list for prediction
   predictFeaturelist<-row.names(pre.dat)
