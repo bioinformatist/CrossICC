@@ -7,7 +7,8 @@
 #' @examples
 #' \donttest{
 #'crossICC.object <- CrossICC(example.matrices, max.iter = 5, use.shiny = FALSE)
-#'train.centroid<-cluster.centroid(crossICC.object[[2]]$platforms[[1]],crossICC.object[[2]]$gene.signature,crossICC.object[[2]]$clusters$clusters)
+#'train.centroid <- cluster.centroid(crossICC.object[[2]]$platforms[[1]],
+#'crossICC.object[[2]]$gene.signature,crossICC.object[[2]]$clusters$clusters)
 #'data(test.data)
 #'predict.result<-centroid2exp(train.centroid,test.data)
 #' }

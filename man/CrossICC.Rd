@@ -91,7 +91,7 @@ The foo functions ...
 \examples{
 \donttest{
 # It takes too long time for running code below, so ignore them in R CMD check.
-CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, use.shiny = FALSE, cross = "cluster")
+CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, use.shiny = FALSE, cross = "cluster")
 }
 }
 \seealso{
