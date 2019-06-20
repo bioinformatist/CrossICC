@@ -53,7 +53,7 @@ CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100,
 
 CrossICC will automatically iterate your data until it reaches convergence. By default, CrossICC will generate an `.rds` formatted object in your home path (`~/`, a.k.a `$HOME` in Linux), followed by an shiny app as shown below that is opened in your default browser, which provides you a very intuitive way to view the results.
 
-![](imgs/readMe_home.jpg)
+![](inst/imgs/readMe_home.jpg)
 
 ## FAQ
 
