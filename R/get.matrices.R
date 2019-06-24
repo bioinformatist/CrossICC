@@ -1,3 +1,3 @@
 get.matrices <- function(..., fromGEO = TRUE) {
-  geo.list <- list(...)
+    geo.list <- list(...)
 }
