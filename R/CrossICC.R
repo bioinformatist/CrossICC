@@ -8,9 +8,11 @@
 #'
 #' @docType package
 #' @name CrossICC
-#' @import data.table MASS MergeMaid grDevices stats Biobase graphics
+#' @import data.table MASS MergeMaid grDevices stats Biobase
 #' @importFrom utils head
 #' @importFrom methods new
+#' @importFrom graphics abline legend lines mtext pairs par text
+#' @importFrom Biobase exprs
 NULL
 
 #' Title The Main Function of the package
