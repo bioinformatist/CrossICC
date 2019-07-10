@@ -1,3 +1,6 @@
+Changes in version 0.1.1 (2019-06-25)
+  * Update vignette and some man pages for functions
+
 Changes in version 0.1.0 (2019-06-25)
   * The first version of CrossICC
   * Submitted to Bioconductor
