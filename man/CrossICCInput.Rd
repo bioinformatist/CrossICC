@@ -18,6 +18,6 @@ Title Read file into CrossICC input
 \examples{
 \donttest{
 files<-list.files(path="",pattern = ".csv")
-crossicc.input <- CrossICCInput(files, sep=",")
+crossicc.input <- CrossICCInput(files)
 }
 }

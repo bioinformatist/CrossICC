@@ -350,7 +350,7 @@ summaryCrossICC <- function(result) {
 #' @examples
 #' \donttest{
 #' files<-list.files(path="",pattern = ".csv")
-#' crossicc.input <- CrossICCInput(files, sep=",")
+#' crossicc.input <- CrossICCInput(files)
 #' }
 CrossICCInput <- function(files){
   if (is.character(files) == TRUE) {
