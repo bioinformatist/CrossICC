@@ -3,6 +3,9 @@ suppressMessages(library(cluster))
 suppressMessages(library(ggplot2))
 suppressMessages(library(ggsci))
 suppressMessages(library(tibble))
+suppressMessages(library(ggalluvial))
+suppressMessages(library(dplyr))
+suppressMessages(library(limma))
 #plot heat map from matrix and annotation information
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_row=FALSE,showRowname=FALSE){
   clustercolor <- list(Cluster = c(Cluster1 = "#E41A1C", Cluster2 = "#377EB8", Cluster3 = "#4DAF4A", Cluster4 = "#984EA3",
@@ -114,6 +117,59 @@ plotStackBarplot<-function(df,int.vect1,int.vect2,input.theme){
     g=g+theme_hc()+ scale_colour_hc()
   }
   return(g)
+}
+
+
+
+Sankeyplot <- function(var1,var2,input.theme){
+
+
+  stastdata <- data.frame(table(paste(var1, var2, sep = "-")), stringsAsFactors = FALSE)
+  stastdata <- dplyr::mutate(stastdata,
+                             cluster1 = strsplit2(Var1, split = "-")[, 1],
+                             cluster2 = strsplit2(Var1, split = "-")[, 2])
+
+  g <- ggplot(data = stastdata,
+               aes(axis1 = cluster1, axis2 = cluster2,
+                   y = Freq)) +
+    scale_x_discrete(limits = colnames(inputdata)[2:3], expand = c(.1, .05)) +
+    geom_alluvium(aes(fill = cluster2)) + scale_fill_d3(palette = "category20c")+
+    geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE)
+
+  if(input.theme=="default"){
+    g=g+theme(legend.position = "none")+ plotDefaultTheme2
+  }else if(input.theme=="Tufte"){
+    g=g+geom_rangeframe() + theme_tufte()
+  }else if(input.theme=="Economist"){
+    g=g+ theme_economist()+ scale_colour_economist()
+  }else if(input.theme=="Solarized"){
+    g=g+ theme_solarized()+ scale_colour_solarized("blue")
+  }else if(input.theme=="Stata"){
+    g=g+ theme_stata() + scale_colour_stata()
+  }else if(input.theme=="Excel 2003"){
+    g=g+ theme_excel() + scale_colour_excel()
+  }else if(input.theme=="Inverse Gray"){
+    g=g+ theme_igray()
+  }else if(input.theme=="Fivethirtyeight"){
+    g=g+scale_color_fivethirtyeight()+ theme_fivethirtyeight()
+  }else if(input.theme=="Tableau"){
+    g=g+theme_igray()+ scale_colour_tableau()
+  }else if(input.theme=="Stephen"){
+    g=g+theme_few()+ scale_colour_few()
+  }else if(input.theme=="Wall Street"){
+    g=g+theme_wsj()+ scale_colour_wsj("colors6", "")
+  }else if(input.theme=="GDocs"){
+    g=g+theme_gdocs()+ scale_color_gdocs()
+  }else if(input.theme=="Calc"){
+    g=g+theme_calc()+ scale_color_calc()
+  }else if(input.theme=="Pander"){
+    g=g+theme_pander()+ scale_colour_pander()
+  }else if(input.theme=="Highcharts"){
+    g=g+theme_hc()+ scale_colour_hc()
+  }
+  return(g)
+
+  return(sk)
 }
 
 
