@@ -1,8 +1,7 @@
 m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform.mad = TRUE, skip.merge.dup = FALSE, skip.mm = FALSE, 
     com.mode = "overlap") {
     
-    set.seed(55222)
-    
+
     # Check if has NAs in matrices
     if (!all(sapply(platforms.list, function(x) !any(is.na(x))))) {
         stop("Your list has as least one matrix contains NA(s)!\n
