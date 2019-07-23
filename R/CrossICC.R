@@ -13,6 +13,7 @@
 #' @importFrom methods new
 #' @importFrom graphics abline legend lines mtext pairs par text
 #' @importFrom Biobase exprs
+#' @importFrom dplyr count
 NULL
 
 #' Title The Main Function of the package
