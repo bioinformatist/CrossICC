@@ -28,7 +28,7 @@ Imports: data.table,
     ggthemes,
     dplyr,
     tibble
-Depends: R (>= 3.6),
+Depends: R (>= 3.5),
     MASS,
     Biobase
 biocViews: Software, GeneExpression, DifferentialExpression, GUI, GeneSetEnrichment, Classification, Clustering
