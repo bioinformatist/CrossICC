@@ -3,7 +3,6 @@
 #' @param vec2 a string vector
 #' @param universe total number of all strings that vec1 and vec2 comes from
 #' @return  a P value
-#' @export
 get_overlap_test_by_fisher <- function(vec1, vec2, universe) {
     mat <- matrix(c(universe - length(union(vec1, vec2)), length(setdiff(vec1, vec2)), length(setdiff(vec1, vec2)), length(intersect(vec1,
         vec2))), nrow = 2)
@@ -19,7 +18,6 @@ get_overlap_test_by_fisher <- function(vec1, vec2, universe) {
 #' @param list2 a list that contains a lot vectors
 #' @param universe (Optional) total number of all strings that vec1 and vec2 comes from
 #' @return a data frame of Jaccard index or a list contains two dataframe (jaccard index and Fisher's test P value list )
-#' @export
 #'
 get_jarrad_index_df_fromlist <- function(list1, list2, universe = NULL) {
     # get individual jaccard index
@@ -61,7 +59,6 @@ get_jarrad_index_df_fromlist <- function(list1, list2, universe = NULL) {
 #' @param df2 an annotated data frame with cluster at the seccond column
 #' @param universe (Optional) total number of all strings that vec1 and vec2 comes from
 #' @return a data frame of Jaccard index or a list contains two dataframe (jaccard index and Fisher's test P value list )
-#' @export
 #'
 get_jarrad_index_df_fromDF <- function(df1, df2, universe = NULL) {
     if (class(df1) == "integer") {
@@ -88,7 +85,6 @@ get_jarrad_index_df_fromDF <- function(df1, df2, universe = NULL) {
 #' @param col1 name of interest variable 1 column in df
 #' @param col2 name of interest variable 2 column in df
 #' @return adjust ARI value
-#' @export
 rand.index <- function(df, col1, col2) {
     group1 <- as.numeric(as.factor(df[, col1]))
     group2 <- as.numeric(as.factor(df[, col2]))
@@ -104,16 +100,12 @@ rand.index <- function(df, col1, col2) {
 }
 
 
-
-
-
 # get adjust Rand index
 #' Title Adjust Rank Index
 #' @param df input data frame
 #' @param col1 name of interest variable 1 column in df
 #' @param col2 name of interest variable 2 column in df
 #' @return adjust ARI value
-#' @export
 #'
 Cal.ARI <- function(df, col1, col2) {
     x = df[, col1]
@@ -140,8 +132,6 @@ Cal.ARI <- function(df, col1, col2) {
     statCol = sum(cdsum(matrixColsum))
 
     ARI = (matrixSum - (statRow * statCol)/(cdsum(n)))/(((statRow + statCol)/2) - (statRow * statCol/cdsum(n)))
-
-
 
     return(ARI)
 }
