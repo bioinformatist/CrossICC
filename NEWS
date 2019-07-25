@@ -1,3 +1,9 @@
+Changes in version 0.99.1 (2019-07-25)
+  * Main function CrossICC will not use shiny app by default
+  * Add sankey plot
+  * Remove some default dependencies (only needed when use shiny)
+  * Fix some check error and warnings
+
 Changes in version 0.1.1 (2019-06-25)
   * Update vignette and some man pages for functions
 
