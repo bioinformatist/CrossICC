@@ -10,7 +10,7 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up") {
     colnames(design) <- paste("K", 1:k, sep = "")
     K <- colnames(design)
     fit <- limma::lmFit(eSet.subset, design)
-    
+
     x <- c()
     for (i in 1:(k - 1)) {
         for (j in (i + 1):k) {
@@ -20,7 +20,7 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up") {
     for (i in 1:k) {
         x <- c(x, paste(K[i], paste("(", paste(K[-i], collapse = "+"), ")", "/", k - 1, sep = ""), sep = "-"))
     }
-    
+
     contrast.matrix <- limma::makeContrasts(contrasts = x, levels = design)
     fit2 <- limma::contrasts.fit(fit, contrast.matrix)
     fit2 <- limma::eBayes(fit2)
@@ -36,16 +36,15 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up") {
     }
     ml <- r[-1]
     names(ml) <- K
-    
+
     # if (k <= 2 && mode == 'both') { warning('It's not allowed to perform ebayes with both mode when cluster type number is less than
     # 2.\nAlready set it to up mode.') mode = 'up' }
-    
+
     # Some element (actually as data.frame) of ml may has 0 columns and 0 rows, remove them here
     ml <- ml[sapply(ml, function(x) dim(x)[1]) > 0]
-    
-    geneset2gene <- switch(mode, up = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][, 1] >= 0))), 
-        rownames(ml[[x]])[which(ml[[x]][, 1] >= 0)]))), both = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])), 
+
+    geneset2gene <- switch(mode, up = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][, 1] >= 0))),
+        rownames(ml[[x]])[which(ml[[x]][, 1] >= 0)]))), both = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])),
         row.names(ml[[x]])))))
     list(full.m = r[[1]], geneset2gene = geneset2gene)
-    # r
 }
