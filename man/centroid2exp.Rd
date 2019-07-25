@@ -7,9 +7,9 @@
 centroid2exp(centroid, vd)
 }
 \arguments{
-\item{centroid}{a centroid calculated by crossICC}
+\item{centroid}{a centroid calculated by CrossICC}
 
-\item{vd}{a expression dataframe to predict clusters, with featurer in rows and samples in colomns,(no NA permitted )}
+\item{vd}{an expression data.frame to predict clusters, with features in rows and samples in colomns(no NA permitted)}
 }
 \description{
 Title To predict Samples cluter based on their centroid
