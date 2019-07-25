@@ -5,9 +5,9 @@
 #' @return  a P value
 #' @export
 get_overlap_test_by_fisher <- function(vec1, vec2, universe) {
-    mat <- matrix(c(universe - length(union(vec1, vec2)), length(setdiff(vec1, vec2)), length(setdiff(vec1, vec2)), length(intersect(vec1, 
+    mat <- matrix(c(universe - length(union(vec1, vec2)), length(setdiff(vec1, vec2)), length(setdiff(vec1, vec2)), length(intersect(vec1,
         vec2))), nrow = 2)
-    
+
     fr <- fisher.test(mat, alternative = "greater")
     return(fr$p.value)
 }
@@ -28,7 +28,7 @@ get_jarrad_index_df_fromlist <- function(list1, list2, universe = NULL) {
         S <- I/(length(vec1) + length(vec2) - I)
         return(S)
     }
-    
+
     # get individual jaccard index to a list
     get_J_list <- function(vec1, list.temp) {
         res.list <- unlist(lapply(list.temp, get_J, vec1 = vec1))
@@ -39,14 +39,14 @@ get_jarrad_index_df_fromlist <- function(list1, list2, universe = NULL) {
         P.list <- unlist(lapply(list.temp, get_overlap_test_by_fisher, vec1 = vec1, universe = universe))
         return(P.list)
     }
-    # get matrxi output
+    # get matrix output
     res.m.list <- lapply(list1, get_J_list, list.temp = list2)
-    S.df <- data.frame(matrix(unlist(res.m.list), nrow = length(list1), byrow = T), stringsAsFactors = FALSE)
+    S.df <- data.frame(matrix(unlist(res.m.list), nrow = length(list1), byrow = TRUE), stringsAsFactors = FALSE)
     colnames(S.df) <- names(list2)
     row.names(S.df) <- names(list1)
     if (!is.null(universe)) {
         P.m.list <- lapply(list1, get_P_list, list.temp = list2, universe = universe)
-        p.df <- data.frame(matrix(unlist(P.m.list), nrow = length(list1), byrow = T), stringsAsFactors = FALSE)
+        p.df <- data.frame(matrix(unlist(P.m.list), nrow = length(list1), byrow = TRUE), stringsAsFactors = FALSE)
         colnames(p.df) <- names(list2)
         row.names(p.df) <- names(list1)
         return(list(J.index = S.df, P.fisher = p.df))
@@ -78,7 +78,7 @@ get_jarrad_index_df_fromDF <- function(df1, df2, universe = NULL) {
     } else {
         return(get_jarrad_index_df_fromlist(list1, list2, universe))
     }
-    
+
 }
 
 # get Rand index
@@ -92,7 +92,7 @@ get_jarrad_index_df_fromDF <- function(df1, df2, universe = NULL) {
 rand.index <- function(df, col1, col2) {
     group1 <- as.numeric(as.factor(df[, col1]))
     group2 <- as.numeric(as.factor(df[, col2]))
-    
+
     x <- abs(sapply(group1, function(x) x - group1))
     x[x > 1] <- 1
     y <- abs(sapply(group2, function(x) x - group2))
@@ -118,30 +118,30 @@ rand.index <- function(df, col1, col2) {
 Cal.ARI <- function(df, col1, col2) {
     x = df[, col1]
     y = df[, col2]
-    
+
     if (length(x) != length(y)) {
         stop("two vectors have different lengths!\n")
     }
-    
+
     cdsum = function(x) {
         y = x * (x - 1)/2
         return(y)
     }
-    
+
     mkMatrix = table(x, y)
     mkMatrixSum = apply(mkMatrix, 1, cdsum)
     matrixSum = sum(mkMatrixSum)
-    
+
     matrixColsum = colSums(mkMatrix)
     matrixRowsum = rowSums(mkMatrix)
     n = length(x)
-    
+
     statRow = sum(cdsum(matrixRowsum))
     statCol = sum(cdsum(matrixColsum))
-    
+
     ARI = (matrixSum - (statRow * statCol)/(cdsum(n)))/(((statRow + statCol)/2) - (statRow * statCol/cdsum(n)))
-    
-    
-    
+
+
+
     return(ARI)
 }
