@@ -1,4 +1,7 @@
-Changes in version 0.99.2 (2019-07-26)
+Changes in version 0.99.4 (2019-07-26)
+  * Update some man pages
+
+Changes in version 0.99.3 (2019-07-26)
   * Update examples for most functions
   * Remove random seed of ConcensusClusterPlus function
 
