@@ -67,7 +67,7 @@ NULL
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
-                     cc.seed = 5000, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
+                     cc.seed = NULL, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
 
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
