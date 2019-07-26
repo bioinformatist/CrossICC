@@ -1,3 +1,7 @@
+Changes in version 0.99.2 (2019-07-26)
+  * Update examples for most functions
+  * Remove random seed of ConcensusClusterPlus function
+
 Changes in version 0.99.2 (2019-07-25)
   * Fix some mistakes in Rd files
 
