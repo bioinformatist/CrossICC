@@ -25,8 +25,6 @@ a matrix with samples' eigenvalue in different super clusters.
 Title To get GSEA-like ranked matrix from CrossICC result.
 }
 \examples{
-\donttest{
-CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
+CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 ssGSEA(demo.platforms[[1]], CrossICC.object$gene.signature, CrossICC.object$unioned.genesets)
-}
 }

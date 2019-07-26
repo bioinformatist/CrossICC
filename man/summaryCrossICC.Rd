@@ -16,8 +16,6 @@ list contains: a matrix of genesets mapping to genes; a named atomic vetor of sa
 Title Summary the CrossICC-returned list to produce human-readable output
 }
 \examples{
-\donttest{
-CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
+CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 summaryCrossICC(CrossICC.object)
-}
 }

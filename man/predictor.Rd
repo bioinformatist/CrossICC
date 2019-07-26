@@ -18,9 +18,6 @@ a list contains a vecter that store the predict clusters and a normalized expres
 Title To calculate the correlation between the predictor centroid and the validation centroid.
 }
 \examples{
-\donttest{
-CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
+CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 predictor(demo.platforms[[1]], CrossICC.object)
-}
-
 }

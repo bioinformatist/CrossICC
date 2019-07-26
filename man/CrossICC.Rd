@@ -13,7 +13,7 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001,
   heatmap.order = "up.based", com.mode = "overlap", cc.seed = NULL,
   cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "up",
   cross = "cluster", skip.merge.dup = TRUE, skip.mm = FALSE,
-  skip.mfs = FALSE, use.shiny = TRUE)
+  skip.mfs = FALSE, use.shiny = FALSE)
 }
 \arguments{
 \item{...}{all datasets (matrices is better)}
@@ -89,10 +89,7 @@ The foo functions ...
 }
 
 \examples{
-\donttest{
-# It takes too long time for running code below, so ignore them in R CMD check.
-CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 2)
-}
+CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 }
 \seealso{
 \code{\link[ConsensusClusterPlus]{ConsensusClusterPlus}}

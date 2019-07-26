@@ -16,8 +16,6 @@ list contains matrixs from each platform parsing from file provided .
 Title Read file into CrossICC input
 }
 \examples{
-\donttest{
 files <- list.files(path=".")
-crossicc.input <- CrossICCInput(files)
-}
+CrossICC.input <- CrossICCInput(files)
 }
