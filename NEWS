@@ -1,3 +1,6 @@
+Changes in version 0.99.7 (2019-07-26)
+  * Update man pages
+
 Changes in version 0.99.6 (2019-07-26)
   * Use all functions in reloaded MergeMaid code
   * To test all examples in exported function
