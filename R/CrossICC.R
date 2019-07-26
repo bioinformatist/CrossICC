@@ -63,7 +63,7 @@ NULL
 #' @examples
 #' \donttest{
 #' # It takes too long time for running code below, so ignore them in R CMD check.
-#' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, use.shiny = FALSE, cross = "cluster")
+#' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 2)
 #' }
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
@@ -289,21 +289,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
 
   if (use.shiny) {
     warning('Result list would not be returned when use.shiny = TRUE.')
-    run.shiny()
+    runShinyCrossICC()
   }
   result
-}
-
-run.shiny <- function(){
-  pkg.suggested <- c('rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
-  checkPackages <- function(pkg){
-    if (!requireNamespace(pkg, quietly = TRUE)) {
-      stop("Package pkg needed for shiny app. Please install it.",
-           call. = FALSE)
-    }
-  }
-  lapply(pkg.suggested, checkPackages)
-  shiny::runApp(system.file("shiny", package = "CrossICC"))
 }
 
 #' Title Summary the CrossICC-returned list to produce human-readable output
@@ -315,7 +303,7 @@ run.shiny <- function(){
 #'
 #' @examples
 #' \donttest{
-#' CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
+#' CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
 #' summaryCrossICC(CrossICC.object)
 #' }
 summaryCrossICC <- function(result) {
@@ -349,7 +337,7 @@ summaryCrossICC <- function(result) {
 #'
 #' @examples
 #' \donttest{
-#' files<-list.files(path="",pattern = ".csv")
+#' files <- list.files(path=".")
 #' crossicc.input <- CrossICCInput(files)
 #' }
 CrossICCInput <- function(files){
