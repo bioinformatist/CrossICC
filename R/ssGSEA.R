@@ -11,8 +11,8 @@
 #'
 #' @examples
 #' \donttest{
-#' CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
-#' ssGSEA(example.matrices$x, CrossICC.object$gene.signature, CrossICC.object$unioned.genesets)
+#' CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
+#' ssGSEA(demo.platforms[[1]], CrossICC.object$gene.signature, CrossICC.object$unioned.genesets)
 #' }
 ssGSEA <- function(x, gene.signature, geneset2gene, color = c("purple", "#910202", "#035005", "#1273d6", "#ff8207"), cluster) {
     # Our up-stream matrix is already with gene symbols, so provide fake 'genewprobe' for runFAIME. But still need geneset2gene: An
@@ -27,7 +27,7 @@ ssGSEA <- function(x, gene.signature, geneset2gene, color = c("purple", "#910202
     fs.scale <- replace(fs.scale, fs.scale < -2, -2)
     fs.scale <- replace(fs.scale, fs.scale > 2, 2)
     sn <- gene.signature
-    
+
     fs.scale <- fs.scale[, names(sort(cluster))]
     col.col <- c()
     cluster.member <- unique(sort(cluster))
@@ -35,6 +35,6 @@ ssGSEA <- function(x, gene.signature, geneset2gene, color = c("purple", "#910202
         cluster.names <- names(which(cluster == cluster.member[i]))
         col.col <- c(col.col, rep(color[i], length(cluster.names)))
     }
-    
+
     return(list(fs, fs.scale))
 }

@@ -3,6 +3,11 @@
 #' \code{runShinyCrossICC} run shiny independently
 #' @author Qi Zhao
 #' @export
+#'
+#' @example
+#' \donttest{
+#' runShinyCrossICC()
+#' }
 runShinyCrossICC <- function() {
   pkg.suggested <- c('rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
   checkPackages <- function(pkg){
