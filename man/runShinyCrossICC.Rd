@@ -9,6 +9,11 @@ runShinyCrossICC()
 \description{
 \code{runShinyCrossICC} run shiny independently
 }
+\examples{
+\donttest{
+runShinyCrossICC()
+}
+}
 \author{
 Qi Zhao
 }

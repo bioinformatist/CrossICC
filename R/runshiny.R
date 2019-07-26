@@ -4,7 +4,7 @@
 #' @author Qi Zhao
 #' @export
 #'
-#' @example
+#' @examples
 #' \donttest{
 #' runShinyCrossICC()
 #' }

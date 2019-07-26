@@ -26,7 +26,7 @@ Title To get GSEA-like ranked matrix from CrossICC result.
 }
 \examples{
 \donttest{
-CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
-ssGSEA(example.matrices$x, CrossICC.object$gene.signature, CrossICC.object$unioned.genesets)
+CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
+ssGSEA(demo.platforms[[1]], CrossICC.object$gene.signature, CrossICC.object$unioned.genesets)
 }
 }

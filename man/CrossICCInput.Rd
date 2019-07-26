@@ -17,7 +17,7 @@ Title Read file into CrossICC input
 }
 \examples{
 \donttest{
-files<-list.files(path="",pattern = ".csv")
+files <- list.files(path=".")
 crossicc.input <- CrossICCInput(files)
 }
 }

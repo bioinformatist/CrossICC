@@ -19,8 +19,8 @@ Title To calculate the correlation between the predictor centroid and the valida
 }
 \examples{
 \donttest{
-predictor(example.matrices$x, crossICC.object)
+CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
+predictor(demo.platforms[[1]], CrossICC.object)
 }
-
 
 }

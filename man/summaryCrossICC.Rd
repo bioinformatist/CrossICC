@@ -17,7 +17,7 @@ Title Summary the CrossICC-returned list to produce human-readable output
 }
 \examples{
 \donttest{
-CrossICC.object <- CrossICC(example.matrices, max.iter = 20)
+CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
 summaryCrossICC(CrossICC.object)
 }
 }
