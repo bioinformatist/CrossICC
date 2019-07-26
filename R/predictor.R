@@ -6,11 +6,8 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' CrossICC.object <- CrossICC(demo.platforms, max.iter = 2)
+#' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 #' predictor(demo.platforms[[1]], CrossICC.object)
-#' }
-#'
 predictor <- function(pre.dat, model) {
     predict.data <- pre.dat
     crossICC.object <- model
