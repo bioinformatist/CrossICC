@@ -69,6 +69,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
                      cc.seed = NULL, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = TRUE){
 
+
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
   dir.create(output.dir, showWarnings = FALSE)
@@ -116,7 +117,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
   # If study.names is not defined or seems not OK, use automatically generated ones instead
   if (missing(study.names) || !is.element(class(study.names), "character") || length(study.names) != length(platforms)) {
     message('No study names provided or something goes wrong with your study names. Will use auto-generated study names instead.')
-    study.names <- sapply(1:length(platforms), function(x) paste0('Matrix.', x))
+    study.names <- vapply(1:length(platforms), function(x) paste0('Matrix.', x), "Yu Fat is handsome")
     names(platforms) <- study.names
   } else {
     names(platforms) <- study.names
@@ -269,7 +270,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
 
   # Just report results of last iteration (To reduce the size of RDS used by shiny)
   result <- list(# consensus.cluster = cc,  # For test only
-    # all.sig = all.sig,  # For test only
     er = ebayes.result,  # For test only
     arg.list = arg.list,  # named vector object of arguments
     platforms = platforms,  # For heatmap in shiny
@@ -277,7 +277,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     filter.sig = filter.sig,
     iter.sig = iter.sig,
     gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
-    # gene.sig.all = gene.sig.all,  # For test only
     clusters = balanced.cluster,
     geneset2gene = geneset2gene,
     unioned.genesets = unioned.genesets
@@ -293,17 +292,18 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     warning('Result list would not be returned when use.shiny = TRUE.')
     run.shiny()
   }
-  # list(all.sig = all.sig, balanced.cluster = balanced.cluster)
   result
-  # all.sig
-  # cc
-  # list(all.sig, cc)
-  # platforms
-  # balanced.cluster
-  # ebayes.result
 }
 
 run.shiny <- function(){
+  pkg.suggested <- c('rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
+  checkPackages <- function(pkg){
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+      stop("Package pkg needed for shiny app. Please install it.",
+           call. = FALSE)
+    }
+  }
+  lapply(pkg.suggested, checkPackages)
   shiny::runApp(system.file("shiny", package = "CrossICC"))
 }
 

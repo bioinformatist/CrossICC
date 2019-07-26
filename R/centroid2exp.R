@@ -1,8 +1,7 @@
 #' Title To predict Samples cluter based on their centroid
 #'
-#' @param centroid a centroid calculated by crossICC
-#' @param vd a expression dataframe to predict clusters, with featurer in rows and samples in colomns,(no NA permitted )
-#' @export
+#' @param centroid a centroid calculated by CrossICC
+#' @param vd an expression data.frame to predict clusters, with features in rows and samples in colomns(no NA permitted)
 #'
 #' @examples
 #' \donttest{
@@ -13,7 +12,7 @@
 #'predict.result<-centroid2exp(train.centroid,test.data)
 #' }
 centroid2exp <- function(centroid, vd) {
-    
+
     # do nornmalization as the same as in training dat aset
     vd <- m.f.s(list(vd), fdr.cutoff = 1, filter.cutoff = 1, perform.mad = FALSE)[[2]][[1]]
     gene.sig = intersect(rownames(centroid), rownames(vd[complete.cases(vd), ]))
