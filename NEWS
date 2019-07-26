@@ -1,3 +1,7 @@
+Changes in version 0.99.6 (2019-07-26)
+  * Use all functions in reloaded MergeMaid code
+  * To test all examples in exported function
+
 Changes in version 0.99.5 (2019-07-26)
   * Turn off default shiny calling
 
