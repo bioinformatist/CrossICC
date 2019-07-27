@@ -17,5 +17,5 @@ Title Summary the CrossICC-returned list to produce human-readable output
 }
 \examples{
 CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
-summaryCrossICC(CrossICC.object)
+CrossICC.summary <- summaryCrossICC(CrossICC.object)
 }

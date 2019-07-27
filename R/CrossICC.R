@@ -141,9 +141,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
                       function(x) paste(x, iteration, sep = "."),
                       "Yu Fat is handsome")
 
-    pdf(NULL)
-    par(mar=c(1,1,1,1))
-    dev.control('enable') # enable display list
     cc <- vapply(names(platforms),
                  function(x) list(suppressMessages(ConsensusClusterPlus::ConsensusClusterPlus(platforms[[x]][gene.sig,],
                                                                                               maxK = max.K, reps=rep.runs, pItem=pItem,
@@ -152,7 +149,6 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
                                                                                               seed=cc.seed, plot = NULL))),
                  # ConsensusClusterPlus returns a list of 7 elements, but we need a nested list
                  list(rep(list('aString'), 7)))
-    dev.off()
 
     all.sig <- lapply(names(platforms), function(x) platforms[[x]][gene.sig,])
     names(all.sig) <- names(platforms)
@@ -301,7 +297,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
 #'
 #' @examples
 #' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
-#' summaryCrossICC(CrossICC.object)
+#' CrossICC.summary <- summaryCrossICC(CrossICC.object)
 summaryCrossICC <- function(result) {
 
   temp.object<-result$clusters[[1]]
