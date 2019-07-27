@@ -4,8 +4,7 @@
 \alias{ssGSEA}
 \title{Title To get GSEA-like ranked matrix from CrossICC result.}
 \usage{
-ssGSEA(x, gene.signature, geneset2gene, color = c("purple", "#910202",
-  "#035005", "#1273d6", "#ff8207"), cluster)
+ssGSEA(x, gene.signature, geneset2gene)
 }
 \arguments{
 \item{x}{a eSet object or eSet-like matrix.}
@@ -14,9 +13,9 @@ ssGSEA(x, gene.signature, geneset2gene, color = c("purple", "#910202",
 
 \item{geneset2gene}{a matrix contains geneset (cluster name) mapping to gene.}
 
-\item{color}{to be deprecated.}
-
 \item{cluster}{only used when plot.file is provided. Single super cluster vector of list from CrossICC result list.}
+
+\item{color}{to be deprecated.}
 }
 \value{
 a matrix with samples' eigenvalue in different super clusters.
@@ -25,6 +24,8 @@ a matrix with samples' eigenvalue in different super clusters.
 Title To get GSEA-like ranked matrix from CrossICC result.
 }
 \examples{
+\donttest{
 CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 ssGSEA(demo.platforms[[1]], CrossICC.object$gene.signature, CrossICC.object$unioned.genesets)
+}
 }
