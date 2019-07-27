@@ -332,7 +332,7 @@ summaryCrossICC <- function(result) {
 #' @export
 #'
 #' @examples
-#' files <- list.files(path=".")
+#' files <- list.files(path=".", pattern = '.csv')
 #' CrossICC.input <- CrossICCInput(files)
 CrossICCInput <- function(files){
   if (is.character(files) == TRUE) {
