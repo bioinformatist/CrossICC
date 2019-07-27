@@ -6,6 +6,7 @@ suppressMessages(library(tibble))
 suppressMessages(library(ggalluvial))
 suppressMessages(library(dplyr))
 suppressMessages(library(limma))
+suppressMessages(library(pheatmap))
 #plot heat map from matrix and annotation information
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_row=FALSE,showRowname=FALSE){
   clustercolor <- list(Cluster = c(Cluster1 = "#E41A1C", Cluster2 = "#377EB8", Cluster3 = "#4DAF4A", Cluster4 = "#984EA3",
@@ -23,7 +24,7 @@ plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_
 
   plot.matrix <- plot.matrix[, rownames(sample.cluster)]
   #plot heatmap
-  xx<-pheatmap::pheatmap(plot.matrix[genes,],
+  xx<-pheatmap(plot.matrix[genes,],
                      scale = 'none',
                      annotation_colors = clustercolor,
                      border_color = NA,
@@ -121,8 +122,10 @@ plotStackBarplot<-function(df,int.vect1,int.vect2,input.theme){
 
 
 
-Sankeyplot <- function(var1,var2,input.theme){
+Sankeyplot <- function(df,int.vect1,int.vect2,input.theme="default"){
 
+  var1=df[,int.vect1]
+  var2=df[,int.vect2]
 
   stastdata <- data.frame(table(paste(var1, var2, sep = "-")), stringsAsFactors = FALSE)
   stastdata <- dplyr::mutate(stastdata,
@@ -132,7 +135,7 @@ Sankeyplot <- function(var1,var2,input.theme){
   g <- ggplot(data = stastdata,
                aes(axis1 = cluster1, axis2 = cluster2,
                    y = Freq)) +
-    scale_x_discrete(limits = colnames(inputdata)[2:3], expand = c(.1, .05)) +
+    scale_x_discrete(limits = colnames(stastdata)[2:3], expand = c(.1, .05)) +
     geom_alluvium(aes(fill = cluster2)) + scale_fill_d3(palette = "category20c")+
     geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE)
 

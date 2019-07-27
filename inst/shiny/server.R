@@ -205,16 +205,6 @@ shinyServer(function(session,input, output) {
         outputArgs = list()
       )
 
-#GSEA analysis----
-      output$ssGSEAmatrix<-renderDataTable({
-        validate(
-          need(!is.null(InterationResult()), "Press submit button")
-        )
-
-        crossICC.object<-InterationResult()
-        ssGSEA.list<-ssGSEA(crossICC.object$platforms[[input$SelectPL]], crossICC.object$gene.signature, crossICC.object$unioned.genesets,cluster = crossICC.object$clusters$clusters)
-        ssGSEA.list[[1]]
-      })
 
   #Download functions----
       #plot
@@ -458,6 +448,15 @@ shinyServer(function(session,input, output) {
         g<-plotStackBarplot(df,int.vect1 = x,int.vect2 = y,input.theme = input$cor_theme)
         print(g)
       })
+      getSankyplot<-reactive({
+        df<-clinicalRelatedData()
+        df<-df[complete.cases(df),]
+        x<-input$corAnalysisSelect1
+        y<-input$corAnalysisSelect2
+        g<-Sankeyplot(df,int.vect1 = x,int.vect2 = y,input.theme = input$cor_theme)
+        print(g)
+      })
+      
       #correlation plot
      output$getCorplotRender<-renderPlot({
        getcorplot()
@@ -465,6 +464,13 @@ shinyServer(function(session,input, output) {
        width = corre_size,
        height = corre_size,
        outputArgs = list()
+     )
+     output$getSankyPlotRender<-renderPlot({
+       getSankyplot()
+     },
+     width = corre_size,
+     height = corre_size,
+     outputArgs = list()
      )
       #download plot
      output$DownloadCorrelationPlot<-downloadHandler(
@@ -487,9 +493,69 @@ shinyServer(function(session,input, output) {
                               png='image/pdf',
                               tiff='image/tiff')
      )
-
+     #download plot
+     output$DownloadSankeyPlot<-downloadHandler(
+       filename = function() {
+         paste("sankey_", Sys.time(), '.',input$DownloadCorrelationPlot_check, sep='')
+       },
+       content = function(file) {
+         switch (input$DownloadsankeyPlotCheck,
+                 pdf=pdf(file),
+                 png=png(file),
+                 tiff=tiff(file))
+         getSankyplot()
+         validate(
+           need(!is.null(plot.matrix), "No data input")
+         )
+         dev.off()
+       },
+       contentType =  switch (input$DownloadsankeyPlotCheck,
+                              pdf='image/pdf',
+                              png='image/pdf',
+                              tiff='image/tiff')
+     )
 
 # -------------------------------
+     
+     #GSEA analysis----
+     output$ssGSEAmatrix<-renderDataTable({
+       validate(
+         need(!is.null(InterationResult()), "Press submit button")
+       )
+       
+       crossICC.object<-InterationResult()
+       ssGSEA.list<-ssGSEA(crossICC.object$platforms[[input$SelectPL]], crossICC.object$gene.signature, crossICC.object$unioned.genesets,cluster = crossICC.object$clusters$clusters)
+       ssGSEA.list[[1]]
+     })
+     ssGSEAData<-  reactive({
+       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = T,row.names = 1)
+       inFile <- input$ssGSEAdatafile
+       clinical.df<-NULL
+       if (!is.null(inFile)){
+         clinical.df<-read.csv(inFile,header=T,check.names = F)
+       }
+       switch(input$data3,
+              "Default" = example,
+              "Upload" = clinical.df
+       )
+     })
+##### survival analysis
+     
+   SurvivalData<-  reactive({
+       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = T,row.names = 1)
+       inFile <- input$survivalFile
+       clinical.df<-NULL
+       if (!is.null(inFile)){
+         clinical.df<-read.csv(inFile,header=T,check.names = F)
+       }
+       switch(input$data3,
+              "Default" = example,
+              "Upload" = clinical.df
+       )
+     })
+#--------------------------------
 
+     
+     
 
 })
