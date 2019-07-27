@@ -302,7 +302,7 @@ bodyCorrelation <- tabItem(
                   'file3',
                   'Input dataset in matrix file',
                   accept =
-                    c('text/txt', '.rds')
+                    c('text/txt', '.csv')
                 )
               ),
               uiOutput("VariableSelectionUI1"),
@@ -353,8 +353,22 @@ bodyCorrelation <- tabItem(
              )
            ),
            tabPanel(
+             title = div(icon("book"), "SankeyPlot"),
+             value = "ca04",
+             withSpinner(plotOutput("getSankyPlotRender",height = "100%"), color = "black"),
+             box(
+               width = NULL,  status = "success",
+               radioButtons("DownloadsankeyPlotCheck","Choose file type to download:",
+                            c("png", "pdf", "tiff"),inline = TRUE,selected = "pdf"
+               ),
+               downloadBttn('DownloadSankeyPlot', 'Download')
+               # to be added
+             )
+           ),
+           tabPanel(
              title = div(icon("book"), "Read Me"),
-             value = "ca04"
+             value = "ca04",
+             includeMarkdown("dom/correlation.Rmd")
              # ,includeHTML("dom/correlation.html")
 
            )
@@ -440,7 +454,7 @@ bodySsGSEA <- tabItem("ssgsea",
                             tabPanel(
                               title = div(icon("book"), "Read Me"),
                               value = "ssgseaRes03"
-                              # ,includeMarkdown("dom/ssGSEA.html")
+                               ,includeMarkdown("dom/ssGSEA.Rmd")
                             )
                           )
                         )
@@ -459,7 +473,24 @@ bodySurival <- tabItem(
               height = "100%", width = "100%",
               tabPanel(
                 title = div(icon("book"), "Loading"),
-                value = "survivalset01"
+                value = "survivalset01",
+                radioGroupButtons(
+                  "data5",
+                  label = strong("Survival Dataset"),
+                  choices = c(Default = "Default", Upload = "Upload"),
+                  selected = 'Default',
+                  status = "primary"
+                ),
+                conditionalPanel(
+                  condition = "input.data5 == 'Upload'",
+                  fileInput(
+                    'survivalFile',
+                    'Input dataset in matrix file',
+                    accept =
+                      c('text/txt', '.csv')
+                  )
+                )
+                
 
               ),
               tabPanel(
@@ -487,7 +518,8 @@ bodySurival <- tabItem(
         ),
         tabPanel(
           title = div(icon("book"), "Read Me"),
-          value = "survivalRes03"
+          value = "survivalRes03",
+          includeMarkdown("dom/survival.Rmd")
           # , includeHTML("dom/survival.html")
         )
       )
