@@ -12,10 +12,6 @@ ssGSEA(x, gene.signature, geneset2gene)
 \item{gene.signature}{gene signatures calculated by CrossICC.}
 
 \item{geneset2gene}{a matrix contains geneset (cluster name) mapping to gene.}
-
-\item{cluster}{only used when plot.file is provided. Single super cluster vector of list from CrossICC result list.}
-
-\item{color}{to be deprecated.}
 }
 \value{
 a matrix with samples' eigenvalue in different super clusters.
