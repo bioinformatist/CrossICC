@@ -80,7 +80,7 @@ To run CrossICC:
 library(CrossICC)
 data(demo.platforms)
 # Turn on use.shiny parameter if you want to call shiny once the CrossICC finished
-CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, use.shiny = FALSE)
+CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, use.shiny = FALSE)
 ```
 
 CrossICC will generate an `.rds` formatted object in your home path (`~/`, a.k.a `$HOME` in Linux), which records key features (genes), iteration times and other information during analysis in a compressed file format. You can call shiny app with this file later.
