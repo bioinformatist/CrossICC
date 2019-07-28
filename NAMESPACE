@@ -3,7 +3,6 @@
 export(CrossICC)
 export(CrossICCInput)
 export(predictor)
-export(runShinyCrossICC)
 export(ssGSEA)
 export(summaryCrossICC)
 import(Biobase)
