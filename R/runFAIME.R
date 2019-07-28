@@ -66,7 +66,7 @@ Symbol!")
     colnames(res) <- colnames(dat)
     geneIDs <- rownames(dat)
     for (i in 1:length(seeds)) {
-        genemembers <- geneset2gene[which(geneset2gene[, 1] == seeds[i]), 2]
+        genemembers <- geneset2gene[which(geneset2gene[, 1] %in% seeds[i]), 2]
         # Expression-Anchored Pathway Profiles of Individual Samples Predicts Survival, Yang X et al.
         targetP <- unlist(allSym[which(allSym %in% genemembers)])
         for (j in 1:ncol(dat)) {

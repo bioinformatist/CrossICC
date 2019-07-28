@@ -518,27 +518,67 @@ shinyServer(function(session,input, output) {
 # -------------------------------
 
      #GSEA analysis----
-     output$ssGSEAmatrix<-renderDataTable({
-       validate(
-         need(!is.null(InterationResult()), "Press submit button")
-       )
-
-       crossICC.object<-InterationResult()
-       ssGSEA.list<-ssGSEA(crossICC.object$platforms[[input$SelectPL]], crossICC.object$gene.signature, crossICC.object$unioned.genesets,cluster = crossICC.object$clusters$clusters)
+     get_ssGSEAmatrix<- reactive({
+       
+        if(is.null(ssGSEAData())){
+          data<-demo.platforms[[1]]
+        }else{
+          data =ssGSEAData()
+        }
+       
+       if(is.null(GSEAhellmarksData())){
+         crossICC.object<-InterationResult()
+         data<-crossICC.object$platforms[[1]]
+         geneset2geneN<-crossICC.object$unioned.genesets
+         clusterN<- paste("K",crossICC.object$clusters$clusters[[1]],sep="")
+         
+         
+         
+         
+       }else{
+         GSset = GSEAhellmarksData()
+         genes<-unique(GSset[,2])
+         geneset2geneN<-GSset[,c(2,1)]
+         
+         clusterN<-GSset[,1]
+         
+       }
+       
+       
+       ssGSEA.list<-ssGSEA(data,genes,geneset2geneN,clusterN)
+       
        ssGSEA.list[[1]]
      })
      ssGSEAData<-  reactive({
-       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = TRUE,row.names = 1)
        inFile <- input$ssGSEAdatafile
        clinical.df<-NULL
        if (!is.null(inFile)){
          clinical.df<-read.csv(inFile,header=TRUE,check.names = FALSE)
        }
-       switch(input$data3,
-              "Default" = example,
+       switch(input$ssGSEAdata,
+              "Example" = NULL,
               "Upload" = clinical.df
        )
      })
+     GSEAhellmarksData<-  reactive({
+       # example<-  read.csv(file = path.expand('data/KEGG.csv'),header = TRUE,row.names = 1)
+       inFile <- input$ssGSEAdatafile
+       clinical.df<-NULL
+       if (!is.null(inFile)){
+         clinical.df<-read.csv(inFile,header=TRUE,check.names = FALSE)
+       }
+       switch(input$ssGSEASet,
+              # "KEGG" = example,
+              "Default" = NULL,
+              "Upload" = clinical.df
+       )
+     })
+     
+     output$ssGSEAmatrix <- renderDataTable({
+       
+       get_ssGSEAmatrix()
+     })
+     
 ##### survival analysis
 
    SurvivalData<-  reactive({

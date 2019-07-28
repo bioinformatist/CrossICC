@@ -412,8 +412,8 @@ bodySsGSEA <- tabItem("ssgsea",
                               radioGroupButtons(
                                 "ssGSEASet",
                                 label = strong("GENE SET"),
-                                choices = c(KEGG = "KEGG",Hallmarks= "Hallmarks",Upload = "Upload"),
-                                selected = 'KEGG',
+                                choices = c(KEGG = "KEGG",Default= "Default",Upload = "Upload"),
+                                selected = 'Default',
                                 status = "primary"
                               ),
                               conditionalPanel(
@@ -444,7 +444,8 @@ bodySsGSEA <- tabItem("ssgsea",
                             id = "ssGseaResultPanel", side = "left",selected = "ssgseaRes03",
                             tabPanel(
                               title = div(icon("book"), "Out Table"),
-                              value = "ssgseaRes01"
+                              value = "ssgseaRes01",
+                              dataTableOutput("ssGSEAmatrix")
 
                             ),
                             tabPanel(

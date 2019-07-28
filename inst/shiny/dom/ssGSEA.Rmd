@@ -6,6 +6,7 @@ To use this module you can upload a correctly formatted .csv or text file. A man
 
 #### Gene set input file (Optional)
 For gene set file, CrossICC provide two example genesets of KEGG and HALLMARKS pathways from (GSEA) MSigDB(http://software.broadinstitute.org/gsea/msigdb/index.jsp) . For user defined geneset, you just need format the gene set into the following content(tab delimitted).
+When you are going to perform ssGSEA analysis on CrossICC result, you can leave the Gene set input file `default`
 * Here is a sample format for gene set file:  
 
 | pathways| gene name | Source |
