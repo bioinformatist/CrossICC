@@ -10,7 +10,7 @@
 #' @name CrossICC
 #' @import data.table MASS MergeMaid grDevices stats Biobase
 #' @importFrom utils head
-#' @importFrom methods new
+#' @importFrom methods new is
 #' @importFrom graphics abline legend lines mtext pairs par text
 #' @importFrom Biobase exprs
 #' @importFrom dplyr count

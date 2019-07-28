@@ -1,3 +1,7 @@
+Changes in version 0.99.15 (2019-07-28)
+  * CrossICC now need R version >= 3.6
+  * Fix NAMESPACE bug
+
 Changes in version 0.99.14 (2019-07-28)
   * Update vignette and man pages
 
