@@ -14,7 +14,7 @@ cluster.centroid <- function(x, gene.signature, cluster) {
     centroids <- c()
     for (i in unique(cluster)) {
         sub.mat <- x.scale[gene.signature, names(which(cluster == i))]
-        if (class(sub.mat) == "numeric") {
+        if (is(sub.mat, "numeric")) {
             centroids <- cbind(centroids, sub.mat)
         } else {
             centroids <- cbind(centroids, apply(sub.mat, 1, median, na.rm = FALSE))

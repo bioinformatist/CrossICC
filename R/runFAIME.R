@@ -18,11 +18,11 @@
 FAIME <- function(sampleExp, genemembers, na.last = TRUE, weightRank, logCheck = FALSE) {
     # check if it log transformed, if not, log transformed # by this transformation, negative value will be scaled to NA #
     if (logCheck) {
-        if (max(sampleExp) > 20) 
+        if (max(sampleExp) > 20)
             sampleExp <- log2(SampleExp)
     }
-    
-    if (any(is.na(names(sampleExp)))) 
+
+    if (any(is.na(names(sampleExp))))
         stop("Please input sampleExp with probe IDs")
     allGenes <- names(sampleExp)
     N <- length(allGenes)
@@ -39,7 +39,7 @@ FAIME <- function(sampleExp, genemembers, na.last = TRUE, weightRank, logCheck =
             rankscore <- rankedExp
         }
     }
-    
+
     # Step 2: Calculate F-score for each individual gene-set per a sample using mRNA expression of their gene members and that of its
     # none-members #
     ST <- sum(rankscore[genemembers])/length(genemembers)
@@ -54,9 +54,9 @@ FAIME <- function(sampleExp, genemembers, na.last = TRUE, weightRank, logCheck =
 # TRUE.  if weithRank='mild' the exp( (rank-N)/N) was applied which controls the weights between 0 and 1 output: res: A matrix of
 # transformed microRNA profiling, the score calculated by FAIME
 runFAIME <- function(dat, genewprobe, geneset2gene, na.last = TRUE, weightRank = TRUE) {
-    if (class(dat) == "ExpressionSet") 
+    if (is(dat, "ExpressionSet"))
         dat <- exprs(dat)
-    if (is.null(names(genewprobe))) 
+    if (is.null(names(genewprobe)))
         stop("Please input the zz as a named vector for gene
 Symbol!")
     allSym <- genewprobe[rownames(dat)]

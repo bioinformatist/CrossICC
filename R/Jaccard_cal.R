@@ -61,10 +61,10 @@ get_jarrad_index_df_fromlist <- function(list1, list2, universe = NULL) {
 #' @return a data frame of Jaccard index or a list contains two dataframe (jaccard index and Fisher's test P value list )
 #'
 get_jarrad_index_df_fromDF <- function(df1, df2, universe = NULL) {
-    if (class(df1) == "integer") {
+    if (is(df1, "integer")) {
         df1 <- data.frame(names(df1), df1)
     }
-    if (class(df2) == "integer") {
+    if (is(df2, "integer")) {
         df2 <- data.frame(names(df2), df2)
     }
     # get individual jaccard index

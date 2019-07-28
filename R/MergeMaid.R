@@ -87,7 +87,7 @@ mergeExprs <- function(...) {
 
     # When there's only one list passed to ..., it should be flattened as matrices, such as: arg[[1]] is flattened list with certain
     # sub-lists
-    if ((is.element(class(arg), "list")) & (length(arg) == 1)) {
+    if ((is(arg, "list")) & (length(arg) == 1)) {
         for (j in 1:length(arg[[1]])) {
             k <- k + 1
             x[[k]] <- mergeget(arg[[1]][[j]])

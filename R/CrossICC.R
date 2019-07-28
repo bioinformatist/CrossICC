@@ -16,7 +16,7 @@
 #' @importFrom dplyr count
 NULL
 
-#' Title The Main Function of the package
+#' The Main Function of the package
 #'
 #' @param output.dir the results' output directory.
 #' @param max.iter the maximum number of iterations.
@@ -90,7 +90,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
   # Already can auto-skip this filtering when there's only one sample.
   # if ((length(arg) == 1) & (is.element(class(arg[[1]]),"matrix"))) {
   #   stop("Number of studies should not less than 2.")
-  if ((length(arg) == 1) & (is.element(class(arg[[1]]), "list"))) {
+  if ((length(arg) == 1) & (is(arg[[1]], "list"))) {
     platforms.list <- unlist(arg, recursive = FALSE)
     if (length(platforms.list) == 1) {
       message('Only one matrix detected. MergeMaid will not work. Will skip cross analysis.')
@@ -113,7 +113,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
   }
 
   # If study.names is not defined or seems not OK, use automatically generated ones instead
-  if (missing(study.names) || !is.element(class(study.names), "character") || length(study.names) != length(platforms)) {
+  if (missing(study.names) || !is(study.names, "character") || length(study.names) != length(platforms)) {
     message('No study names provided or something goes wrong with your study names. Will use auto-generated study names instead.')
     study.names <- vapply(1:length(platforms), function(x) paste0('Matrix.', x), "Yu Fat is handsome")
     names(platforms) <- study.names
@@ -316,7 +316,7 @@ summaryCrossICC <- function(result) {
   colnames(union.geneset)=c("Cluster","Genes")
   final.geneset<-union.geneset
   # Get final clusterSample result
-  if(class(temp.object)=='list'){
+  if(is(temp.object, 'list')){
     names(temp.object)=c()
     final.cluster<-do.call(c,temp.object)
   }else{

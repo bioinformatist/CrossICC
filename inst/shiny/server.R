@@ -172,7 +172,7 @@ shinyServer(function(session,input, output) {
         platform.names <- names(crossICC.object$platforms)
         index <- which(platform.names %in% platform())
         plot.matrix<-as.data.frame(crossICC.object$platforms[[index]])
-        if(class(crossICC.object$clusters$clusters)=="list"){
+        if(is(crossICC.object$clusters$clusters, "list")){
           cluster.table<-crossICC.object$clusters$clusters[[index]]
         }else{
           cluster.table<-crossICC.object$clusters$clusters
