@@ -1,3 +1,8 @@
+Changes in version 0.99.12 (2019-07-28)
+  * Fix ssGSEA() bug
+  * Remove external shiny calling function
+  * CrossICC() can reset working directory to previous one now
+
 Changes in version 0.99.11 (2019-07-28)
   * Add sankey plot to shiny app
   * Optimize the main function
