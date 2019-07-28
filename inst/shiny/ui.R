@@ -80,7 +80,7 @@ bodyCrossICC <- tabItem("CrossICC",
                         fluidRow(
                           #setting panel
                           box(
-                            title = div(shiny::icon("gear"), "Data upload & Configuration", inline =T),
+                            title = div(shiny::icon("gear"), "Data upload & Configuration", inline =TRUE),
                             width = 3,
                             tabBox (
                               height = "100%", width = "100%",
@@ -490,7 +490,7 @@ bodySurival <- tabItem(
                       c('text/txt', '.csv')
                   )
                 )
-                
+
 
               ),
               tabPanel(

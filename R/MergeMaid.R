@@ -792,7 +792,7 @@ isna <- function(x) return(is.na(x))
 
         if (is.null(plotype) || plotype == 2) {
             if (is.null(plotype))
-                par(ask = T)
+                par(ask = TRUE)
             k <- m <- 1
             par(mfrow = c(nn, nn), oma = c(0, 0, 8, 0))
 

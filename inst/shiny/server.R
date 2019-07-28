@@ -302,7 +302,7 @@ shinyServer(function(session,input, output) {
         inFile <- input$file2
         data<-NULL
         if (!is.null(inFile)){
-          data<-read.csv(inFile$datapath,header=T,row.names=1,check.names = F)
+          data<-read.csv(inFile$datapath,header=TRUE,row.names=1,check.names = FALSE)
         }
         data
       })
@@ -358,11 +358,11 @@ shinyServer(function(session,input, output) {
 # Correlation analysis -----------
 
       clinicalRelatedData<-  reactive({
-        example<-  read.csv(file = path.expand('data/TCGA.COAD.csv'),header = T,row.names = 1)
+        example<-  read.csv(file = path.expand('data/TCGA.COAD.csv'),header = TRUE, row.names = 1)
         inFile <- input$file3
         clinical.df<-NULL
         if (!is.null(inFile)){
-          clinical.df<-read.csv(inFile,header=T,check.names = F)
+          clinical.df<-read.csv(inFile,header=TRUE,check.names = FALSE)
         }
         switch(input$data3,
                "Default" = example,
@@ -456,7 +456,7 @@ shinyServer(function(session,input, output) {
         g<-Sankeyplot(df,int.vect1 = x,int.vect2 = y,input.theme = input$cor_theme)
         print(g)
       })
-      
+
       #correlation plot
      output$getCorplotRender<-renderPlot({
        getcorplot()
@@ -516,23 +516,23 @@ shinyServer(function(session,input, output) {
      )
 
 # -------------------------------
-     
+
      #GSEA analysis----
      output$ssGSEAmatrix<-renderDataTable({
        validate(
          need(!is.null(InterationResult()), "Press submit button")
        )
-       
+
        crossICC.object<-InterationResult()
        ssGSEA.list<-ssGSEA(crossICC.object$platforms[[input$SelectPL]], crossICC.object$gene.signature, crossICC.object$unioned.genesets,cluster = crossICC.object$clusters$clusters)
        ssGSEA.list[[1]]
      })
      ssGSEAData<-  reactive({
-       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = T,row.names = 1)
+       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = TRUE,row.names = 1)
        inFile <- input$ssGSEAdatafile
        clinical.df<-NULL
        if (!is.null(inFile)){
-         clinical.df<-read.csv(inFile,header=T,check.names = F)
+         clinical.df<-read.csv(inFile,header=TRUE,check.names = FALSE)
        }
        switch(input$data3,
               "Default" = example,
@@ -540,13 +540,13 @@ shinyServer(function(session,input, output) {
        )
      })
 ##### survival analysis
-     
+
    SurvivalData<-  reactive({
-       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = T,row.names = 1)
+       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = TRUE,row.names = 1)
        inFile <- input$survivalFile
        clinical.df<-NULL
        if (!is.null(inFile)){
-         clinical.df<-read.csv(inFile,header=T,check.names = F)
+         clinical.df<-read.csv(inFile,header=TRUE,check.names = FALSE)
        }
        switch(input$data3,
               "Default" = example,
@@ -555,7 +555,7 @@ shinyServer(function(session,input, output) {
      })
 #--------------------------------
 
-     
-     
+
+
 
 })
