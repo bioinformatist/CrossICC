@@ -7,6 +7,7 @@ suppressMessages(library(ggalluvial))
 suppressMessages(library(dplyr))
 suppressMessages(library(limma))
 suppressMessages(library(pheatmap))
+# suppressMessages(library(survminer))
 #plot heat map from matrix and annotation information
 plot_expression_heatmap_with_cluster<-function(df,sample.cluster, genes,cluster_row=FALSE,showRowname=FALSE){
   clustercolor <- list(Cluster = c(Cluster1 = "#E41A1C", Cluster2 = "#377EB8", Cluster3 = "#4DAF4A", Cluster4 = "#984EA3",
@@ -173,6 +174,20 @@ Sankeyplot <- function(df,int.vect1,int.vect2,input.theme="default"){
   return(g)
 
   return(sk)
+}
+
+
+plotSurvival<-function(df,int.var,Time,Status){
+  
+  plot.df<-df[,which(colnames(df) %in% c(int.var,Time,Status))]
+  
+  names(plot.df)<-c("feature","time","status")
+  
+  fit<-survival::survfit( survival::Surv(time, status) ~ feature,
+           data = plot.df )
+  
+  ggsurvplot(fit, data = plot.df, pval = TRUE)
+  
 }
 
 

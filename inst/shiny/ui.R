@@ -260,7 +260,8 @@ bodyPredict <- tabItem(
       ),
       tabPanel(
         title = div(icon("book"), "Readme"),
-        value = "pre02"
+        value = "pre02",
+        includeMarkdown("dom/predict.Rmd")
       )
     )
   )
@@ -442,7 +443,7 @@ bodySsGSEA <- tabItem("ssgsea",
                             height = "100%", width = "100%",
                             id = "ssGseaResultPanel", side = "left",selected = "ssgseaRes03",
                             tabPanel(
-                              title = div(icon("book"), "PredictResult"),
+                              title = div(icon("book"), "Out Table"),
                               value = "ssgseaRes01"
 
                             ),
@@ -469,7 +470,7 @@ bodySurival <- tabItem(
     box(
       title = "Input dataset",
       width = 3,
-      tabBox (id = "SurvivalSettingPanel" , side = "left",selected = "ssgseaset01",
+      tabBox (id = "SurvivalSettingPanel" , side = "left",selected = "survivalset01",
               height = "100%", width = "100%",
               tabPanel(
                 title = div(icon("book"), "Loading"),
@@ -489,7 +490,12 @@ bodySurival <- tabItem(
                     accept =
                       c('text/txt', '.csv')
                   )
-                )
+                ),
+                
+                uiOutput("survivalFeatureSelect1"),
+                uiOutput("survivalTimeSelect1"),
+                uiOutput("survivalStatusSelect1"),
+                actionBttn("submit5", "Submit", style = "unite")
 
 
               ),
@@ -507,21 +513,34 @@ bodySurival <- tabItem(
       width =9,
       tabBox (id = "survivalResultPanel",   side = "left", selected = "survivalRes03",
               height = "100%", width = "100%",
-        tabPanel(
-          title = div(icon("book"), "PredictResult"),
-          value = "survivalRes01"
-        ),
-        tabPanel(
-          title = div(icon("book"), "Plot"),
-          value = "survivalRes02"
-
-        ),
-        tabPanel(
-          title = div(icon("book"), "Read Me"),
-          value = "survivalRes03",
-          includeMarkdown("dom/survival.Rmd")
-          # , includeHTML("dom/survival.html")
-        )
+              
+              tabPanel(
+                title = div(icon("book"), " Dataset"),
+                value = "survivalRes01",
+                dataTableOutput("survivalData")
+                # , includeHTML("dom/survival.html")
+              ),
+    
+              tabPanel(
+                title = div(icon("book"), "Plot"),
+                value = "survivalRes02",
+                withSpinner(plotOutput("SurvivalPlotRender",height = "100%"), color = "black"),
+                box(
+                  width = NULL,  status = "success",
+                  radioButtons("DownloadSurvivalPlotCheck","Choose file type to download:",
+                               c("png", "pdf", "tiff"),inline = TRUE,selected = "pdf"
+                  ),
+                  downloadBttn('DowloadSurvival', 'Download')
+                  # to be added
+                )
+      
+              ),
+              tabPanel(
+                title = div(icon("book"), "Read Me"),
+                value = "survivalRes03",
+                includeMarkdown("dom/survival.Rmd")
+                # , includeHTML("dom/survival.html")
+              )
       )
     )
   )

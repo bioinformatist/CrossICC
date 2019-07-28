@@ -542,17 +542,81 @@ shinyServer(function(session,input, output) {
 ##### survival analysis
 
    SurvivalData<-  reactive({
-       example<-  read.csv(file = path.expand('data/surv.test.csv'),header = TRUE,row.names = 1)
+       example<-  read.csv(file = path.expand('data/SurvivalExample.csv'),header = TRUE,row.names = 1)
        inFile <- input$survivalFile
        clinical.df<-NULL
        if (!is.null(inFile)){
          clinical.df<-read.csv(inFile,header=TRUE,check.names = FALSE)
        }
-       switch(input$data3,
+       switch(input$data5,
               "Default" = example,
               "Upload" = clinical.df
        )
      })
+   
+   
+   # select data UI
+   output$survivalFeatureSelect1<-renderUI({
+     condition=colnames(SurvivalData())
+     conditionVector=as.character(condition)
+     selectInput("survivalSelect1", "InteterstFeature:",choices=conditionVector,selected=conditionVector[1])
+   })
+   output$survivalTimeSelect1<-renderUI({
+     condition=colnames(SurvivalData())
+     conditionVector=as.character(condition)
+     selectInput("survivalSelect2", "Survival Time:",choices=conditionVector,selected=conditionVector[2])
+   })
+   output$survivalStatusSelect1<-renderUI({
+     condition=colnames(SurvivalData())
+     conditionVector=as.character(condition)
+     selectInput("survivalSelect3", "Survival Status:",choices=conditionVector,selected=conditionVector[3])
+   })
+   
+   output$survivalData <- renderDataTable({
+     
+     SurvivalData()
+   })
+   
+   # survival Plot 
+   SurvivalPlot<-reactive({
+     df<-SurvivalData()
+     df<-df[complete.cases(df),]
+     x<-input$survivalSelect1
+     y<-input$survivalSelect2
+     z<-input$survivalSelect3
+     g<-plotSurvival(df,x,y,z)
+     print(g)
+   })
+   output$SurvivalPlotRender<-renderPlot({
+     SurvivalPlot()
+   },
+   width = survival_size,
+   height = survival_size,
+   outputArgs = list()
+   )
+   # downlaod plot 
+   #download plot
+   output$DowloadSurvival<-downloadHandler(
+     filename = function() {
+       paste("sankey_", Sys.time(), '.',input$DownloadCorrelationPlot_check, sep='')
+     },
+     content = function(file) {
+       switch (input$DownloadSurvivalPlotCheck,
+               pdf=pdf(file),
+               png=png(file),
+               tiff=tiff(file))
+       getSankyplot()
+       validate(
+         need(!is.null(plot.matrix), "No data input")
+       )
+       dev.off()
+     },
+     contentType =  switch (input$DownloadsankeyPlotCheck,
+                            pdf='image/pdf',
+                            png='image/pdf',
+                            tiff='image/tiff')
+   )
+   
 #--------------------------------
 
 

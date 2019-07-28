@@ -1,0 +1,6 @@
+#### Allocate new Samples   
+
+CrossICC provide `predict()` function allowing users to obtaind the cluster number of the unclassified samples based on the result from the CrossICC object.
+In this section ,users could perform prediction with the `CrossICC.object`. Note that, for new sample, it should contains all the features that used for prediction. 
+that is, the feature from the CrossICC result. Otherwise, it will throw errors. 
+
