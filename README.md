@@ -83,6 +83,22 @@ object in your home path (`~/`, a.k.a `$HOME` in Linux), followed by an
 shiny app as shown below that is opened in your default browser, which
 provides you a very intuitive way to view the results.
 
+## Shiny app
+
+Our package also comes with a shiny app. To run
+it:
+
+``` r
+pkg.suggested <- c('ggalluvial', 'rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
+checkPackages <- function(pkg){
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    stop("Package pkg needed for shiny app. Please install it.", call. = FALSE)
+  }
+}
+lapply(pkg.suggested, checkPackages)
+shiny::runApp(system.file("shiny", package = "CrossICC"))
+```
+
 ![](inst/imgs/readMe_home.jpg)
 
 ## FAQ
