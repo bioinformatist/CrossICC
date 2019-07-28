@@ -1,16 +1,3 @@
-#' Title To predict Samples cluter based on their centroid
-#'
-#' @param centroid a centroid calculated by CrossICC
-#' @param vd an expression data.frame to predict clusters, with features in rows and samples in colomns(no NA permitted)
-#'
-#' @examples
-#' \donttest{
-#'crossICC.object <- CrossICC(example.matrices, max.iter = 5, use.shiny = FALSE)
-#'train.centroid <- cluster.centroid(crossICC.object[[2]]$platforms[[1]],
-#'crossICC.object[[2]]$gene.signature,crossICC.object[[2]]$clusters$clusters)
-#'data(test.data)
-#'predict.result<-centroid2exp(train.centroid,test.data)
-#' }
 centroid2exp <- function(centroid, vd) {
 
     # do nornmalization as the same as in training dat aset

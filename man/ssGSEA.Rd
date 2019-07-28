@@ -2,7 +2,7 @@
 % Please edit documentation in R/ssGSEA.R
 \name{ssGSEA}
 \alias{ssGSEA}
-\title{Title To get GSEA-like ranked matrix from CrossICC result.}
+\title{To get GSEA-like ranked matrix from CrossICC result.}
 \usage{
 ssGSEA(x, gene.signature, geneset2gene, cluster)
 }
@@ -19,9 +19,9 @@ ssGSEA(x, gene.signature, geneset2gene, cluster)
 a matrix with samples' eigenvalue in different super clusters.
 }
 \description{
-Title To get GSEA-like ranked matrix from CrossICC result.
+To get GSEA-like ranked matrix from CrossICC result.
 }
 \examples{
 CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
-ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature, geneset2gene = CrossICC.object$unioned.genesets, cluster = CrossICC.object$clusters$clusters[[1]])
+CrossICC.ssGSEA <- ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature, geneset2gene = CrossICC.object$unioned.genesets, cluster = CrossICC.object$clusters$clusters[[1]])
 }

@@ -1,13 +1,13 @@
-#' Title To calculate the correlation between the predictor centroid and the validation centroid.
+#' To calculate the correlation between the predictor centroid and the validation centroid.
 #'
-#' @param pre.dat a eSet object or eSet-like matrix. with features in rows and samples in columns
-#' @param model a CrossICC Object
+#' @param pre.dat a eSet object or eSet-like matrix with features in rows and samples in columns
+#' @param model a CrossICC object
 #' @return a list contains a vecter that store the predict clusters and a normalized expression matrix
 #' @export
 #'
 #' @examples
 #' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
-#' predictor(demo.platforms[[1]], CrossICC.object)
+#' predicted <- predictor(demo.platforms[[1]], CrossICC.object)
 predictor <- function(pre.dat, model) {
     predict.data <- pre.dat
     crossICC.object <- model

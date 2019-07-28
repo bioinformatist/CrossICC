@@ -1,10 +1,3 @@
-#' Title get centroids of clusters by a set of gene signature and their cluster information
-#'
-#' @param x expression matrix for calculating centroid
-#' @param gene.signature a vector of genenames representing a certain siganture of pathway or biological function.
-#' @param cluster a named cluster numbers with gene name as the cluster name and the cluster number as the value
-#'
-
 cluster.centroid <- function(x, gene.signature, cluster) {
     x.sample.name <- colnames(x)
     # print(x.sample.name)

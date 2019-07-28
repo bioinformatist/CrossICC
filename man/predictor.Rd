@@ -2,22 +2,22 @@
 % Please edit documentation in R/predictor.R
 \name{predictor}
 \alias{predictor}
-\title{Title To calculate the correlation between the predictor centroid and the validation centroid.}
+\title{To calculate the correlation between the predictor centroid and the validation centroid.}
 \usage{
 predictor(pre.dat, model)
 }
 \arguments{
-\item{pre.dat}{a eSet object or eSet-like matrix. with features in rows and samples in columns}
+\item{pre.dat}{a eSet object or eSet-like matrix with features in rows and samples in columns}
 
-\item{model}{a CrossICC Object}
+\item{model}{a CrossICC object}
 }
 \value{
 a list contains a vecter that store the predict clusters and a normalized expression matrix
 }
 \description{
-Title To calculate the correlation between the predictor centroid and the validation centroid.
+To calculate the correlation between the predictor centroid and the validation centroid.
 }
 \examples{
 CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
-predictor(demo.platforms[[1]], CrossICC.object)
+predicted <- predictor(demo.platforms[[1]], CrossICC.object)
 }
