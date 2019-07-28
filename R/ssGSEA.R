@@ -3,16 +3,15 @@
 #' @param x a eSet object or eSet-like matrix.
 #' @param gene.signature gene signatures calculated by CrossICC.
 #' @param geneset2gene a matrix contains geneset (cluster name) mapping to gene.
+#' @param cluster CrossICC returned clusters. Note: Must mapping to x!
 #'
 #' @return a matrix with samples' eigenvalue in different super clusters.
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
-#' ssGSEA(demo.platforms[[1]], CrossICC.object$gene.signature, CrossICC.object$unioned.genesets)
-#' }
-ssGSEA <- function(x, gene.signature, geneset2gene) {
+#' ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature, geneset2gene = CrossICC.object$unioned.genesets, cluster = CrossICC.object$clusters$clusters[[1]])
+ssGSEA <- function(x, gene.signature, geneset2gene, cluster) {
     # Our up-stream matrix is already with gene symbols, so provide fake 'genewprobe' for runFAIME. But still need geneset2gene: An
     # one-to-one mapping matrix with two columns, the 1st column is geneset ID/name, and the 2nd is its gene members
     if (is.null(gene.signature)) {
@@ -24,15 +23,7 @@ ssGSEA <- function(x, gene.signature, geneset2gene) {
     fs.scale <- t(scale(t(fs)))
     fs.scale <- replace(fs.scale, fs.scale < -2, -2)
     fs.scale <- replace(fs.scale, fs.scale > 2, 2)
-    sn <- gene.signature
-
     fs.scale <- fs.scale[, names(sort(cluster))]
-    # col.col <- c()
-    # cluster.member <- unique(sort(cluster))
-    # for (i in 1:length(cluster)) {
-    #     cluster.names <- names(which(cluster == cluster.member[i]))
-    #     col.col <- c(col.col, rep(color[i], length(cluster.names)))
-    # }
 
     return(list(fs, fs.scale))
 }
