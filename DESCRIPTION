@@ -29,12 +29,11 @@ Imports: data.table,
     methods,
     ConsensusClusterPlus,
     limma,
-    MergeMaid,
     cluster,
     dplyr,
-    MASS,
     Biobase
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.4.0),
+  MASS
 biocViews: Software, GeneExpression, DifferentialExpression, GUI, GeneSetEnrichment, Classification, Clustering
     FeatureExtraction, Survival, Microarray, RNASeq, BatchEffect, Normalization, Preprocessing, Visualization
 VignetteBuilder: knitr
