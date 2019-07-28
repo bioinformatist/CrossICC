@@ -70,6 +70,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
   dir.create(output.dir, showWarnings = FALSE)
+  pre.wd <- getwd()
   setwd(output.dir)
 
   # Check parameter values (sometimes users bring spelling mistake here)
@@ -272,7 +273,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
     clusters = balanced.cluster,
     geneset2gene = geneset2gene,
-    unioned.genesets = unioned.genesets
+    unioned.genesets = as.matrix(unioned.genesets)
   )
 
   saveRDS(result, file = 'CrossICC.object.rds')
@@ -283,8 +284,17 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
 
   if (use.shiny) {
     warning('Result list would not be returned when use.shiny = TRUE.')
-    runShinyCrossICC()
+    pkg.suggested <- c('ggalluvial', 'rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
+    checkPackages <- function(pkg){
+      if (!requireNamespace(pkg, quietly = TRUE)) {
+        stop("Package pkg needed for shiny app. Please install it.",
+             call. = FALSE)
+      }
+    }
+    lapply(pkg.suggested, checkPackages)
+    shiny::runApp(system.file("shiny", package = "CrossICC"))
   }
+  setwd(pre.wd)
   result
 }
 
