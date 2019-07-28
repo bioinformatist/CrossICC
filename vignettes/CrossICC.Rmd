@@ -85,10 +85,16 @@ CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, use.shiny = FALSE)
 
 CrossICC will generate an `.rds` formatted object in your home path (`~/`, a.k.a `$HOME` in Linux), which records key features (genes), iteration times and other information during analysis in a compressed file format. You can call shiny app with this file later.
 
-Then you can use CrossICC's result as model for clustering new samples:
+To compare samples according to their pathway information, we provide a way to get GSEA-like ranked eigenvalue matrix:
 
-```r
-exprs.pre <- predictor(new.exprs, CrossICC.obj)
+```{r}
+CrossICC.ssGSEA <- ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature, geneset2gene = CrossICC.object$unioned.genesets, cluster = CrossICC.object$clusters$clusters[[1]])
+```
+
+And you can use CrossICC's result as model for clustering new samples, simply by calculate the correlation between the predictor centroid and the validation centroid:
+
+```{r}
+predicted <- predictor(demo.platforms[[1]], CrossICC.object)
 ```
 
 `new.exprs` is your expression matrix, and CrossICC's result `CrossICC.obj` can be used as model. The process will take a few minutes.
