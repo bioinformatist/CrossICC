@@ -1,3 +1,6 @@
+Changes in version 0.99.13 (2019-07-28)
+  * Update vignette and man pages
+
 Changes in version 0.99.12 (2019-07-28)
   * Fix ssGSEA() bug
   * Remove external shiny calling function
