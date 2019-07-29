@@ -37,7 +37,7 @@ Imports: data.table,
     stats,
     graphics,
     utils
-Depends: R (>= 3.6),
+Depends: R (>= 3.5),
   MASS
 biocViews: Software, GeneExpression, DifferentialExpression, GUI, GeneSetEnrichment, Classification, Clustering,
   FeatureExtraction, Survival, Microarray, RNASeq, BatchEffect, Normalization, Preprocessing, Visualization
