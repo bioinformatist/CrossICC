@@ -1,7 +1,7 @@
 centroid2exp <- function(centroid, vd) {
 
     # do nornmalization as the same as in training dat aset
-    vd <- m.f.s(list(vd), fdr.cutoff = 1, filter.cutoff = 1, perform.mad = FALSE)[[2]][[1]]
+    vd <- m.f.s(list(vd), fdr.cutoff = 1, filter.cutoff = 1, perform.mad = FALSE, skip.remove.same = TRUE)[[2]][[1]]
     gene.sig = intersect(rownames(centroid), rownames(vd[complete.cases(vd), ]))
     if (!isTRUE(all.equal(sort(rownames(centroid)), sort(gene.sig)))) {
         stop("missing prediction features in your expression dataset\n p")  # to valide data without missing data
