@@ -52,6 +52,7 @@ NULL
 #' @param skip.mfs by default, the datasets will be normalized at the start,
 #' and the genes or features that have no or few contributions to the final clusters will be filtered out. To skip this process, you can set this parameter to TRUE. Only try when you're sure that you're working with pre-processed datasets.
 #' @param com.mode mode for choose common features when pre-processing data. Could be "overlap" (use intersection, default) or "merge" (keep all features).
+#' @param supercluster.method method for super-clustering. Default is 'hclust', can also be 'kmeans'.
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -64,7 +65,7 @@ NULL
 #' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
-                     cc.seed = NULL, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = FALSE){
+                     cc.seed = NULL, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', supercluster.method = 'hclust', skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = FALSE){
 
 
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
@@ -156,7 +157,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
 
     balanced.cluster <- balance.cluster(all.sig,
                                         cc = cc, cluster.cutoff = cluster.cutoff, sil.filter = sil.filter,
-                                        max.K = max.K, cross = cross)
+                                        max.K = max.K, cross = cross, supercluster.method = supercluster.method)
 
     ebayes.result <- lapply(names(all.sig),
                             function(x) ebayes(all.sig[[x]],
