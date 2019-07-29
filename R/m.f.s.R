@@ -24,7 +24,7 @@ m.f.s <- function(platforms.list, filter.cutoff = 0.5, fdr.cutoff = 0.1, perform
         cat(paste(date(), "--", "Removing features with no variance"), "\n")
         no.same <- lapply(non.duplicates, remove.all.same)
     } else {
-        no.same <- remove.all.same
+        no.same <- non.duplicates
     }
 
     filter.sig <- rbind(vapply(platforms.list, function(x) dim(x)[1], 2333), vapply(non.duplicates, function(x) dim(x)[1], 2333), vapply(no.same,
