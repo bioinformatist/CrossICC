@@ -88,7 +88,8 @@ CrossICC will generate an `.rds` formatted object in your home path (`~/`, a.k.a
 To compare samples according to their pathway information, we provide a way to get GSEA-like ranked eigenvalue matrix:
 
 ```{r}
-CrossICC.ssGSEA <- ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature, geneset2gene = CrossICC.object$unioned.genesets, cluster = CrossICC.object$clusters$clusters[[1]])
+Mcluster <- paste("K", CrossICC.object$clusters$clusters[[1]], sep = "")
+CrossICC.ssGSEA <- ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature, geneset2gene = CrossICC.object$unioned.genesets, cluster = Mcluster)
 ```
 
 And you can use CrossICC's result as model for clustering new samples, simply by calculate the correlation between the predictor centroid and the validation centroid:
