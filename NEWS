@@ -1,3 +1,6 @@
+Changes in version 0.99.20 (2019-07-30)
+  * Fix predictor() error by complete cases
+
 Changes in version 0.99.19 (2019-07-29)
   * Fix m.f.s bug when calculating centroid of new matrix
 
