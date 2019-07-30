@@ -12,8 +12,9 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001,
   distance = "euclidean", sil.filter = "soft",
   heatmap.order = "up.based", com.mode = "overlap", cc.seed = NULL,
   cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "up",
-  cross = "cluster", skip.merge.dup = TRUE, skip.mm = FALSE,
-  skip.mfs = FALSE, use.shiny = FALSE)
+  cross = "cluster", supercluster.method = "hclust",
+  skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE,
+  use.shiny = FALSE)
 }
 \arguments{
 \item{...}{all datasets (matrices is better)}
@@ -65,6 +66,8 @@ or a function that returns a clustering.}
 \item{ebayes.mode}{'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes when determining MDEGs. default is 'up'}
 
 \item{cross}{object type when determining meta-cluster. Could be "cluster" for clusters by ConsencusClusterPlus, "sample" for samples or "none" (only used for single dataset).}
+
+\item{supercluster.method}{method for super-clustering. Default is 'hclust', can also be 'kmeans'.}
 
 \item{skip.merge.dup}{skip merge multiple probes for one gene (duplicates) or not. Default is TRUE (it is highly recommended that user has their data pre-processed well).}
 
