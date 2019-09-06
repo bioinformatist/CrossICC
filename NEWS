@@ -1,3 +1,6 @@
+Changes in version 0.99.22 (2019-09-06)
+  * Fix bugs by removing lazy load
+
 Changes in version 0.99.21 (2019-09-06)
   * Add overwrite function for main function
   * Optimize packages suggested checking
