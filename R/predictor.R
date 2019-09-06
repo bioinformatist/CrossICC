@@ -1,7 +1,7 @@
 #' To calculate the correlation between the predictor centroid and the validation centroid.
 #'
 #' @param pre.dat a eSet object or eSet-like matrix with features in rows and samples in columns
-#' @param model a CrossICC object
+#' @param model a list containing CrossICC result
 #' @return a list contains a vecter that store the predict clusters and a normalized expression matrix
 #' @export
 #'
@@ -21,7 +21,7 @@ predictor <- function(pre.dat, model) {
 
     differ.length <- length(crossICC.object$gene.signature) - length(overlap.feature)
     if (differ.length > 0 & differ.length < 5) {
-        warning(paste("missing ", differ.length, " features in your expression data set, continute predicting any way ", sep = ""))
+        warning(paste("missing ", differ.length, " features in your expression data set, continue predicting any way ", sep = ""))
     } else if (differ.length >= 5) {
 
         stop(paste("missing too many (", differ.length, ") features in your expression data set, plz replace your predict data set",
@@ -41,7 +41,7 @@ predictor <- function(pre.dat, model) {
     return(list(cluster = vali.predict.bycentroid.cluter, matrix = vali.predict.normalized.matrix))
 }
 
-#' Title Return centroid of centroid from each platform
+#' Return centroid of centroid from each platform
 #'
 #' @param centroid.list a list stored the centroid
 #' @param cluster  a named vector with gene names as name and the cluster number as vector value
