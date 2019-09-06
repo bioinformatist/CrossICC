@@ -1,3 +1,7 @@
+Changes in version 0.99.21 (2019-09-06)
+  * Add overwrite function for main function
+  * Optimize packages suggested checking
+
 Changes in version 0.99.20 (2019-07-30)
   * Fix predictor() error by complete cases
 
