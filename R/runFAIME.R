@@ -65,11 +65,11 @@ Symbol!")
     rownames(res) <- seeds
     colnames(res) <- colnames(dat)
     geneIDs <- rownames(dat)
-    for (i in 1:length(seeds)) {
+    for (i in seq_len(length(seeds))) {
         genemembers <- geneset2gene[which(geneset2gene[, 1] %in% seeds[i]), 2]
         # Expression-Anchored Pathway Profiles of Individual Samples Predicts Survival, Yang X et al.
         targetP <- unlist(allSym[which(allSym %in% genemembers)])
-        for (j in 1:ncol(dat)) {
+        for (j in seq_len(ncol(dat))) {
             oneSampleExp <- dat[, j]
             names(oneSampleExp) <- geneIDs
             res[i, j] <- FAIME(oneSampleExp, genemembers = names(targetP), na.last = na.last, weightRank = weightRank)
