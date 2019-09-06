@@ -35,7 +35,7 @@ In this project, we present CrossICC to implement this method. Moreover, many ne
 
 1. Download & install the package.
 
-To install via Bioconductor (coming soon):
+To install via Bioconductor:
 
 ```{r getPackage, eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
