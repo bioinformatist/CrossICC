@@ -6,7 +6,8 @@
 #' @export
 #'
 #' @examples
-#' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
+#' data("demo.platforms")
+#' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE)
 #' predicted <- predictor(demo.platforms[[1]], CrossICC.object)
 predictor <- function(pre.dat, model) {
     predict.data <- pre.dat

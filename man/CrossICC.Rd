@@ -90,7 +90,8 @@ CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for I
 The Main Function of the package
 }
 \examples{
-CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
+data("demo.platforms")
+CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE)
 }
 \seealso{
 \code{\link[ConsensusClusterPlus]{ConsensusClusterPlus}}
