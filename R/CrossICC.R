@@ -1,10 +1,5 @@
 #' CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.
 #'
-#' The CrossICC package provides three categories of important functions:
-#' foo, bar and baz.
-#'
-#' @section CrossICC functions:
-#' The foo functions ...
 #'
 #' @docType package
 #' @name CrossICC
@@ -40,7 +35,7 @@ NULL
 #' @param ebayes.mode 'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes when determining MDEGs. default is 'up'
 #' @param use.shiny if TRUE, a shiny app will appear after running this main function.
 #' @param cross object type when determining meta-cluster. Could be "cluster" for clusters by ConsencusClusterPlus, "sample" for samples or "none" (only used for single dataset).
-#' @param max.K the maximum cluster number of ConsensusClusterPlus.
+#' @param max.K the maximum cluster number of ConsensusClusterPlus. Default is 10, but was set as number of samples when there're less than 10 samples.
 #' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is TRUE (it is highly recommended that user has their data pre-processed well).
 #' @param skip.mm skip MergeMaid processing or not. Default is FALSE (not skip).
 #' @param sil.filter silhouetee width filtering mode. Could be "soft" or "hard". If "hard", all negtive silhouetee width value will be set to 0. Default is "soft" (to do nothing).
@@ -53,6 +48,7 @@ NULL
 #' and the genes or features that have no or few contributions to the final clusters will be filtered out. To skip this process, you can set this parameter to TRUE. Only try when you're sure that you're working with pre-processed datasets.
 #' @param com.mode mode for choose common features when pre-processing data. Could be "overlap" (use intersection, default) or "merge" (keep all features).
 #' @param supercluster.method method for super-clustering. Default is 'hclust', can also be 'kmeans'.
+#' @param overwrite if user allow overwrite result file? Default is FALSE.
 #'
 #' @return A nested list with iteration time as its name and list containing consensus cluster,
 #' gene signature and balanced cluster as its value.
@@ -63,16 +59,16 @@ NULL
 #'
 #' @examples
 #' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
-CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~/', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
+CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
-                     cc.seed = NULL, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', supercluster.method = 'hclust', skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE, use.shiny = FALSE){
+                     cc.seed = NULL, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', supercluster.method = 'hclust', skip.merge.dup = TRUE,
+                     skip.mm = FALSE, skip.mfs = FALSE, use.shiny = FALSE, overwrite = FALSE){
 
 
   if (max.iter < 2) warning('Result from less than 2 times iteration may not make sense at all!')
 
   dir.create(output.dir, showWarnings = FALSE)
-  pre.wd <- getwd()
-  setwd(output.dir)
+
 
   # Check parameter values (sometimes users bring spelling mistake here)
   cross <- match.arg(cross, c("cluster", "sample", "none"))
@@ -117,10 +113,9 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
   if (missing(study.names) || !is(study.names, "character") || length(study.names) != length(platforms)) {
     message('No study names provided or something goes wrong with your study names. Will use auto-generated study names instead.')
     study.names <- vapply(1:length(platforms), function(x) paste0('Matrix.', x), "Yu Fat is handsome")
-    names(platforms) <- study.names
-  } else {
-    names(platforms) <- study.names
   }
+
+  names(platforms) <- study.names
 
   # Use the first datasets' feature names as default
   gene.sig <- rownames(platforms[[1]])
@@ -197,7 +192,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
 
       design <- model.matrix(~ 0 + factor(merged.cluster))
       k <- length(unique(merged.cluster))
-      colnames(design) <- paste("K", 1:k, sep = "")
+      colnames(design) <- paste("K", seq_len(k), sep = "")
       K <- colnames(design)
       fit <- limma::lmFit(merged.matrix, design)
 
@@ -208,7 +203,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
         }
       }
 
-      for(i in 1:k){
+      for(i in seq_len(k)){
         x <- c(x, paste(K[i], paste("(", paste(K[-i], collapse="+"), ")", "/", k-1, sep=""), sep="-"))
       }
 
@@ -277,29 +272,31 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     unioned.genesets = as.matrix(unioned.genesets)
   )
 
-  saveRDS(result, file = 'CrossICC.object.rds')
+  if (!overwrite & file.exists(file.path('~', 'CrossICC.object.rds'))) {
+    stop('Result file already existed!')
+  }
+
+  saveRDS(result, file = file.path('~', 'CrossICC.object.rds'))
   cat("A CrossICC.object.rds file will be generated in home directory by default.
       Note that the previous file will be overridden.\n")
 
   cat(paste(date(), iteration - 1, sep=" -- Iteration finished! Iteration time for reaching convergence/limit: "), '\n')
 
   if (use.shiny) {
-    warning('Result list would not be returned when use.shiny = TRUE.')
+    # warning('Result list would not be returned when use.shiny = TRUE.')
     pkg.suggested <- c('ggalluvial', 'rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
     checkPackages <- function(pkg){
       if (!requireNamespace(pkg, quietly = TRUE)) {
-        stop("Package pkg needed for shiny app. Please install it.",
-             call. = FALSE)
+        stop("Package ", pkg, " needed for shiny app. Please install it. All package needed are: ", paste(pkg.suggested, collapse = ' '), call. = FALSE)
       }
     }
     lapply(pkg.suggested, checkPackages)
     shiny::runApp(system.file("shiny", package = "CrossICC"))
   }
-  setwd(pre.wd)
   result
 }
 
-#' Title Summary the CrossICC-returned list to produce human-readable output
+#' Summary the CrossICC-returned list to produce human-readable output
 #'
 #' @param result list-type CrossICC's return value.
 #'
@@ -332,17 +329,17 @@ summaryCrossICC <- function(result) {
 }
 
 
-#' Title Read file into CrossICC input
+#' Read file into CrossICC input
 #'
 #' @param files a list for filenames, usually a returned value of list.files() function
-#' @return list contains matrixs from each platform parsing from file provided .
+#' @return list contains matrices from each platform parsing from file provided .
 #' @export
 #'
 #' @examples
 #' files <- list.files(path=".", pattern = '.csv')
 #' CrossICC.input <- CrossICCInput(files)
 CrossICCInput <- function(files){
-  if (is.character(files) == TRUE) {
+  if (is.character(files)) {
     dfinput <- function(x){
       outputdf <- as.matrix(data.frame(fread(x, stringsAsFactors = FALSE,  check.names = FALSE), row.names = 1, check.names = FALSE))
       return(outputdf)
@@ -351,7 +348,7 @@ CrossICCInput <- function(files){
     return(testData)
   }
   else {
-    print("Please ensure the name of files you want to import is in a charachter")
+    stop("Please ensure character type filenames were provided!")
   }
 }
 
