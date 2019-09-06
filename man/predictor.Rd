@@ -9,7 +9,7 @@ predictor(pre.dat, model)
 \arguments{
 \item{pre.dat}{a eSet object or eSet-like matrix with features in rows and samples in columns}
 
-\item{model}{a CrossICC object}
+\item{model}{a list containing CrossICC result}
 }
 \value{
 a list contains a vecter that store the predict clusters and a normalized expression matrix

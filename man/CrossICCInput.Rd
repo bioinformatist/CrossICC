@@ -2,7 +2,7 @@
 % Please edit documentation in R/CrossICC.R
 \name{CrossICCInput}
 \alias{CrossICCInput}
-\title{Title Read file into CrossICC input}
+\title{Read file into CrossICC input}
 \usage{
 CrossICCInput(files)
 }
@@ -10,10 +10,10 @@ CrossICCInput(files)
 \item{files}{a list for filenames, usually a returned value of list.files() function}
 }
 \value{
-list contains matrixs from each platform parsing from file provided .
+list contains matrices from each platform parsing from file provided .
 }
 \description{
-Title Read file into CrossICC input
+Read file into CrossICC input
 }
 \examples{
 files <- list.files(path=".", pattern = '.csv')

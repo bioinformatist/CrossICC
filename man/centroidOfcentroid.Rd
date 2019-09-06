@@ -2,7 +2,7 @@
 % Please edit documentation in R/predictor.R
 \name{centroidOfcentroid}
 \alias{centroidOfcentroid}
-\title{Title Return centroid of centroid from each platform}
+\title{Return centroid of centroid from each platform}
 \usage{
 centroidOfcentroid(centroid.list, cluster)
 }
@@ -15,5 +15,5 @@ centroidOfcentroid(centroid.list, cluster)
 a list contains a vecter that store the predict clusters and a normalized expression matrix
 }
 \description{
-Title Return centroid of centroid from each platform
+Return centroid of centroid from each platform
 }

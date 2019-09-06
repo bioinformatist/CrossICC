@@ -2,7 +2,7 @@
 % Please edit documentation in R/CrossICC.R
 \name{summaryCrossICC}
 \alias{summaryCrossICC}
-\title{Title Summary the CrossICC-returned list to produce human-readable output}
+\title{Summary the CrossICC-returned list to produce human-readable output}
 \usage{
 summaryCrossICC(result)
 }
@@ -13,7 +13,7 @@ summaryCrossICC(result)
 list contains: a matrix of genesets mapping to genes; a named atomic vetor of samples mapping to super clusters.
 }
 \description{
-Title Summary the CrossICC-returned list to produce human-readable output
+Summary the CrossICC-returned list to produce human-readable output
 }
 \examples{
 CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)

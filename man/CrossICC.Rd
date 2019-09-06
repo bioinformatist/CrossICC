@@ -7,14 +7,14 @@
 \title{CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.}
 \usage{
 CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001,
-  output.dir = "~/", max.K = 10, max.iter = 20, rep.runs = 1000,
+  output.dir = "~", max.K = 10, max.iter = 20, rep.runs = 1000,
   n.platform = 2, pItem = 0.8, pFeature = 1, clusterAlg = "hc",
   distance = "euclidean", sil.filter = "soft",
   heatmap.order = "up.based", com.mode = "overlap", cc.seed = NULL,
   cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = "up",
   cross = "cluster", supercluster.method = "hclust",
   skip.merge.dup = TRUE, skip.mm = FALSE, skip.mfs = FALSE,
-  use.shiny = FALSE)
+  use.shiny = FALSE, overwrite = FALSE)
 }
 \arguments{
 \item{...}{all datasets (matrices is better)}
@@ -27,7 +27,7 @@ CrossICC(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001,
 
 \item{output.dir}{the results' output directory.}
 
-\item{max.K}{the maximum cluster number of ConsensusClusterPlus.}
+\item{max.K}{the maximum cluster number of ConsensusClusterPlus. Default is 10, but was set as number of samples when there're less than 10 samples.}
 
 \item{max.iter}{the maximum number of iterations.}
 
@@ -77,20 +77,18 @@ or a function that returns a clustering.}
 and the genes or features that have no or few contributions to the final clusters will be filtered out. To skip this process, you can set this parameter to TRUE. Only try when you're sure that you're working with pre-processed datasets.}
 
 \item{use.shiny}{if TRUE, a shiny app will appear after running this main function.}
+
+\item{overwrite}{if user allow overwrite result file? Default is FALSE.}
 }
 \value{
 A nested list with iteration time as its name and list containing consensus cluster,
 gene signature and balanced cluster as its value.
 }
 \description{
-The CrossICC package provides three categories of important functions:
-foo, bar and baz.
-}
-\section{CrossICC functions}{
+CrossICC: Automatically Aggregating and Summarizing Bioinformatics Results for Interactive Report.
 
-The foo functions ...
+The Main Function of the package
 }
-
 \examples{
 CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1)
 }
