@@ -10,6 +10,8 @@
 #' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE)
 #' predicted <- predictor(demo.platforms[[1]], CrossICC.object)
 predictor <- function(pre.dat, model) {
+    if (is(pre.dat, "SummarizedExperiment"))
+        pre.dat <- assay(pre.dat)
     predict.data <- pre.dat
     crossICC.object <- model
     # validation.Data shoud be format features in rows and samples in columns

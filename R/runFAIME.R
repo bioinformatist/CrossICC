@@ -54,11 +54,10 @@ FAIME <- function(sampleExp, genemembers, na.last = TRUE, weightRank, logCheck =
 # TRUE.  if weithRank='mild' the exp( (rank-N)/N) was applied which controls the weights between 0 and 1 output: res: A matrix of
 # transformed microRNA profiling, the score calculated by FAIME
 runFAIME <- function(dat, genewprobe, geneset2gene, na.last = TRUE, weightRank = TRUE) {
+    if (is(dat, "SummarizedExperiment"))
+        dat <- assay(dat)
     if (is(dat, "ExpressionSet"))
         dat <- exprs(dat)
-    if (is.null(names(genewprobe)))
-        stop("Please input the zz as a named vector for gene
-Symbol!")
     allSym <- genewprobe[rownames(dat)]
     seeds <- unique(geneset2gene[, 1])
     res <- matrix(nrow = length(seeds), ncol = ncol(dat))
