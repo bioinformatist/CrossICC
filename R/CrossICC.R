@@ -33,7 +33,7 @@ NULL
 #' @param study.names a vector containing all study names
 #' @param ... all datasets (matrices is better)
 #' @param ebayes.mode 'up' or 'both'. Choose only up-regulated genes or all differentially expressed genes when determining MDEGs. default is 'up'
-#' @param use.shiny if TRUE, a shiny app will appear after running this main function.
+#' @param use.shiny if TRUE, a shiny app will appear after running this main function. Note: You must keep output.dir with default value '~' for using shiny app.
 #' @param cross object type when determining meta-cluster. Could be "cluster" for clusters by ConsencusClusterPlus, "sample" for samples or "none" (only used for single dataset).
 #' @param max.K the maximum cluster number of ConsensusClusterPlus. Default is 10, but was set as number of samples when there're less than 10 samples.
 #' @param skip.merge.dup skip merge multiple probes for one gene (duplicates) or not. Default is TRUE (it is highly recommended that user has their data pre-processed well).
@@ -270,8 +270,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
     clusters = balanced.cluster,
     geneset2gene = geneset2gene,
-    unioned.genesets = as.matrix(unioned.genesets),
-    output.dir = output.dir
+    unioned.genesets = as.matrix(unioned.genesets)
   )
 
   if (!overwrite & file.exists(file.path(output.dir, 'CrossICC.object.rds'))) {

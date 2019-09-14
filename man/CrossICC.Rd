@@ -76,7 +76,7 @@ or a function that returns a clustering.}
 \item{skip.mfs}{by default, the datasets will be normalized at the start,
 and the genes or features that have no or few contributions to the final clusters will be filtered out. To skip this process, you can set this parameter to TRUE. Only try when you're sure that you're working with pre-processed datasets.}
 
-\item{use.shiny}{if TRUE, a shiny app will appear after running this main function.}
+\item{use.shiny}{if TRUE, a shiny app will appear after running this main function. Note: You must keep output.dir with default value '~' for using shiny app.}
 
 \item{overwrite}{if user allow overwrite result file? Default is FALSE.}
 }
