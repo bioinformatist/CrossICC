@@ -270,14 +270,15 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     gene.order = gene.order,  # Sorted gene names by Fold-Change value, for heatmaps use
     clusters = balanced.cluster,
     geneset2gene = geneset2gene,
-    unioned.genesets = as.matrix(unioned.genesets)
+    unioned.genesets = as.matrix(unioned.genesets),
+    output.dir = output.dir
   )
 
-  if (!overwrite & file.exists(file.path('~', 'CrossICC.object.rds'))) {
+  if (!overwrite & file.exists(file.path(output.dir, 'CrossICC.object.rds'))) {
     stop('Result file already existed!')
   }
 
-  saveRDS(result, file = file.path('~', 'CrossICC.object.rds'))
+  saveRDS(result, file = file.path(output.dir, 'CrossICC.object.rds'))
   cat("A CrossICC.object.rds file will be generated in home directory by default.
       Note that the previous file will be overridden.\n")
 
