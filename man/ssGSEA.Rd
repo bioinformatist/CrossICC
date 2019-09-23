@@ -25,5 +25,6 @@ To get GSEA-like ranked matrix from CrossICC result.
 data("demo.platforms")
 CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE)
 Mcluster <- paste("K", CrossICC.object$clusters$clusters[[1]], sep = "")
-CrossICC.ssGSEA <- ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature, geneset2gene = CrossICC.object$unioned.genesets, cluster = Mcluster)
+CrossICC.ssGSEA <- ssGSEA(x = demo.platforms[[1]], gene.signature = CrossICC.object$gene.signature,
+geneset2gene = CrossICC.object$unioned.genesets, cluster = Mcluster)
 }
