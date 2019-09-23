@@ -17,6 +17,6 @@ Summary the CrossICC-returned list to produce human-readable output
 }
 \examples{
 data("demo.platforms")
-CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE)
+CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, outdir = tempdir())
 CrossICC.summary <- summaryCrossICC(CrossICC.object)
 }
