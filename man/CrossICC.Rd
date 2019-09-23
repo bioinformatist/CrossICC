@@ -91,7 +91,7 @@ The Main Function of the package
 }
 \examples{
 data("demo.platforms")
-CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, outdir = tempdir())
+CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, output.dir = tempdir())
 }
 \seealso{
 \code{\link[ConsensusClusterPlus]{ConsensusClusterPlus}}

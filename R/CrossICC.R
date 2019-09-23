@@ -59,7 +59,7 @@ NULL
 #'
 #' @examples
 #' data("demo.platforms")
-#' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, outdir = tempdir())
+#' CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, output.dir = tempdir())
 CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, output.dir = '~', max.K = 10, max.iter = 20, rep.runs = 1000, n.platform = 2,
                      pItem = 0.8, pFeature = 1, clusterAlg = "hc", distance = "euclidean", sil.filter = 'soft', heatmap.order = 'up.based', com.mode = 'overlap',
                      cc.seed = NULL, cluster.cutoff = 0.05, ebayes.cutoff = 0.1, ebayes.mode = 'up', cross = 'cluster', supercluster.method = 'hclust', skip.merge.dup = TRUE,
@@ -174,7 +174,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     geneset2gene <- lapply(geneset2gene , setNames , nm = c('super.cluster', 'signatures'))
 
     if (length(platforms) >= 2) {
-      unioned.genesets <- data.table(do.call(rbind, geneset2gene))[, .(count = .N), by = 'super.cluster,signatures'][count >= n.platform,][, seq_len(2)]
+      # Keep 1:2 instead of seq_len(2) for subsetting data.table correctly
+      unioned.genesets <- data.table(do.call(rbind, geneset2gene))[, .(count = .N), by = 'super.cluster,signatures'][count >= n.platform,][, 1:2]
     } else {
       unioned.genesets <- as.matrix(unique(data.table(do.call(rbind, geneset2gene))))
     }
@@ -306,7 +307,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
 #'
 #' @examples
 #' data("demo.platforms")
-#' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, outdir = tempdir())
+#' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, output.dir = tempdir())
 #' CrossICC.summary <- summaryCrossICC(CrossICC.object)
 summaryCrossICC <- function(result) {
 

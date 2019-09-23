@@ -7,7 +7,7 @@
 #'
 #' @examples
 #' data("demo.platforms")
-#' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, outdir = tempdir())
+#' CrossICC.object <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 1, overwrite = TRUE, output.dir = tempdir())
 #' predicted <- predictor(demo.platforms[[1]], CrossICC.object)
 predictor <- function(pre.dat, model) {
     if (is(pre.dat, "SummarizedExperiment"))
