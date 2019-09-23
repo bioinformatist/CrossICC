@@ -1,7 +1,8 @@
-balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, cross = 'cluster', sil.filter, supercluster.method = 'hclust'){
+balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL,
+                            cross = 'cluster', sil.filter, supercluster.method = 'hclust'){
   k <- vapply(cc, function(x) derive.clusternum(x, cluster.cutoff, maxK = max.K), 2333)
 
-  # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= n-1.
+  # Max cluster number must be refined here, for silhouette statistics are only defined if 2 <= k <= (n - 1).
   # Here, n is sum(k), Qi suggests that max.K should be as half as n by default
   if (is.null(max.K)) {
     max.K <- ceiling(sum(k) / 2)
@@ -26,7 +27,9 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, c
   # Sometimes correlation matrix row number is less than max cutree k
   if (dim(all.k)[1] < max.K) max.K <- dim(all.k)[1]
 
-  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, cross = cross, sil.filter = sil.filter, supercluster.method = supercluster.method)[[1]][,3])))
+  silws <- unlist(lapply(2:max.K, function(x) mean(sil.width(all.k, x, cross = cross,
+                                                             sil.filter = sil.filter,
+                                                             supercluster.method = supercluster.method)[[1]][,3])))
   max.silw <- which.max(silws) + 1
 
   si <- sil.width(all.k, max.silw, cross = cross, sil.filter = sil.filter, supercluster.method = supercluster.method)
@@ -40,7 +43,7 @@ balance.cluster <- function(sig.list, cc, cluster.cutoff = 0.05, max.K = NULL, c
     cc.k.balanced <- cc.k.old <- lapply(names(k), function(x) cc[[x]][[k[[x]]]]$consensusClass)
     names(cc.k.balanced) <- names(cc.k.old) <- names(k)
 
-    invisible(lapply(1:max.silw,
+    invisible(lapply(seq_len(max.silw),
                      function(x) lapply(names(k),
                                         # Must use <<- here for scope restrinction
                                         function(y) cc.k.balanced[[y]][which(cc.k.old[[y]] %in% which(hc.list[[y]] == x))] <<- x)))
@@ -90,7 +93,7 @@ cal.auc <- function(consencus.result, k){
 
 cor.cc <- function(xyz, cc, k, cross = 'sample'){
   centroids.list <- lapply(names(k),
-                           function(p) lapply(1:k[[p]],
+                           function(p) lapply(seq_len(k[[p]]),
                                               # Thanks to https://stackoverflow.com/questions/28423275/dimx-must-have-a-positive-length-when-applying-function-in-data-frame/28423503#28423503
                                               function(q) apply(xyz[[p]][, names(which(cc[[p]][[k[[p]]]]$consensusClass == q)), drop = FALSE],
                                                                 1, median, na.rm = TRUE)))
@@ -98,7 +101,7 @@ cor.cc <- function(xyz, cc, k, cross = 'sample'){
                                     recursive = FALSE))
 
   centroids.names.list <- lapply(names(k),
-                                 function(x) lapply(1:k[[x]],
+                                 function(x) lapply(seq_len(k[[x]]),
                                                     function(y) paste(x, k[[x]], y, sep = '.')))
   centroids.names <- unlist(centroids.names.list)
   setnames(centroids, centroids.names)

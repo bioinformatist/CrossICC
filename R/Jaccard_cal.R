@@ -89,9 +89,9 @@ rand.index <- function(df, col1, col2) {
     group1 <- as.numeric(as.factor(df[, col1]))
     group2 <- as.numeric(as.factor(df[, col2]))
 
-    x <- abs(sapply(group1, function(x) x - group1))
+    x <- abs(vapply(group1, function(x) x - group1, numeric(1)))
     x[x > 1] <- 1
-    y <- abs(sapply(group2, function(x) x - group2))
+    y <- abs(vapply(group2, function(x) x - group2, numeric(1)))
     y[y > 1] <- 1
     sg <- sum(abs(x - y))/2
     bc <- choose(dim(x)[1], 2)

@@ -11,7 +11,7 @@ centroid2exp <- function(centroid, vd) {
     centroid = centroid[gene.sig, ]
     vclass <- c()
     vcor <- c()
-    for (i in 1:ncol(vd)) {
+    for (i in seq_len(ncol(vd))) {
         d = vd[, i]
         c.cor = c()
         pv = c()

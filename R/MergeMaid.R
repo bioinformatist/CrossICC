@@ -24,7 +24,7 @@ mergeget <- function(x) {
         rownames(x[[1]]) <- x[[3]]
         pd <- data.frame(x[[2]])
         if (is.null(colnames(x[[1]])))
-            sn = as.character(c(1:ncol(x[[1]]))) else sn <- colnames(x[[1]])
+            sn = as.character(c(seq_len(ncol(x[[1]])))) else sn <- colnames(x[[1]])
         rownames(pd) <- sn
         ad <- new("AnnotatedDataFrame", data = pd)
         es <- new("ExpressionSet", exprs = x[[1]], phenoData = ad)
@@ -36,7 +36,7 @@ mergeget <- function(x) {
 
         pd <- data.frame(rep(NA, (ncol(x))))
         if (is.null(colnames(x)))
-            sn = as.character(c(1:ncol(x))) else sn <- colnames(x)
+            sn = as.character(seq_len(ncol(x))) else sn <- colnames(x)
         row.names(pd) <- sn
 
         rownames(pd) <- sn
@@ -88,16 +88,16 @@ mergeExprs <- function(...) {
     # When there's only one list passed to ..., it should be flattened as matrices, such as: arg[[1]] is flattened list with certain
     # sub-lists
     if ((is(arg, "list")) & (length(arg) == 1)) {
-        for (j in 1:length(arg[[1]])) {
+        for (j in seq_len(length(arg[[1]]))) {
             k <- k + 1
             x[[k]] <- mergeget(arg[[1]][[j]])
         }
     } else {
-        for (i in 1:length(arg)) {
+        for (i in seq_len(length(arg))) {
             check(arg[[i]])
             if (is.element(class(arg[[i]]), "mergeExpressionSet")) {
                 mm <- mergeget(arg[[i]])
-                for (j in 1:length(arg[[i]])) {
+                for (j in seq_len(length(arg[[i]]))) {
                   k <- k + 1
                   x[[k]] <- mm[[j]]
                 }
@@ -114,7 +114,7 @@ mergeExprs <- function(...) {
 
     nnote <- matrix(NA, tt, 2)
 
-    for (i in 1:tt) {
+    for (i in seq_len(tt)) {
         if (i == 1)
             iid <- as.matrix(featureNames(x[[i]])) else iid <- rbind(iid, as.matrix(featureNames(x[[i]])))
         nnote[i, 2] <- ""
@@ -124,7 +124,7 @@ mergeExprs <- function(...) {
 
     # generate the matrices with missing value 'NA'
 
-    for (i in 1:tt) {
+    for (i in seq_len(tt)) {
         y <- assayData(x[[i]])[["exprs"]]
         idy <- featureNames(x[[i]])
         y.avg <- AverageDuplicates(y, idy)
@@ -137,7 +137,7 @@ mergeExprs <- function(...) {
 
     idmatrix <- matrix(0, length(iid), tt)
     index <- as.vector(nnote[, 2])
-    for (i in 1:tt) {
+    for (i in seq_len(tt)) {
         idx <- featureNames(x[[i]])
         cc <- match(iid, idx)
         idmatrix[, i] <- ifelse(is.na(cc), 0, 1)
@@ -228,9 +228,9 @@ maxintcor <- function(A, B) {
     n = n1 + n2
     nn = ns + 1
     covs = cov(AB, use = "pairwise")
-    AA = covs[1:ns, 1:ns]
+    AA = covs[seq_len(ns), seq_len(ns)]
     BB = covs[nn:n, nn:n]
-    AB = covs[1:ns, nn:n]
+    AB = covs[seq_len(ns), nn:n]
     AAinv = ginv(AA)
     BBinv = ginv(BB)
     eigens = eigen(AAinv %*% AB %*% BBinv %*% t(AB))
@@ -248,7 +248,7 @@ maxintcor <- function(A, B) {
         stop("When exact is TRUE, you can only use the methods, ''pearson'' and ''spearman''.")
 
     geneid <- rep(1, nrow(x@geneStudy))
-    for (i in 1:nn) {
+    for (i in seq_len(nn)) {
         geneid <- geneid * (x@geneStudy[, i])
     }
     geneuid <- geneNames(x)[geneid == 1]
@@ -257,7 +257,7 @@ maxintcor <- function(A, B) {
     pcor <- alist(... = )
     nnote <- rep(NA, nn)
 
-    for (i in 1:nn) {
+    for (i in seq_len(nn)) {
         matches1 <- match(geneuid, featureNames(exprs(x)[[i]]))
         pcor[[i]] <- assayData(exprs(x)[[i]])[["exprs"]][matches1, ]
         if (method == "spearman" && exact)
@@ -270,7 +270,7 @@ maxintcor <- function(A, B) {
     np <- nn * (nn - 1)/2
     ppair <- matrix(0, np, 2)
     k <- 1
-    for (i in 1:(nn - 1)) {
+    for (i in seq_len(nn - 1)) {
         for (j in (i + 1):nn) {
             ppair[k, ] <- c(i, j)
             k <- k + 1
@@ -281,7 +281,7 @@ maxintcor <- function(A, B) {
 
     icor <- matrix(NA, nuid, np)
     canc <- rep(0, np)
-    for (i in 1:np) {
+    for (i in seq_len(np)) {
         CC1 <- pcor[[ppair[i, 1]]]
         CC2 <- pcor[[ppair[i, 2]]]
         if (exact)
@@ -315,8 +315,8 @@ isna <- function(x) return(is.na(x))
     m1 = mat1 = cov(A, use = "pairwise.complete.obs")
     m2 = mat2 = cov(B, use = "pairwise.complete.obs")
     mat12 = matrix(nrow = n1, ncol = n2)
-    for (i in 1:n1) {
-        for (j in 1:n2) {
+    for (i in seq_len(n1)) {
+        for (j in seq_len(n2)) {
             mat12[i, j] = cov(A[, i], B[, j], use = "pairwise.complete.obs")
         }
     }
@@ -325,8 +325,8 @@ isna <- function(x) return(is.na(x))
         mm = mat12
         aa = A[index, ]
         bb = B[index, ]
-        whca = (1:length(aa))[is.na(aa)]
-        whcb = (1:length(bb))[is.na(bb)]
+        whca = (seq_len(length(aa)))[is.na(aa)]
+        whcb = (seq_len(length(bb)))[is.na(bb)]
 
         if (length(whca) != 0) {
             aa <- aa[-whca]
@@ -341,8 +341,8 @@ isna <- function(x) return(is.na(x))
         }
         return((aa %*% mm %*% bb)/sqrt(aa %*% m1 %*% aa)/sqrt(bb %*% m2 %*% bb))
     }
-    ans = sapply(1:m, iicor)
-    names(ans) = rn
+    ans <- vapply(seq_len(m), iicor, numeric(1))
+    names(ans) <- rn
     return(ans)
 }
 
@@ -358,8 +358,8 @@ isna <- function(x) return(is.na(x))
     mat1 = cov(A, use = "pairwise.complete.obs")
     mat2 = cov(B, use = "pairwise.complete.obs")
     mat12 = matrix(nrow = n1, ncol = n2)
-    for (i in 1:n1) {
-        for (j in 1:n2) {
+    for (i in seq_len(n1)) {
+        for (j in seq_len(n2)) {
             mat12[i, j] = cov(A[, i], B[, j], use = "pairwise.complete.obs")
         }
     }
@@ -373,7 +373,7 @@ isna <- function(x) return(is.na(x))
         c = x %*% mat12 %*% y
         return(c/(sqrt(v1) * sqrt(v2)))
     }
-    return(sapply(1:n, getone))
+    return(vapply(seq_len(n), getone, numeric(1)))
 }
 
 .integ.cal <- function(mat1, mat2, method = NULL) {
@@ -393,17 +393,17 @@ isna <- function(x) return(is.na(x))
             aa = A[indx, ]
             sum(aa * x, na.rm = TRUE)
         }
-        rx = sapply(1:(nrow(m1) - 1), nammx)
+        rx = vapply(seq_len(nrow(m1) - 1), nammx, numeric(1))
 
         nammy = function(indy) {
             bb = B[indy, ]
             sum(bb * y, na.rm = TRUE)
         }
-        ry = sapply(1:(nrow(m2) - 1), nammy)
+        ry = vapply(seq_len(nrow(m2) - 1), nammy, numeric(1))
 
         integ[index] <- cor(rx, ry, use = "pairwise.complete.obs")
     }
-    ans = sapply(1:(nrow(mat1)), sziicor)
+    ans = vapply(seq_len(nrow(mat1)), sziicor, numeric(1))
     names(ans) = rn
     return(ans)
 }
@@ -427,8 +427,8 @@ isna <- function(x) return(is.na(x))
     n1 = dim(A)[2]
     n2 = dim(B)[2]
     mat12 = matrix(nrow = n1, ncol = n2)
-    for (i in 1:n1) {
-        for (j in 1:n2) {
+    for (i in seq_len(n1)) {
+        for (j in seq_len(n2)) {
             mat12[i, j] = cov(A[, i], B[, j], use = "pairwise.complete.obs")
         }
     }
@@ -478,12 +478,12 @@ isna <- function(x) return(is.na(x))
 
     nnote <- rep(NA, nn)
 
-    for (i in 1:nn) {
+    for (i in seq_len(nn)) {
         nnote[i] <- nnote[i] <- paste("study", i, sep = " ")
     }
 
     geneid <- rep(1, nrow(x@geneStudy))
-    for (i in 1:nn) {
+    for (i in seq_len(nn)) {
         geneid <- geneid * (x@geneStudy[, i])
     }
     geneuid <- geneNames(x)[geneid == 1]
@@ -494,7 +494,7 @@ isna <- function(x) return(is.na(x))
         np <- nn * (nn - 1)/2
         ppair <- matrix(0, np, 2)
         k <- 1
-        for (i in 1:(nn - 1)) {
+        for (i in seq_len(nn - 1)) {
             for (j in (i + 1):nn) {
                 ppair[k, ] <- c(i, j)
                 k <- k + 1
@@ -503,7 +503,7 @@ isna <- function(x) return(is.na(x))
 
         ppair1 <- matrix(0, np, 2)
         k <- 1
-        for (i in 1:(nn - 1)) {
+        for (i in seq_len(nn - 1)) {
             for (j in (i + 1):nn) {
                 ppair1[k, ] <- c(nn + 1 - i, nn + 1 - j)
                 k <- k + 1
@@ -514,7 +514,7 @@ isna <- function(x) return(is.na(x))
         exp1 <- matrix(NA, 10000, np)
         obs <- matrix(NA, nuid, np)
 
-        for (i in 1:np) {
+        for (i in seq_len(np)) {
             matches1 <- match(geneuid, featureNames(exprs(x)[[ppair[i, 1]]]))
             matches2 <- match(geneuid, featureNames(exprs(x)[[ppair[i, 2]]]))
             exprs1 <- assayData(exprs(x)[[ppair[i, 1]]])[["exprs"]][matches1, ]
@@ -527,8 +527,8 @@ isna <- function(x) return(is.na(x))
         k <- m <- 1
         par(mfrow = c(nn, nn), oma = c(0, 0, 8, 0))
 
-        for (i in 1:nn) {
-            for (j in 1:nn) {
+        for (i in seq_len(nn)) {
+            for (j in seq_len(nn)) {
                 if (k <= np) {
                   if (ppair[k, 1] == i & ppair[k, 2] == j) {
                     d1 <- exp1[, k]
@@ -558,7 +558,7 @@ isna <- function(x) return(is.na(x))
                         y.legend <- 0.9
                       if (is.null(cex.legend))
                         cex.legend <- 1
-                      legend(x.legend, y.legend, paste(legend.text), col = 1:2, lty = 1, cex = cex.legend)
+                      legend(x.legend, y.legend, paste(legend.text), col = seq_len(2), lty = 1, cex = cex.legend)
                     } else {
                       aa <- c(0.5, 0.5)
                       bb <- c(0.7, 0.8)
@@ -613,7 +613,7 @@ isna <- function(x) return(is.na(x))
             y.legend <- ymax
         if (is.null(cex.legend))
             cex.legend <- 0.9
-        legend(x.legend, y.legend, paste(legend.text), col = 1:2, lty = 1, cex = cex.legend)
+        legend(x.legend, y.legend, paste(legend.text), col = seq_len(2), lty = 1, cex = cex.legend)
         rtn <- d1
     }
     return(rtn)
@@ -623,7 +623,7 @@ isna <- function(x) return(is.na(x))
 .show.mergeExpressionSet <- function(object) {
     x = exprs(object)
     y = list()
-    for (i in 1:length(x)) {
+    for (i in seq_len(length(x))) {
         show(x[[i]])
     }
     return()
@@ -637,18 +637,18 @@ isna <- function(x) return(is.na(x))
 
     nnote <- rep(NA, nn)
 
-    for (i in 1:nn) {
+    for (i in seq_len(nn)) {
         nnote[i] <- paste("study", i, sep = " ")
     }
     report[[1]] <- matrix(NA, 2, nn)
     report[[1]][1, ] <- names(object)
-    for (i in 1:nn) {
+    for (i in seq_len(nn)) {
         report[[1]][2, i] <- nrow(assayData(exprs(object)[[i]])[["exprs"]])
     }
 
     report[[2]] <- matrix(NA, 2, nn)
     report[[2]][1, ] <- names(object)
-    for (i in 1:nn) {
+    for (i in seq_len(nn)) {
         report[[2]][2, i] <- ncol(assayData(exprs(object)[[i]])[["exprs"]])
     }
 

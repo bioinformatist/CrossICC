@@ -7,17 +7,17 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up") {
     }
     # Here use subset of cluster class, for finer method class contains all clusters
     design <- model.matrix(~0 + factor(class))
-    colnames(design) <- paste("K", 1:k, sep = "")
+    colnames(design) <- paste("K", seq_len(k), sep = "")
     K <- colnames(design)
     fit <- limma::lmFit(eSet.subset, design)
 
     x <- c()
-    for (i in 1:(k - 1)) {
+    for (i in seq_len(k - 1)) {
         for (j in (i + 1):k) {
             x <- c(x, paste(K[j], K[i], sep = "-"))
         }
     }
-    for (i in 1:k) {
+    for (i in seq_len(k)) {
         x <- c(x, paste(K[i], paste("(", paste(K[-i], collapse = "+"), ")", "/", k - 1, sep = ""), sep = "-"))
     }
 
@@ -41,7 +41,7 @@ ebayes <- function(eSet.subset, class, cutoff = 0.1, mode = "up") {
     # 2.\nAlready set it to up mode.') mode = 'up' }
 
     # Some element (actually as data.frame) of ml may has 0 columns and 0 rows, remove them here
-    ml <- ml[sapply(ml, function(x) dim(x)[1]) > 0]
+    ml <- ml[vapply(ml, function(x) dim(x)[1], numeric(1)) > 0]
 
     geneset2gene <- switch(mode, up = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, length(which(ml[[x]][, 1] >= 0))),
         rownames(ml[[x]])[which(ml[[x]][, 1] >= 0)]))), both = do.call(rbind, lapply(names(ml), function(x) data.frame(rep(x, nrow(ml[[x]])),

@@ -113,7 +113,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
   # If study.names is not defined or seems not OK, use automatically generated ones instead
   if (missing(study.names) || !is(study.names, "character") || length(study.names) != length(platforms)) {
     message('No study names provided or something goes wrong with your study names. Will use auto-generated study names instead.')
-    study.names <- vapply(1:length(platforms), function(x) paste0('Matrix.', x), "Yu Fat is handsome")
+    study.names <- vapply(seq_len(length(platforms)), function(x) paste0('Matrix.', x), "Yu Fat is handsome")
   }
 
   names(platforms) <- study.names
@@ -174,7 +174,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
     geneset2gene <- lapply(geneset2gene , setNames , nm = c('super.cluster', 'signatures'))
 
     if (length(platforms) >= 2) {
-      unioned.genesets <- data.table(do.call(rbind, geneset2gene))[, .(count = .N), by = 'super.cluster,signatures'][count >= n.platform,][, 1:2]
+      unioned.genesets <- data.table(do.call(rbind, geneset2gene))[, .(count = .N), by = 'super.cluster,signatures'][count >= n.platform,][, seq_len(2)]
     } else {
       unioned.genesets <- as.matrix(unique(data.table(do.call(rbind, geneset2gene))))
     }
@@ -198,7 +198,7 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
       fit <- limma::lmFit(merged.matrix, design)
 
       x <- c()
-      for(i in 1:(k - 1)){
+      for(i in seq_len(k - 1)){
         for(j in (i + 1):k){
           x <- c(x, paste(K[j], K[i], sep = "-"))
         }
@@ -226,8 +226,8 @@ CrossICC <- function(..., study.names, filter.cutoff = 0.5, fdr.cutoff = 0.001, 
       # Filtering: only keep 1 to all
       FC.tables <- lapply(ebayes.result.2, function(x) x$full.m[,grep('\\.\\.', names(x$full.m))])
       # Pre-ordering: From left to right, according to all columns
-      sorted.tables <- lapply(FC.tables, function(x) x[do.call(order, lapply(1:NCOL(x), function(i) -x[, i])), ])
-      gene.order <- lapply(sorted.tables, function(h) unique(unlist(lapply(1:ncol(h), function(x) row.names(h[h[,x] > 0,])))))
+      sorted.tables <- lapply(FC.tables, function(x) x[do.call(order, lapply(seq_len(NCOL(x)), function(i) -x[, i])), ])
+      gene.order <- lapply(sorted.tables, function(h) unique(unlist(lapply(seq_len(ncol(h)), function(x) row.names(h[h[,x] > 0,])))))
       # gene.order <- com.feature(unlist(lapply(sorted.genes, function(x) x[x %in% gene.sig])), method = 'merge')
 
     }
