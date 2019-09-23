@@ -1,3 +1,6 @@
+Changes in version 0.99.24 (2019-09-23)
+  * Update source code for robustness
+
 Changes in version 0.99.23 (2019-09-14)
   * Add support for type SummarizedExperiment in function predictor()
   * Fix output directory problem in main function
