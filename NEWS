@@ -1,4 +1,4 @@
-Changes in version 1.0.0 (2019-10-22)
+Changes in version 0.99.27 (2019-10-22)
   * Use tempdir() in test to avoid using home dir of bioconductor build machine
 
 Changes in version 0.99.26 (2019-09-23)
