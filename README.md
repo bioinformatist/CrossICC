@@ -129,3 +129,6 @@ packages. Zhixiang Zuo
 supervise the project. Zekun Liu performed the test and helped run an
 example of the package. For more information or questions, plz contact
 either of the authors above.
+## Citation 
+
+Zhao, Qi, Yu Sun, Zekun Liu, Hongwan Zhang, Xingyang Li, Kaiyu Zhu, Ze-Xian Liu, Jian Ren, and Zhixiang Zuo. "CrossICC: iterative consensus clustering of cross-platform gene expression data without adjusting batch effect." Briefings in Bioinformatics (2019).
