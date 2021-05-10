@@ -331,5 +331,35 @@ Cal.ARI <- function(df, col1, col2) {
   return(ARI)
 }
 
-
+plot_predicted_heatmap<-function(df,sample.cluster, genes,cluster_row=TRUE,showRowname=FALSE){
+  clustercolor <- list(Cluster = c(Cluster1 = "#E41A1C", Cluster2 = "#377EB8", Cluster3 = "#4DAF4A", Cluster4 = "#984EA3",
+                                   Cluster5 = "#FF7F00", Cluster6 = "#FFFF33", Cluster7 = "#A65628", Cluster8 = "#F781BF", Cluster9 = "#999999",ClusterUnclassified="grey"))
+  
+  plot.matrix <- df
+  samplename <- colnames(plot.matrix)
+  sample.cluster <- data.frame(Cluster = sample.cluster)
+  sample.cluster$Cluster <- paste("Cluster", sample.cluster$Cluster, sep = "")
+  
+  sample.cluster <- tibble::rownames_to_column(sample.cluster, var = "sampleid") %>%
+    filter(sampleid %in% samplename) %>%
+    arrange(Cluster) %>%
+    data.frame(row.names = 1)
+  
+  # avoid the cluster has not right columns for data matrix
+  plot.matrix <- plot.matrix[, rownames(sample.cluster)]
+  #plot heatmap
+  xx<-pheatmap(plot.matrix[genes,],
+               scale = 'none',
+               annotation_colors = clustercolor,
+               border_color = NA,
+               cluster_cols = FALSE,
+               cluster_rows = cluster_row,
+               annotation_col = sample.cluster,
+               show_rownames = showRowname,
+               show_colnames = FALSE,
+               colorRampPalette(c("blue", "white", "red"))(100))
+  
+  return(xx)
+  
+}
 

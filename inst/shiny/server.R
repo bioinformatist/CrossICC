@@ -322,17 +322,17 @@ shinyServer(function(session,input, output) {
         predict.data<-predict.inputdata()
         crossICC.object<-InterationResult()
         #validation.Data shoud be format features in rows and samples in columns
-        res.pred<-predictor(predict.data,crossICC.object)
+        res.pred<-predictor(as.matrix(predict.data),crossICC.object)
         return(res.pred)
       })
       # predict heatmap for replication
       output$predictHeatmap<-renderPlot({
 
-        predict.list<-get_predict_result()
-        cfDNA.crossICC<-InterationResult()
-        cluster<-predict.list$cluster
-        plot.matrix<-predict.list$matrix
-        plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC$gene.order)
+        predict.result<-get_predict_result()
+        crossicc.obj<-InterationResult()
+        cluster<-predict.result$cluster
+        plot.matrix<-predict.result$matrix
+        plot_predicted_heatmap(as.data.frame(plot.matrix),cluster)
 
       })
       output$DownloadPredictHeatmap<-downloadHandler(
@@ -341,17 +341,42 @@ shinyServer(function(session,input, output) {
         },
         content = function(file) {
           pdf(file)
-          predict.list<-get_predict_result()
-          cfDNA.crossICC<-InterationResult()
-          cluster<-predict.list$cluster
-          plot.matrix<-predict.list$matrix
+          predict.result<-get_predict_result()
+          crossicc.obj<-InterationResult()
+          cluster<-predict.result$cluster
+          plot.matrix<-predict.result$matrix
           validate(
             need(!is.null(plot.matrix), "Press the prediction button")
           )
-          plot_expression_heatmap_with_cluster(plot.matrix,cluster,cfDNA.crossICC$gene.order)
+
+          plot_predicted_heatmap(as.data.frame(plot.matrix),cluster)
           dev.off()
         },
         contentType = 'image/pdf'
+      )
+      
+      output$DownloadPredictClusterResult<-downloadHandler(
+      
+        filename = function() {
+          paste("Predicted_cluster_", Sys.time(), '.csv', sep='')
+        },
+        content = function(file) {
+          predict.result<-get_predict_result()
+          plot.matrix<-data.frame(Sample=names(predict.result$cluster),Cluster=predict.result$cluster)
+          write.csv(plot.matrix, file)
+
+        },
+        contentType = 'text/csv'
+      )
+      
+      output$DownloadPredictExampleFile<-downloadHandler(
+        filename = "test_example.csv",
+        content = function(file) {
+          data("demo.platforms")
+          write.csv(demo.platforms[[1]],file)
+          
+        },
+        contentType = 'text/csv'
       )
 # ----------------
 

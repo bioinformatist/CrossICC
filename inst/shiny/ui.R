@@ -239,8 +239,9 @@ bodyPredict <- tabItem(
         fileInput(
           'file2',
           'Input dataset in matrix file',
-          accept = c('text/txt', '.rds')
-        )
+          accept = c('text/txt', c('.rds','.csv','.txt'))
+        ),
+        downloadLink('DownloadPredictExampleFile', 'See example file ')
       ),
       actionBttn("submit2", "Submit")
     ),
@@ -255,6 +256,7 @@ bodyPredict <- tabItem(
         value = "pre01",
 
         downloadLink('DownloadPredictHeatmap', 'Download PDF'),
+        downloadLink('DownloadPredictClusterResult', 'Download Predicted Cluster Result'),
         withSpinner(plotOutput("predictHeatmap", height = "800px"), color = "black")
 
       ),
