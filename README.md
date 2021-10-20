@@ -56,7 +56,20 @@ clusters.
 
 ### Via GitHub (latest)
 
+* **Important! From bioconductor >3.12, `CrossICC` is nolonger available from biocondutor. This is because one core dependency of CrossICC `MergeMaid` is not mentained after that version. Here, we provide the only may to install `MergeMaid` before `CrossICC` installed:**
+* Step 1. Download `MergeMaid` source code. Shell console or install from url below 
+https://bioconductor.riken.jp/packages/3.1/bioc/src/contrib/MergeMaid_2.40.0.tar.gz
+``` shell 
+# shell code 
+ wget https://bioconductor.riken.jp/packages/3.1/bioc/src/contrib/MergeMaid_2.40.0.tar.gz
+```
+
+* Step 2. Install `CrossICC` from console.  
 ``` r
+# install MergeMaid from Source
+
+install.packages("MergeMaid_2.40.0.tar.gz",build="source")
+# install CrossICC from github
 install.packages("devtools")
 devtools::install_github("bioinformatist/CrossICC")
 ```
@@ -72,6 +85,7 @@ normalization).
 
 ``` r
 library(CrossICC)
+data(demo.platforms)
 CrossICC.obj <- CrossICC(demo.platforms, skip.mfs = TRUE, max.iter = 100, 
                          cross = "cluster", fdr.cutoff = 0.1, 
                          ebayes.cutoff = 0.1, filter.cutoff = 0.1)
@@ -87,7 +101,7 @@ provides you a very intuitive way to view the results.
 
 Our package also comes with a shiny app. To run
 it:
-
+* Step 3(optional)
 ``` r
 pkg.suggested <- c('ggalluvial', 'rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
 checkPackages <- function(pkg){
