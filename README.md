@@ -103,7 +103,7 @@ Our package also comes with a shiny app. To run
 it:
 * Step 3(optional)
 ``` r
-pkg.suggested <- c('ggalluvial', 'rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
+pkg.suggested <- c('ggalluvial', 'ggsci','rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
 checkPackages <- function(pkg){
   if (!requireNamespace(pkg, quietly = TRUE)) {
     warning(paste0("Package ",pkg," needed for shiny app. Installing...."))
