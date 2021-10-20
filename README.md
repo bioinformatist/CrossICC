@@ -120,6 +120,11 @@ tempdata.impute=impute.knn(as.matrix(tempdata) ,k = 10, rowmax = 0.5, colmax = 0
 normalize.Data=as.data.frame(tempdata.impute$data)
 ```
 
+  - Question 2 : can I install the `CrossICC` from bioconductor. 
+
+> A: No, from bioconductor >3.8, `CrossICC` is nolonger available from biocondutor. This is because one core dependency of CrossICC `MergeMaid` is not mentained
+> and we didnot get the lisence to update the package. So users could only install our package from github directly.   
+
 ## Contribution
 
 Qi Zhao [@likelet](https://github.com/likelet) and Yu Sun
