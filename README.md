@@ -122,7 +122,7 @@ normalize.Data=as.data.frame(tempdata.impute$data)
 
   - Question 2 : can I install the `CrossICC` from bioconductor. 
 
-> A: No, from bioconductor >3.8, `CrossICC` is nolonger available from biocondutor. This is because one core dependency of CrossICC `MergeMaid` is not mentained
+> A: No, from bioconductor >3.12, `CrossICC` is nolonger available from biocondutor. This is because one core dependency of CrossICC `MergeMaid` is not mentained
 > and we didnot get the lisence to update the package. So users could only install our package from github directly.   
 
 ## Contribution
