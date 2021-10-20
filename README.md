@@ -106,7 +106,8 @@ it:
 pkg.suggested <- c('ggalluvial', 'rmarkdown', 'knitr', 'shiny', 'shinydashboard', 'shinyWidgets', "shinycssloaders", 'DT', 'ggthemes', 'ggplot2', 'pheatmap', 'RColorBrewer', 'tibble')
 checkPackages <- function(pkg){
   if (!requireNamespace(pkg, quietly = TRUE)) {
-    stop(paste0("Package ",pkg," needed for shiny app. Please install it."), call. = FALSE)
+    warning(paste0("Package ",pkg," needed for shiny app. Installing...."))
+    install.packages(pkg)
   }
 }
 lapply(pkg.suggested, checkPackages)
