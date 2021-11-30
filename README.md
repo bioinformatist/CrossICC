@@ -59,9 +59,8 @@ clusters.
 * **Important! From bioconductor >3.12, `CrossICC` is nolonger available from biocondutor. This is because one core dependency of CrossICC `MergeMaid` is not mentained after that version. Here, we provide the only may to install `MergeMaid` before `CrossICC` installed:**
 * Step 1. Download `MergeMaid` source code. via `Shell` console or directly download from URL below 
 https://bioconductor.riken.jp/packages/3.1/bioc/src/contrib/MergeMaid_2.40.0.tar.gz
-``` shell 
-# shell code 
- wget https://bioconductor.riken.jp/packages/3.1/bioc/src/contrib/MergeMaid_2.40.0.tar.gz
+``` console   
+$ wget https://bioconductor.riken.jp/packages/3.1/bioc/src/contrib/MergeMaid_2.40.0.tar.gz
 ```
 
 * Step 2. Install `CrossICC` from `R` console.  
