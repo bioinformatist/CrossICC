@@ -3,6 +3,8 @@
 
 # CrossICC
 
+[![check in Biotreasury](https://img.shields.io/badge/Biotreasury-collected-brightgreen)](https://biotreasury.rjmart.cn/#/tool?id=10016)
+
 ## Table of the content
 
   - [Overview](#overview)
